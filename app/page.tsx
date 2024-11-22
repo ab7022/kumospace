@@ -8,11 +8,14 @@ import Productivity from "./components/LandingPage/Productivity";
 import Steps from "./components/LandingPage/Steps";
 import Transform from "./components/LandingPage/Transform";
 import Trial from "./components/LandingPage/Trial";
+import { getUser } from "./components/Sessions";
 
-export default function Home() {
+export default async function Home() {
+  const session = await getUser();
+
   return (
     <>
-      <Header />
+      <Header session={session}/>
       <Productivity />
       <Transform />
       <Steps />

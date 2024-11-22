@@ -1,0 +1,56 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model User {
+  id                  Int          @id @default(autoincrement())
+  name                String
+  email               String       @unique
+  password            String?
+  profile_url         String?
+  username            String?      @unique
+  premium_user        Boolean      @default(false)
+  validTill           DateTime?
+  admin               Boolean      @default(false)
+  createdAt           DateTime     @default(now())
+  trialEndsAt         DateTime?    @default(dbgenerated("CURRENT_TIMESTAMP + INTERVAL '14 days'"))
+  provider            String
+  hasSubmittedDetails Boolean      @default(false)
+  isVerified          Boolean      @default(false)
+  spaces              Space[]
+  teamMembers         TeamMember[]
+
+  @@index([email], name: "email_idx")
+  @@index([username], name: "username_idx")
+}
+
+model Space {
+  id          Int          @id @default(autoincrement())
+  spaceName   String
+  url         String
+  teamSize    String
+  spaceId     String       @unique @default(dbgenerated("substr(md5(random()::text), 1, 6)"))
+  primaryGoal String
+  userId      Int
+  teammembers TeamMember[]
+  User        User         @relation(fields: [userId], references: [id])
+  createdAt   DateTime     @default(now())
+}
+
+model TeamMember {
+  id                 Int     @id @default(autoincrement())
+  email              String
+  invitationAccepted Boolean @default(false)
+  role               String  @default("member")
+  userId             Int
+  spaceId            Int
+  Space              Space   @relation(fields: [spaceId], references: [id])
+  User               User    @relation(fields: [userId], references: [id])
+
+  @@unique([email, spaceId])
+}
