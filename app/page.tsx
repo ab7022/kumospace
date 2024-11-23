@@ -15,7 +15,7 @@ export default async function Home() {
 
   return (
     <>
-      <Header session={session}/>
+      <Header session={session} />
       <Productivity />
       <Transform />
       <Steps />
