@@ -1,6 +1,5 @@
-import Header from "./components/LandingPage/Header";
+import Header from "@/components/LandingPage/Header";
 
-// app/not-found.js
 export default function NotFound() {
   return (
     <div className="bg-neutral-900">

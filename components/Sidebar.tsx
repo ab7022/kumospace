@@ -1,7 +1,7 @@
 "use client";
 import React, { useState } from "react";
-import { Logo } from "@/app/components/Logo";
-import { LogoIcon } from "@/app/components/Logo";
+import { Logo } from "@/components/Logo";
+import { LogoIcon } from "@/components/Logo";
 import Image from "next/image";
 import {
   IconArrowLeft,

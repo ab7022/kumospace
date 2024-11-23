@@ -1,8 +1,7 @@
 import React, { useState } from "react";
-import Header from "../components/LandingPage/Header";
-import axios from "axios";
-import { getUser } from "../components/Sessions";
-import SetupForm from "../components/setup/SetupForm";
+import Header from "@/components/LandingPage/Header";
+import { getUser } from "@/components/Sessions";
+import SetupForm from "@/components/setup/SetupForm";
 
 export default async function Setup() {
   const session = await getUser();

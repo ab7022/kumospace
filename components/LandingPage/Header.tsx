@@ -122,7 +122,7 @@ export default function Header({ session }: { session: any }) {
               <>
                 <Link
                   className="inline-flex items-center justify-center rounded-full border-2 border-gray-500 bg-transparent px-6 py-2 text-base font-medium text-white transition hover:bg-primary-500  hover:text-black"
-                  href="/workspace"
+                  href="/Dashboard/Workspace"
                 >
                   My Workspace
                 </Link>

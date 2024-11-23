@@ -1,4 +1,5 @@
 const Dashboard = ({ open }: { open: boolean }) => {
+  
   return (
     <div className="flex flex-1  overflow-x-scroll bg-gradient-to-br from-neutral-900 to-neutral-800 p-8">
       <div className="max-w-8xl  mx-auto">
