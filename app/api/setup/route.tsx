@@ -32,6 +32,19 @@ export async function POST(req: NextRequest, res: NextResponse) {
     return NextResponse.json({ error: "User not verified" }, { status: 403 });
   }
 
+  function generateSpaceId() {
+    const chars = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
+    let spaceId = "";
+    for (let i = 0; i < 6; i++) {
+      spaceId += chars.charAt(Math.floor(Math.random() * chars.length));
+    }
+    return spaceId;
+  }
+
+  // Usage Example
+  const newSpaceId = generateSpaceId();
+  console.log(newSpaceId); // Outputs something like 'aBcDeF'
+
   try {
     const newSpace = await prisma.space.create({
       data: {
@@ -40,6 +53,7 @@ export async function POST(req: NextRequest, res: NextResponse) {
         teamSize,
         primaryGoal,
         userId,
+        spaceId: newSpaceId,
 
         teammembers: {
           create: {
@@ -51,6 +65,8 @@ export async function POST(req: NextRequest, res: NextResponse) {
         },
       },
     });
+    console.log(newSpace);
+
     return NextResponse.json({ newSpace }, { status: 201 });
   } catch (error) {
     console.error(error);

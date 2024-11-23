@@ -34,7 +34,7 @@ model Space {
   spaceName   String
   url         String
   teamSize    String
-  spaceId     String       @unique @default(dbgenerated("substr(md5(random()::text), 1, 6)"))
+  spaceId     String       @unique
   primaryGoal String
   userId      Int
   teammembers TeamMember[]

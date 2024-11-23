@@ -207,11 +207,11 @@ export default function SetupForm() {
             <option value="" disabled>
               Select team size
             </option>
-            <option value="1-5">1-10 members</option>
-            <option value="6-10">11-25 members</option>
-            <option value="11-20">26-50 members</option>
-            <option value="21+">51-100 members</option>
-            <option value="21+">100+ members</option>
+            <option value="1-10">1-10 members</option>
+            <option value="11-25">11-25 members</option>
+            <option value="26-50">26-50 members</option>
+            <option value="51-100">51-100 members</option>
+            <option value="100+">100+ members</option>
           </select>
         </div>
 
@@ -220,7 +220,7 @@ export default function SetupForm() {
             htmlFor="primary-goal"
             className="block text-sm font-semibold text-gray-600 mb-2"
           >
-            What is your primary goal for using Kumospace?
+            What is your primary goal for using VirtualSync?
           </label>
           <select
             id="primary-goal"
