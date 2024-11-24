@@ -1,5 +1,5 @@
 "use client";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { Logo } from "@/components/Logo";
 import { LogoIcon } from "@/components/Logo";
 import Image from "next/image";
@@ -11,6 +11,7 @@ import {
 } from "@tabler/icons-react";
 import { Sidebar, SidebarBody, SidebarLink } from "../components/ui/Sidevar";
 import { signOut } from "next-auth/react";
+import { usePathname } from "next/navigation";
 
 const SidebarParent = ({ session }: any) => {
   const links = [
@@ -30,7 +31,7 @@ const SidebarParent = ({ session }: any) => {
     },
     {
       label: "Profile",
-      href: "#",
+      href: "/Dashboard/Profile",
       icon: (
         <IconUserBolt className="text-neutral-700 dark:text-neutral-200 h-5 w-5 flex-shrink-0" />
       ),
@@ -53,6 +54,17 @@ const SidebarParent = ({ session }: any) => {
     },
   ];
   const [open, setOpen] = useState(false);
+  const path = usePathname()
+
+  useEffect(() => {
+
+    console.log(path);
+    if (path=="/Dashboard/Profile") {
+      setOpen(true)
+      
+    }
+  }, [path])
+  
 
   return (
     <Sidebar open={open} setOpen={setOpen}>

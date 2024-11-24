@@ -4,6 +4,7 @@ import Link, { LinkProps } from "next/link";
 import React, { useState, createContext, useContext } from "react";
 import { AnimatePresence, motion } from "framer-motion";
 import { IconMenu2, IconX } from "@tabler/icons-react";
+import { usePathname } from "next/navigation";
 
 interface Links {
   label: string;
@@ -85,6 +86,7 @@ export const DesktopSidebar = ({
   ...props
 }: React.ComponentProps<typeof motion.div>) => {
   const { open, setOpen, animate } = useSidebar();
+  const path = usePathname();
   return (
     <>
       <motion.div
@@ -95,8 +97,16 @@ export const DesktopSidebar = ({
         animate={{
           width: animate ? (open ? "300px" : "60px") : "300px",
         }}
-        onMouseEnter={() => setOpen(true)}
-        onMouseLeave={() => setOpen(false)}
+        onMouseEnter={() => {
+          setOpen(true);
+        }}
+        onMouseLeave={() => {
+          if (path == "/Dashboard/Profile") {
+            setOpen(true);
+          } else {
+            setOpen(false);
+          }
+        }}
         {...props}
       >
         {children}

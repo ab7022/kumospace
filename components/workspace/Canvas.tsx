@@ -43,38 +43,78 @@ const MOVEMENT_KEYS = {
   KeyD: "right",
 } as const;
 
-// Avatar Component
 const Avatar = ({
   position,
   name,
   image,
+  email = "Unknown",
+  status = "Active",
   isCurrentUser = false,
 }: AvatarProps) => {
-  console.log(image);
+  const [showModal, setShowModal] = useState(false);
+
   return (
     <div
-      className={`absolute w-16 h-16 rounded-full flex items-center justify-center text-white font-bold transition-all duration-200 `}
+      className={`absolute flex flex-col items-center transition-all duration-200`}
       style={{
         transform: `translate(${position.x}px, ${position.y}px)`,
       }}
+      onMouseEnter={() => setShowModal(true)}
+      onMouseLeave={() => setShowModal(false)}
     >
-      <>
-        {" "}
-        <div className="flex flex-col">
-          <Image
-            width={100}
-            height={100}
-            src={image}
-            alt={`${name}`}
-            className="rounded-md shadow-md shadow-gray-400"
-          />
-          <span className="text-center text-xs">{name}</span>
+      <div className="relative">
+        <Image
+          width={AVATAR_SIZE}
+          height={AVATAR_SIZE}
+          src={image}
+          alt={`${name}`}
+          className="rounded-full shadow-md"
+        />
+        <span className="absolute bottom-0 left-0 bg-green-500 h-3 w-3 rounded-full border-2 border-white" />
+      </div>
+      <span className="mt-2 text-center text-sm text-white">{name}</span>
+
+      {/* Modal */}
+      {showModal && (
+        <div className="absolute top-12 w-60 bg-white rounded-lg shadow-lg p-4 z-50">
+          <div className="flex items-center">
+            <Image
+              width={48}
+              height={48}
+              src={image}
+              alt={`${name}'s avatar`}
+              className="rounded-full shadow-sm"
+            />
+            <div className="ml-4">
+              <h3 className="text-sm font-bold text-gray-800">{name}</h3>
+              <p className="text-xs text-gray-600">{email}</p>
+            </div>
+          </div>
+          <div className="mt-3">
+            <span
+              className={`inline-block px-3 py-1 text-xs font-medium rounded-full ${
+                status === "Active"
+                  ? "bg-green-100 text-green-600"
+                  : "bg-gray-100 text-gray-600"
+              }`}
+            >
+              {status}
+            </span>
+          </div>
+          <div className="mt-4 flex space-x-2">
+            <button className="flex-1 bg-blue-500 text-white text-xs font-medium rounded-md py-1.5 hover:bg-blue-600">
+              View Profile
+            </button>
+            <button className="flex-1 bg-gray-100 text-gray-800 text-xs font-medium rounded-md py-1.5 hover:bg-gray-200">
+              Message
+            </button>
+          </div>
         </div>
-        <div className="absolute bottom-3 -right-2 w-3 h-3 bg-green-500 rounded-full" />
-      </>
+      )}
     </div>
   );
 };
+
 
 // Main Canvas Component
 const Canvas = ({ open, session }: any) => {
