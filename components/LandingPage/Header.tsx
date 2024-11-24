@@ -331,7 +331,7 @@ export default function Header({ session }: { session: any }) {
                     {/* Action Buttons */}
                     <Link
                       className="inline-flex items-center justify-center rounded-full border-2 border-gray-500 bg-neutral-800/50 backdrop-blur-sm px-6 py-3 text-base font-medium text-white transition hover:bg-white hover:text-black"
-                      href="/workspace"
+                      href="/Dashboard/Workspace"
                       onClick={() => setMenuVisible(false)}
                     >
                       My Workspace

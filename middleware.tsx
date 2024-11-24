@@ -6,11 +6,14 @@ export async function middleware(request:NextRequest) {
   const token = await getToken({ req: request });
 
   // Redirect to home if not authenticated and accessing a protected route
-  if (!token && request.nextUrl.pathname === '/Check') {
+  if (!token && request.nextUrl.pathname === '/Dashboard') {
+    return NextResponse.redirect(new URL('/auth/signin', request.url));
+  }
+  if (!token && request.nextUrl.pathname === '/Dashboard/Workspace') {
     return NextResponse.redirect(new URL('/auth/signin', request.url));
   }
 }
 
 export const config = {
-  matcher: ['/Check'], // Apply middleware to the Check route
+  matcher: ['/Dashboard/:path*'], // Apply middleware to the Dashboard route
 };

@@ -3,7 +3,7 @@
 import React, { useEffect, useState, useCallback } from "react";
 import { io, Socket } from "socket.io-client";
 import Image from "next/image";
-import { debounce } from 'lodash';
+import { debounce } from "lodash";
 
 // Types
 interface Position {
@@ -13,26 +13,19 @@ interface Position {
 
 interface User {
   id: string;
+  image: string;
   name: string;
   position: Position;
   status: string;
   lastActive: number;
+  otherAvatar: any;
 }
 
 interface AvatarProps {
   position: Position;
   name: string;
   isCurrentUser?: boolean;
-}
-
-interface CanvasProps {
-  open: boolean;
-  session: {
-    user?: {
-      name?: string;
-      email?: string;
-    };
-  };
+  image: string;
 }
 
 // Constants
@@ -51,38 +44,61 @@ const MOVEMENT_KEYS = {
 } as const;
 
 // Avatar Component
-const Avatar = ({ position, name, isCurrentUser = false }: AvatarProps) => (
-  <div
-    className={`absolute w-12 h-12 rounded-full flex items-center justify-center text-white font-bold transition-all duration-200 ${
-      isCurrentUser ? "bg-blue-500 shadow-lg" : "bg-green-500"
-    }`}
-    style={{
-      transform: `translate(${position.x}px, ${position.y}px)`,
-    }}
-  >
-    <span className="truncate max-w-[40px] text-center">
-      {name.split(" ")[0] || "Anonymous"}
-    </span>
-  </div>
-);
+const Avatar = ({
+  position,
+  name,
+  image,
+  isCurrentUser = false,
+}: AvatarProps) => {
+  console.log(image);
+  return (
+    <div
+      className={`absolute w-16 h-16 rounded-full flex items-center justify-center text-white font-bold transition-all duration-200 `}
+      style={{
+        transform: `translate(${position.x}px, ${position.y}px)`,
+      }}
+    >
+      <>
+        {" "}
+        <div className="flex flex-col">
+          <Image
+            width={100}
+            height={100}
+            src={image}
+            alt={`${name}`}
+            className="rounded-md shadow-md shadow-gray-400"
+          />
+          <span className="text-center text-xs">{name}</span>
+        </div>
+        <div className="absolute bottom-3 -right-2 w-3 h-3 bg-green-500 rounded-full" />
+      </>
+    </div>
+  );
+};
 
 // Main Canvas Component
-const Canvas: React.FC<CanvasProps> = ({ open, session }) => {
+const Canvas = ({ open, session }: any) => {
+  const sessionData = session?.value ? JSON.parse(session.value) : {};
+  const name = sessionData?.user?.name || ""; // Fallback to empty string
+  const email = sessionData?.user?.email || "";
+  const image = sessionData?.user?.image || "";
   const [socket, setSocket] = useState<Socket | null>(null);
-  const [avatarPosition, setAvatarPosition] = useState<Position>({ x: 100, y: 100 });
+  const [avatarPosition, setAvatarPosition] = useState<Position>({
+    x: 100,
+    y: 100,
+  });
   const [otherAvatars, setOtherAvatars] = useState<Record<string, User>>({});
   const [boundaries, setBoundaries] = useState({ width: 0, height: 0 });
 
-  // Initialize socket connection and register user
   useEffect(() => {
     const newSocket = io(SOCKET_URL);
     setSocket(newSocket);
 
-    // Register user when socket connects
     newSocket.on("connect", () => {
       newSocket.emit("register", {
-        name: session?.user?.name || session?.user?.email || "Anonymous",
-        position: { x: 100, y: 100 }
+        name: name || email,
+        image: image || "image",
+        position: { x: 100, y: 100 },
       });
     });
 
@@ -128,7 +144,7 @@ const Canvas: React.FC<CanvasProps> = ({ open, session }) => {
       socket.emit("updatePosition", {
         x: position.x,
         y: position.y,
-        name: session?.user?.name || session?.user?.email || "Anonymous",
+        name: name,
       });
     }, 50),
     [socket, session]
@@ -140,30 +156,38 @@ const Canvas: React.FC<CanvasProps> = ({ open, session }) => {
   }, [avatarPosition, updateServerPosition]);
 
   // Movement handler
-  const moveAvatar = useCallback((direction: string) => {
-    setAvatarPosition((prev) => {
-      const newPosition = { ...prev };
+  const moveAvatar = useCallback(
+    (direction: string) => {
+      setAvatarPosition((prev) => {
+        const newPosition = { ...prev };
 
-      switch (direction) {
-        case "up":
-          newPosition.y = Math.max(0, prev.y - STEP_SIZE);
-          break;
-        case "down":
-          newPosition.y = Math.min(boundaries.height - AVATAR_SIZE, prev.y + STEP_SIZE);
-          break;
-        case "left":
-          newPosition.x = Math.max(0, prev.x - STEP_SIZE);
-          break;
-        case "right":
-          newPosition.x = Math.min(boundaries.width - AVATAR_SIZE, prev.x + STEP_SIZE);
-          break;
-      }
+        switch (direction) {
+          case "up":
+            newPosition.y = Math.max(0, prev.y - STEP_SIZE);
+            break;
+          case "down":
+            newPosition.y = Math.min(
+              boundaries.height - AVATAR_SIZE,
+              prev.y + STEP_SIZE
+            );
+            break;
+          case "left":
+            newPosition.x = Math.max(0, prev.x - STEP_SIZE);
+            break;
+          case "right":
+            newPosition.x = Math.min(
+              boundaries.width - AVATAR_SIZE,
+              prev.x + STEP_SIZE
+            );
+            break;
+        }
 
-      return newPosition;
-    });
-  }, [boundaries]);
+        return newPosition;
+      });
+    },
+    [boundaries]
+  );
 
-  // Keyboard controls
   useEffect(() => {
     const handleKeyDown = (e: KeyboardEvent) => {
       const direction = MOVEMENT_KEYS[e.code as keyof typeof MOVEMENT_KEYS];
@@ -176,7 +200,6 @@ const Canvas: React.FC<CanvasProps> = ({ open, session }) => {
     window.addEventListener("keydown", handleKeyDown);
     return () => window.removeEventListener("keydown", handleKeyDown);
   }, [moveAvatar]);
-
   return (
     <div
       className={`relative flex ${
@@ -195,29 +218,33 @@ const Canvas: React.FC<CanvasProps> = ({ open, session }) => {
       {/* Current user's avatar */}
       <Avatar
         position={avatarPosition}
-        name={session?.user?.name || session?.user?.email || "Anonymous"}
+        name={name || email || ""}
         isCurrentUser={true}
+        image={image}
       />
 
       {/* Other users' avatars */}
       {Object.entries(otherAvatars).map(([id, user]) => {
+        console.log(user);
+
         if (socket && id === socket.id) return null;
+
         return (
           <Avatar
             key={id}
             position={user.position}
             name={user.name}
+            isCurrentUser={false}
+            image={user.image}
           />
         );
       })}
 
-      
-        <div className="absolute top-0 left-0 bg-black/50 text-white p-2 text-sm">
-          <div>Connected: {socket?.connected ? 'Yes' : 'No'}</div>
-          <div>Users: {Object.keys(otherAvatars).length}</div>
-          <div>Position: {JSON.stringify(avatarPosition)}</div>
-        </div>
-      
+      <div className="absolute top-0 left-0 bg-black/50 text-white p-2 text-sm">
+        <div>Connected: {socket?.connected ? "Yes" : "No"}</div>
+        <div>Users: {Object.keys(otherAvatars).length}</div>
+        <div>Position: {JSON.stringify(avatarPosition)}</div>
+      </div>
     </div>
   );
 };

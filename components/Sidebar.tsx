@@ -10,6 +10,7 @@ import {
   IconUserBolt,
 } from "@tabler/icons-react";
 import { Sidebar, SidebarBody, SidebarLink } from "../components/ui/Sidevar";
+import { signOut } from "next-auth/react";
 
 const SidebarParent = ({ session }: any) => {
   const links = [
@@ -45,7 +46,9 @@ const SidebarParent = ({ session }: any) => {
       label: "Logout",
       href: "#",
       icon: (
-        <IconArrowLeft className="text-neutral-700 dark:text-neutral-200 h-5 w-5 flex-shrink-0" />
+        <IconArrowLeft className="text-neutral-700 dark:text-neutral-200 h-5 w-5 flex-shrink-0" onClick={()=>{
+          signOut()
+        }}/>
       ),
     },
   ];

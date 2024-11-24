@@ -1,11 +1,13 @@
 import Header from "@/components/LandingPage/Header";
+import { getUser } from "@/components/Sessions";
 
-export default function NotFound() {
+export default async function NotFound() {
+  const session = await getUser();
   return (
     <div className="bg-neutral-900">
       {" "}
       
-      <Header session={undefined} />
+      <Header session={session} />
       <div className="flex flex-col h-screen  items-center justify-center   text-gray-100">
         <h1 className="text-5xl font-extrabold mb-4 text-red-500">404</h1>
         <p className="text-2xl mb-4">Page Not Found</p>
