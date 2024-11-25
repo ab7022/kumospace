@@ -10,7 +10,7 @@ export async function POST(req: NextRequest) {
         return;
       }
       const url = body.url;
-  
+      
       const user = await client.space.findFirst({
         where: {
           url,

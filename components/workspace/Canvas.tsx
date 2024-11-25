@@ -3,6 +3,7 @@
 import React, { useEffect, useState, useCallback } from "react";
 import { io, Socket } from "socket.io-client";
 import Image from "next/image";
+
 import { debounce } from "lodash";
 
 // Types
@@ -26,6 +27,8 @@ interface AvatarProps {
   name: string;
   isCurrentUser?: boolean;
   image: string;
+  email?: string;
+  status?: string;
 }
 
 // Constants
@@ -114,7 +117,6 @@ const Avatar = ({
     </div>
   );
 };
-
 
 // Main Canvas Component
 const Canvas = ({ open, session }: any) => {

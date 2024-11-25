@@ -7,50 +7,186 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
-model User {
-  id                  Int          @id @default(autoincrement())
-  name                String
-  email               String       @unique
-  password            String?
-  profile_url         String?
-  username            String?      @unique
-  premium_user        Boolean      @default(false)
-  validTill           DateTime?
-  admin               Boolean      @default(false)
-  createdAt           DateTime     @default(now())
-  trialEndsAt         DateTime?    @default(dbgenerated("CURRENT_TIMESTAMP + INTERVAL '14 days'"))
-  provider            String
-  hasSubmittedDetails Boolean      @default(false)
-  isVerified          Boolean      @default(false)
-  spaces              Space[]
-  teamMembers         TeamMember[]
-
-  @@index([email], name: "email_idx")
-  @@index([username], name: "username_idx")
+enum UserRole {
+  ADMIN
+  MODERATOR
+  MEMBER
+  GUEST
 }
 
-model Space {
-  id          Int          @id @default(autoincrement())
-  spaceName   String
-  url         String
-  teamSize    String
-  spaceId     String       @unique
-  primaryGoal String
-  userId      Int
-  teammembers TeamMember[]
-  User        User         @relation(fields: [userId], references: [id])
-  createdAt   DateTime     @default(now())
+enum TaskPriority {
+  LOW
+  MEDIUM
+  HIGH
+}
+
+enum Status {
+  AVAILABLE
+  AWAY
+  DND
+  OFFLINE
+  BUSY
+}
+
+model User {
+  id                  Int                 @id @default(autoincrement())
+  name                String
+  email               String              @unique
+  secondaryEmail      String?
+  phoneNumber         String?
+  password            String?
+  profile_url         String?
+  username            String?             @unique
+  timezone            String?
+  workHoursFrom       String?
+  workHoursTo         String?
+  premium_user        Boolean             @default(false)
+  validTill           DateTime?
+  admin               Boolean             @default(false)
+  createdAt           DateTime            @default(now())
+  trialEndsAt         DateTime?           @default(dbgenerated("CURRENT_TIMESTAMP + INTERVAL '14 days'"))
+  provider            String
+  hasSubmittedDetails Boolean             @default(false)
+  isVerified          Boolean             @default(false)
+  firstName           String?
+  lastName            String?
+  role                UserRole            @default(MEMBER)
+  teamName            String?
+  status              Status              @default(AVAILABLE)
+  onCurrentlyWorking  String?
+  tasks               Task[]
+  spaces              Space[]
+  teamMembers         TeamMembers[]
+  reminders           Reminder[]
+  notifications       Notification[]
+  deadlines           Deadline[]
+  teamMemberships     TeamMember[]
+  Team                Team[]
+  ProjectAssignment   ProjectAssignment[]
+
+  @@unique([email], map: "unique_user_email")
+  @@index([email], name: "email_idx")
+}
+
+model Project {
+  id          Int                 @id @default(autoincrement())
+  projectName String
+  description String?
+  deadline    DateTime
+  status      String              @default("Active") // e.g., Active, Completed, Pending
+  createdAt   DateTime            @default(now())
+  assignments ProjectAssignment[]
+}
+
+model ProjectAssignment {
+  id         Int       @id @default(autoincrement())
+  projectId  Int
+  userId     Int?
+  teamId     Int?
+  assignedAt DateTime  @default(now())
+  deadline   DateTime?
+
+  Project Project @relation(fields: [projectId], references: [id])
+  User    User?   @relation(fields: [userId], references: [id])
+  Team    Team?   @relation(fields: [teamId], references: [id])
+
+  @@unique([projectId, userId, teamId]) // Prevent duplicate assignments
+  @@index([projectId, userId], name: "project_user_idx")
+  @@index([projectId, teamId], name: "project_team_idx")
+}
+
+model Team {
+  id        Int          @id @default(autoincrement())
+  teamName  String
+  createdBy Int
+  createdAt DateTime     @default(now())
+  updatedAt DateTime     @updatedAt
+  members   TeamMember[]
+  User      User         @relation(fields: [createdBy], references: [id])
+
+  ProjectAssignment ProjectAssignment[]
 }
 
 model TeamMember {
-  id                 Int     @id @default(autoincrement())
+  id        Int       @id @default(autoincrement())
+  userId    Int
+  teamId    Int
+  role      UserRole  @default(MEMBER)
+  invitedAt DateTime  @default(now())
+  joinedAt  DateTime?
+  User      User      @relation(fields: [userId], references: [id])
+  Team      Team      @relation(fields: [teamId], references: [id])
+
+  @@unique([userId, teamId])
+}
+
+model Deadline {
+  id                  Int      @id @default(autoincrement())
+  deadline            DateTime
+  deadlineTitle       String
+  deadlineDescription String
+  userId              Int
+  User                User     @relation(fields: [userId], references: [id])
+  createdAt           DateTime @default(now())
+}
+
+model Notification {
+  id              Int      @id @default(autoincrement())
+  directMessage   Boolean  @default(false)
+  meetingReminder Boolean  @default(false)
+  userId          Int
+  User            User     @relation(fields: [userId], references: [id])
+  createdAt       DateTime @default(now())
+}
+
+model Reminder {
+  id                  Int      @id @default(autoincrement())
+  reminderTitle       String
+  reminderDescription String
+  reminderDate        DateTime
+  reminderTime        DateTime
+  userId              Int
+  User                User     @relation(fields: [userId], references: [id])
+  createdAt           DateTime @default(now())
+}
+
+model Task {
+  id        Int          @id @default(autoincrement())
+  taskName  String
+  priority  TaskPriority @default(MEDIUM)
+  completed Boolean      @default(false)
+  userId    Int
+  dueDate   String?
+  User      User         @relation(fields: [userId], references: [id])
+  createdAt DateTime     @default(now())
+}
+
+model Space {
+  id          Int           @id @default(autoincrement())
+  spaceName   String
+  url         String
+  teamSize    String
+  spaceId     String        @unique
+  primaryGoal String
+  userId      Int
+  teamMembers TeamMembers[]
+  User        User          @relation(fields: [userId], references: [id])
+  createdAt   DateTime      @default(now())
+
+  @@unique([spaceId, userId])
+}
+
+model TeamMembers {
+  id                 Int       @id @default(autoincrement())
   email              String
-  invitationAccepted Boolean @default(false)
-  role               String  @default("member")
+  invitationAccepted Boolean   @default(false)
+  role               String    @default("member")
+  invitedAt          DateTime  @default(now())
+  joinedAt           DateTime?
   userId             Int
   spaceId            Int
-  Space              Space   @relation(fields: [spaceId], references: [id])
-  User               User    @relation(fields: [userId], references: [id])
+  Space              Space     @relation(fields: [spaceId], references: [id])
+  User               User      @relation(fields: [userId], references: [id])
 
   @@unique([email, spaceId])
 }
