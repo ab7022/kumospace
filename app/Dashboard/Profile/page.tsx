@@ -17,10 +17,10 @@ const page = () => {
     <div className="flex flex-col w-full flex-1  overflow-x-scroll bg-gradient-to-br from-neutral-900 to-neutral-800">
       <BasicDetails />
       <DailyStatus />
-      <ActiveTask />
-      <ProjectAssign />
-      <Reminders />
-      <TeamDirectory />
+      {/* <ActiveTask /> */}
+      {/* <ProjectAssign /> */}
+       <Reminders /> 
+      {/* <TeamDirectory /> */}
       <Setting />
     </div>
   );

@@ -8,7 +8,6 @@ const ProjectAssign = () => {
         id="tasks_projects"
         className="bg-neutral-800/50 backdrop-blur-xl p-6 border border-neutral-700 rounded-2xl shadow-md m-6 space-y-8"
       >
-        {/* Projects Assigned Section */}
         <div>
           <h3 className="text-2xl font-semibold text-white mb-4">
             📂 Projects Assigned
@@ -46,7 +45,7 @@ const ProjectAssign = () => {
                   </span>{" "}
                   {project.teammates.join(", ")}
                 </div>
-                <button className="absolute bottom-4 right-4 text-sm text-primary hover:underline">
+                <button className="absolute bottom-4 right-4 text-sm text-white hover:underline">
                   View Details →
                 </button>
               </div>

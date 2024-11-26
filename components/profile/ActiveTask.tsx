@@ -139,12 +139,12 @@ const ActiveTask = () => {
                   className="bg-neutral-800 p-4 rounded-lg shadow-sm border border-neutral-700 hover:scale-105 transition-transform duration-300"
                 >
                   <div className="flex flex-row justify-between">
-                    <h4 className="text-lg font-bold text-white mb-2">
+                    <h4 className="text-lg font-bold text-white mb-2 w-full">
                       {task.taskName}
                     </h4>
-                    <h4 className="text-sm font-bold text-white mb-2">
+                    <span className="text-sm font-bold text-white mb-2">
                       {task?.dueDate}
-                    </h4>
+                    </span>
                   </div>
                   <div className="mb-2 flex flex-row justify-between">
                     <span
@@ -158,6 +158,7 @@ const ActiveTask = () => {
                     >
                       {task.priority}
                     </span>
+                   
                     <button
                       onClick={() => handleMarkAsDone(task.id)}
                       className="text-white bg-neutral-700 rounded-md px-2 py-1 text-sm hover:underline"
