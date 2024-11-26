@@ -1,21 +1,10 @@
-import { NEXT_AUTH_CONFIG } from "@/lib/auth";
-import { PrismaClient } from "@prisma/client";
-import { getServerSession } from "next-auth";
+import getUserFromSession from "@/lib/userSession";
 import { NextRequest, NextResponse } from "next/server";
-
-const prisma = new PrismaClient();
+import prisma from "@/lib/prisma";
 export async function POST(req: NextRequest, res: NextResponse) {
-  const session = await getServerSession(NEXT_AUTH_CONFIG);
-
-  if (!session) {
-    return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
-  }
-  const email = session.user?.email;
-  if (!email) {
-    return NextResponse.json(
-      { error: "Email not found in session" },
-      { status: 400 }
-    );
+  const { success, user, error, status } = await getUserFromSession();
+  if (!success || !user) {
+    return NextResponse.json({ error }, { status });
   }
   const body = await req.json();
   const { firstName, lastName, teamName, role } = body;
@@ -25,7 +14,7 @@ export async function POST(req: NextRequest, res: NextResponse) {
 
     await prisma.user.update({
       where: {
-        email,
+        id: user.id,
       },
       data: {
         firstName,
@@ -49,22 +38,13 @@ export async function POST(req: NextRequest, res: NextResponse) {
 }
 
 export async function GET(req: NextRequest, res: NextResponse) {
-  const session = await getServerSession(NEXT_AUTH_CONFIG);
-  try {
-    if (!session) {
-      return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
-    }
-
-    const email = session.user?.email;
-
-    if (!email) {
-      return NextResponse.json(
-        { error: "Email not found in session" },
-        { status: 400 }
-      );
-    }
-    const user = await prisma.user.findUnique({
-      where: { email },
+  try{
+  const { success, user, error, status } = await getUserFromSession();
+  if (!success || !user) {
+    return NextResponse.json({ error }, { status });
+  }
+    const user1 = await prisma.user.findUnique({
+      where: { id: user.id },
       select: {
         firstName: true,
         lastName: true,
@@ -72,7 +52,7 @@ export async function GET(req: NextRequest, res: NextResponse) {
         role: true,
       },
     });
-    return NextResponse.json(user, { status: 200 });
+    return NextResponse.json(user1, { status: 200 });
   } catch (error) {
     return NextResponse.json({ message: error }, { status: 500 });
   }

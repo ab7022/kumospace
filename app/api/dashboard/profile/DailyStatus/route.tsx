@@ -1,24 +1,11 @@
 import { NextRequest, NextResponse } from "next/server";
-import { PrismaClient } from "@prisma/client";
-import { getServerSession } from "next-auth";
-import { NEXT_AUTH_CONFIG } from "@/lib/auth";
-
-const prisma = new PrismaClient(); 
-
+import prisma from "@/lib/prisma";
+import getUserFromSession from "@/lib/userSession";
 export async function POST(req: NextRequest,res: NextResponse) {
   try {
-    const session = await getServerSession(NEXT_AUTH_CONFIG);
-
-    if (!session) {
-      return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
-    }
-    const email = session.user?.email;
-
-    if (!email) {
-      return NextResponse.json(
-        { error: "Email not found in session" },
-        { status: 400 }
-      );
+    const { success, user, error, status } = await getUserFromSession();
+    if (!success || !user) {
+      return NextResponse.json({ error }, { status });
     }
 
     const body = await req.json();
@@ -32,7 +19,7 @@ export async function POST(req: NextRequest,res: NextResponse) {
     }
     const updatedUser = await prisma.user.update({
       where: {
-        email,
+        id:user.id,
       },
       data: {
         onCurrentlyWorking: task,
@@ -58,34 +45,10 @@ export async function POST(req: NextRequest,res: NextResponse) {
 
 export async function GET(req: NextRequest) {  
   try {
-    const session = await getServerSession(NEXT_AUTH_CONFIG);    
-    if (!session) {
-      return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
+    const { success, user, error, status } = await getUserFromSession();
+    if (!success || !user) {
+      return NextResponse.json({ error }, { status });
     }
-    const email = session.user?.email;
-    if (!email) {
-      return NextResponse.json(
-        { error: "Email not found in session" },
-        { status: 400 }
-      );
-    }
-
-    const user = await prisma.user.findUnique({
-      where: { email },
-      select: {
-        onCurrentlyWorking: true,
-        status: true,
-      },
-    });
-
-    if (!user) {
-      return NextResponse.json(
-        { error: "User not found" },
-        { status: 404 }
-      );
-    }
-
-
     return NextResponse.json({
       task: user.onCurrentlyWorking || "",
       availability: user.status || "AVAILABLE",

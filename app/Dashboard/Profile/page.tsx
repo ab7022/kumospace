@@ -21,7 +21,7 @@ const page = () => {
       {/* <ProjectAssign /> */}
        <Reminders /> 
       {/* <TeamDirectory /> */}
-      <Setting />
+      <Setting  />
     </div>
   );
 };

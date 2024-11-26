@@ -2,32 +2,19 @@ import { PrismaClient } from "@prisma/client";
 import { getServerSession } from "next-auth";
 import { NEXT_AUTH_CONFIG } from "@/lib/auth";
 import { NextRequest, NextResponse } from "next/server";
+import getUserFromSession from "@/lib/userSession";
 
 const prisma = new PrismaClient();
 
 export async function POST(req: NextRequest, res: NextResponse) {
   const body = await req.json();
 
-  const session = await getServerSession(NEXT_AUTH_CONFIG);
-
-  if (!session) {
-    return NextResponse.json({ error: "Please Login First" }, { status: 401 });
+  const { success, user, error, status } = await getUserFromSession();
+  if (!success) {
+    return NextResponse.json({ error }, { status });
   }
-  const email = session.user?.email;
-
   const { spaceName, url, teamSize, primaryGoal } = body;
-
-  const user = await prisma.user.findUnique({
-    where: { email },
-  });
   const userId = user?.id;
-  if (!email || !userId) {
-    return NextResponse.json(
-      { error: "Invalid session data" },
-      { status: 400 }
-    );
-  }
-
   if (!user?.isVerified) {
     return NextResponse.json({ error: "User not verified" }, { status: 403 });
   }
@@ -40,11 +27,7 @@ export async function POST(req: NextRequest, res: NextResponse) {
     }
     return spaceId;
   }
-
-  // Usage Example
   const newSpaceId = generateSpaceId();
-  console.log(newSpaceId); // Outputs something like 'aBcDeF'
-
   try {
     const newSpace = await prisma.space.create({
       data: {
@@ -54,10 +37,10 @@ export async function POST(req: NextRequest, res: NextResponse) {
         primaryGoal,
         userId,
         spaceId: newSpaceId,
-
+      
         teammembers: {
           create: {
-            email,
+            email: user?.email,
             role: "Owner",
             invitationAccepted: true,
             userId,

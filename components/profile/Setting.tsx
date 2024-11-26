@@ -9,7 +9,7 @@ const getAllTimeZones = () => {
   return moment.tz.names();
 };
 
-const Setting = ({ userId }: { userId: number }) => {
+const Setting = () => {
   const [selectedTimeZone, setSelectedTimeZone] = useState("UTC");
   const [currentTime, setCurrentTime] = useState(moment());
   const [timeZones, setTimeZones] = useState<string[]>([]);
@@ -73,7 +73,7 @@ const Setting = ({ userId }: { userId: number }) => {
   // Function to handle the save action
   const handleSaveChanges = async () => {
     const data = {
-      userId,
+  
       timezone: selectedTimeZone,
       workHoursFrom,
       workHoursTo,

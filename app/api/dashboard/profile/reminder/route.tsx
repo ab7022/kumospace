@@ -1,33 +1,11 @@
-import { NEXT_AUTH_CONFIG } from "@/lib/auth";
-import { PrismaClient } from "@prisma/client";
-import { getServerSession } from "next-auth";
+import getUserFromSession from "@/lib/userSession";
 import { NextRequest, NextResponse } from "next/server";
-const prisma = new PrismaClient();
+import prisma from "@/lib/prisma";
 export async function POST(req: NextRequest, res: NextResponse) {
   try {
-    const session = await getServerSession(NEXT_AUTH_CONFIG);
-    if (!session) {
-      return NextResponse.json(
-        { success: false, error: "Unauthorized" },
-        { status: 401 }
-      );
-    }
-    const email = session.user?.email;
-    if (!email) {
-      return NextResponse.json(
-        { error: "Email not found in session" },
-        { status: 400 }
-      );
-    }
-
-    const user = await prisma.user.findUnique({
-      where: {
-        email: email as string,
-      },
-    });
-
-    if (!user) {
-      return NextResponse.json({ error: "User not found" }, { status: 400 });
+    const { success, user, error, status } = await getUserFromSession();
+    if (!success || !user) {
+      return NextResponse.json({ error }, { status });
     }
     const body = await req.json();
     const { title, description, time } = body;
@@ -73,33 +51,10 @@ export async function POST(req: NextRequest, res: NextResponse) {
 
 export async function GET(req: NextRequest, res: NextResponse) {
   try {
-    const session = await getServerSession(NEXT_AUTH_CONFIG);
-    if (!session) {
-      return NextResponse.json(
-        { success: false, error: "Unauthorized" },
-        { status: 401 }
-      );
+    const { success, user, error, status } = await getUserFromSession();
+    if (!success || !user) {
+      return NextResponse.json({ error }, { status });
     }
-
-    const email = session.user?.email;
-    if (!email) {
-      return NextResponse.json(
-        { error: "Email not found in session" },
-        { status: 400 }
-      );
-    }
-
-    // Find the user based on session email
-    const user = await prisma.user.findUnique({
-      where: {
-        email: email as string,
-      },
-    });
-
-    if (!user) {
-      return NextResponse.json({ error: "User not found" }, { status: 400 });
-    }
-
     // Fetch all reminders for the authenticated user
     const reminders = await prisma.reminder.findMany({
       where: {
@@ -132,33 +87,10 @@ export async function PUT(req: NextRequest, res: NextResponse) {
     );
   }
   try {
-    const session = await getServerSession(NEXT_AUTH_CONFIG);
-    if (!session) {
-      return NextResponse.json(
-        { success: false, error: "Unauthorized" },
-        { status: 401 }
-      );
+    const { success, user, error, status } = await getUserFromSession();
+    if (!success || !user) {
+      return NextResponse.json({ error }, { status });
     }
-
-    const email = session.user?.email;
-    if (!email) {
-      return NextResponse.json(
-        { error: "Email not found in session" },
-        { status: 400 }
-      );
-    }
-
-    // Find the user based on session email
-    const user = await prisma.user.findUnique({
-      where: {
-        email: email as string,
-      },
-    });
-
-    if (!user) {
-      return NextResponse.json({ error: "User not found" }, { status: 400 });
-    }
-
     const deletedReminder = await prisma.reminder.delete({
       where: {
         userId: user.id,
