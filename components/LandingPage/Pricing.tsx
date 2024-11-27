@@ -87,9 +87,9 @@ const Pricing = () => {
                     viewBox="0 0 24 24"
                   >
                     <path
-                      stroke-linecap="round"
-                      stroke-linejoin="round"
-                      stroke-width="2"
+                      strokeLinecap="round"
+                      strokelinejoin="round"
+                      strokewidth="2"
                       d="M5 13l4 4L19 7"
                     />
                   </svg>
@@ -103,9 +103,9 @@ const Pricing = () => {
                     viewBox="0 0 24 24"
                   >
                     <path
-                      stroke-linecap="round"
-                      stroke-linejoin="round"
-                      stroke-width="2"
+                      strokeLinecap="round"
+                      strokelinejoin="round"
+                      strokewidth="2"
                       d="M5 13l4 4L19 7"
                     />
                   </svg>
@@ -119,9 +119,9 @@ const Pricing = () => {
                     viewBox="0 0 24 24"
                   >
                     <path
-                      stroke-linecap="round"
-                      stroke-linejoin="round"
-                      stroke-width="2"
+                      strokeLinecap="round"
+                      strokelinejoin="round"
+                      strokewidth="2"
                       d="M5 13l4 4L19 7"
                     />
                   </svg>
@@ -135,9 +135,9 @@ const Pricing = () => {
                     viewBox="0 0 24 24"
                   >
                     <path
-                      stroke-linecap="round"
-                      stroke-linejoin="round"
-                      stroke-width="2"
+                      strokeLinecap="round"
+                      strokelinejoin="round"
+                      strokewidth="2"
                       d="M5 13l4 4L19 7"
                     />
                   </svg>
@@ -177,9 +177,9 @@ const Pricing = () => {
                     viewBox="0 0 24 24"
                   >
                     <path
-                      stroke-linecap="round"
-                      stroke-linejoin="round"
-                      stroke-width="2"
+                      strokeLinecap="round"
+                      strokelinejoin="round"
+                      strokewidth="2"
                       d="M5 13l4 4L19 7"
                     />
                   </svg>
@@ -193,9 +193,9 @@ const Pricing = () => {
                     viewBox="0 0 24 24"
                   >
                     <path
-                      stroke-linecap="round"
-                      stroke-linejoin="round"
-                      stroke-width="2"
+                      strokeLinecap="round"
+                      strokelinejoin="round"
+                      strokewidth="2"
                       d="M5 13l4 4L19 7"
                     />
                   </svg>
@@ -209,9 +209,9 @@ const Pricing = () => {
                     viewBox="0 0 24 24"
                   >
                     <path
-                      stroke-linecap="round"
-                      stroke-linejoin="round"
-                      stroke-width="2"
+                      strokeLinecap="round"
+                      strokelinejoin="round"
+                      strokewidth="2"
                       d="M5 13l4 4L19 7"
                     />
                   </svg>
@@ -225,9 +225,9 @@ const Pricing = () => {
                     viewBox="0 0 24 24"
                   >
                     <path
-                      stroke-linecap="round"
-                      stroke-linejoin="round"
-                      stroke-width="2"
+                      strokeLinecap="round"
+                      strokelinejoin="round"
+                      strokewidth="2"
                       d="M5 13l4 4L19 7"
                     />
                   </svg>
@@ -241,9 +241,9 @@ const Pricing = () => {
                     viewBox="0 0 24 24"
                   >
                     <path
-                      stroke-linecap="round"
-                      stroke-linejoin="round"
-                      stroke-width="2"
+                      strokeLinecap="round"
+                      strokelinejoin="round"
+                      strokewidth="2"
                       d="M5 13l4 4L19 7"
                     />
                   </svg>
@@ -280,9 +280,9 @@ const Pricing = () => {
                     viewBox="0 0 24 24"
                   >
                     <path
-                      stroke-linecap="round"
-                      stroke-linejoin="round"
-                      stroke-width="2"
+                      strokeLinecap="round"
+                      strokelinejoin="round"
+                      strokewidth="2"
                       d="M5 13l4 4L19 7"
                     />
                   </svg>
@@ -296,9 +296,9 @@ const Pricing = () => {
                     viewBox="0 0 24 24"
                   >
                     <path
-                      stroke-linecap="round"
-                      stroke-linejoin="round"
-                      stroke-width="2"
+                      strokeLinecap="round"
+                      strokelinejoin="round"
+                      strokewidth="2"
                       d="M5 13l4 4L19 7"
                     />
                   </svg>
@@ -312,9 +312,9 @@ const Pricing = () => {
                     viewBox="0 0 24 24"
                   >
                     <path
-                      stroke-linecap="round"
-                      stroke-linejoin="round"
-                      stroke-width="2"
+                      strokeLinecap="round"
+                      strokelinejoin="round"
+                      strokewidth="2"
                       d="M5 13l4 4L19 7"
                     />
                   </svg>
@@ -328,9 +328,9 @@ const Pricing = () => {
                     viewBox="0 0 24 24"
                   >
                     <path
-                      stroke-linecap="round"
-                      stroke-linejoin="round"
-                      stroke-width="2"
+                      strokeLinecap="round"
+                      strokelinejoin="round"
+                      strokewidth="2"
                       d="M5 13l4 4L19 7"
                     />
                   </svg>
@@ -402,9 +402,9 @@ const Pricing = () => {
                   viewBox="0 0 24 24"
                 >
                   <path
-                    stroke-linecap="round"
-                    stroke-linejoin="round"
-                    stroke-width="2"
+                    strokeLinecap="round"
+                    strokelinejoin="round"
+                    strokewidth="2"
                     d="M9 5l7 7-7 7"
                   />
                 </svg>

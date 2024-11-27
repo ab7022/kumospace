@@ -5,7 +5,6 @@ import { useRouter } from "next/navigation";
 
 export default function SetupForm() {
   const router = useRouter();
-
   const [spaceName, setSpaceName] = useState("");
   const [teamSize, setTeamSize] = useState("");
   const [url, setUrl] = useState("");
@@ -43,6 +42,10 @@ export default function SetupForm() {
     return () => clearTimeout(debounce);
   }, [url]);
 
+  useEffect(() => {
+    getData();
+  }, []);
+
   async function fetchUrl() {
     setIsLoadingUrl(true);
     try {
@@ -61,6 +64,26 @@ export default function SetupForm() {
       setAvailability("error");
     } finally {
       setIsLoadingUrl(false);
+    }
+  }
+  async function getData() {
+    try {
+      const response = await axios.get("/api/setup");
+      const data = response.data;
+      if (response.status === 200) {
+        setSpaceName(data.spaceName);
+        setTeamSize(data.teamSize);
+        setPrimaryGoal(data.primaryGoal);
+        setUrl(data.url);
+        setTimeout(() => {
+          router.push("/Dashboard/Workspace");
+        }, 2000);
+        console.log("Space created successfully:", response.data.newSpace);
+        setErrors({});
+      }
+    } catch (error: any) {
+      console.error("Error:", error.message);
+      setErrors({});
     }
   }
 
@@ -83,7 +106,8 @@ export default function SetupForm() {
         primaryGoal,
         teamSize,
       });
-      router.push("/workspace");
+
+      router.push("/Dashboard/Workspace");
       console.log("Space created successfully:", response.data.newSpace);
       setErrors({});
     } catch (error: any) {
@@ -148,28 +172,29 @@ export default function SetupForm() {
             URL
           </label>
           <p className="text-xs text-gray-500 mb-1">
-            6 to 20 characters, letters and numbers only{" "} </p> <br/>
-            {isLoadingUrl && (
-              <span className="px-2 py-2 m-4  bg-gray-100 text-xs text-gray-500">
-                Checking...
-              </span>
-            )}
-            {availability === "available" && (
-              <span className="px-2 py-2 mt-4  bg-green-100 text-xs text-green-500">
-               This URL is Available
-              </span>
-            )}
-            {availability === "taken" && (
-              <span className="px-2 py-2 m-4  bg-red-100 text-xs text-red-500">
-               This URL is Taken
-              </span>
-            )}
-            {availability === "error" && (
-              <span className="px-2 py-2 bg-yellow-100 text-xs text-yellow-500">
-                Error checking URL
-              </span>
-            )}
-         
+            6 to 20 characters, letters and numbers only{" "}
+          </p>{" "}
+          <br />
+          {isLoadingUrl && (
+            <span className="px-2 py-2 m-4  bg-gray-100 text-xs text-gray-500">
+              Checking...
+            </span>
+          )}
+          {availability === "available" && (
+            <span className="px-2 py-2 mt-4  bg-green-100 text-xs text-green-500">
+              This URL is Available
+            </span>
+          )}
+          {availability === "taken" && (
+            <span className="px-2 py-2 m-4  bg-red-100 text-xs text-red-500">
+              This URL is Taken
+            </span>
+          )}
+          {availability === "error" && (
+            <span className="px-2 py-2 bg-yellow-100 text-xs text-yellow-500">
+              Error checking URL
+            </span>
+          )}
           <div className="flex items-center border rounded-md shadow-sm">
             <span className="px-4 py-2 bg-gray-100 text-sm text-gray-500 border-r border-gray-300">
               www.VirtualSync.com/
@@ -186,7 +211,6 @@ export default function SetupForm() {
               }`}
             />
           </div>
-
           {errors.url && <p className="text-sm text-red-500">{errors.url}</p>}
         </div>
 

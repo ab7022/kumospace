@@ -1,23 +1,17 @@
-import { PrismaClient } from "@prisma/client";
-import { getServerSession } from "next-auth";
-import { NEXT_AUTH_CONFIG } from "@/lib/auth";
+import prisma from "@/lib/prisma";
 import { NextRequest, NextResponse } from "next/server";
 import getUserFromSession from "@/lib/userSession";
-
-const prisma = new PrismaClient();
-
 export async function POST(req: NextRequest, res: NextResponse) {
   const body = await req.json();
-
   const { success, user, error, status } = await getUserFromSession();
   if (!success) {
     return NextResponse.json({ error }, { status });
   }
   const { spaceName, url, teamSize, primaryGoal } = body;
-  const userId = user?.id;
   if (!user?.isVerified) {
     return NextResponse.json({ error: "User not verified" }, { status: 403 });
   }
+  const userId = user.id;
 
   function generateSpaceId() {
     const chars = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
@@ -36,21 +30,51 @@ export async function POST(req: NextRequest, res: NextResponse) {
         teamSize,
         primaryGoal,
         userId,
-        spaceId: newSpaceId,
-      
-        teammembers: {
-          create: {
-            email: user?.email,
-            role: "Owner",
-            invitationAccepted: true,
-            userId,
-          },
-        },
+        spaceCode: newSpaceId,
+        teamMembers: userId
+          ? {
+              create: {
+                email: user?.email,
+                role: "Owner",
+                userId,
+              },
+            }
+          : undefined,
       },
     });
     console.log(newSpace);
 
     return NextResponse.json({ newSpace }, { status: 201 });
+  } catch (error) {
+    console.error(error);
+    return NextResponse.json(
+      { error: "Error Creating Space" },
+      { status: 500 }
+    );
+  }
+}
+
+export async function GET(req: NextRequest, res: NextResponse) {
+  const { success, user, error, status } = await getUserFromSession();
+  if (!success || !user) {
+    return NextResponse.json({ error }, { status });
+  }
+  const userId = user.id;
+  try {
+    const existingSpace = await prisma.space.findFirst({
+      where: {
+        userId,
+      },
+    });
+    console.log(existingSpace);
+    if (existingSpace == null) {
+      return NextResponse.json(
+        { message: "Space already exists" },
+        { status: 409 }
+      );
+    } else {
+      return NextResponse.json({ existingSpace }, { status: 200 });
+    }
   } catch (error) {
     console.error(error);
     return NextResponse.json(

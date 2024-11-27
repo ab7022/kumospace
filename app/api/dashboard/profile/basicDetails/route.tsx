@@ -38,11 +38,11 @@ export async function POST(req: NextRequest, res: NextResponse) {
 }
 
 export async function GET(req: NextRequest, res: NextResponse) {
-  try{
-  const { success, user, error, status } = await getUserFromSession();
-  if (!success || !user) {
-    return NextResponse.json({ error }, { status });
-  }
+  try {
+    const { success, user, error, status } = await getUserFromSession();
+    if (!success || !user) {
+      return NextResponse.json({ error }, { status });
+    }
     const user1 = await prisma.user.findUnique({
       where: { id: user.id },
       select: {
