@@ -29,161 +29,127 @@ enum Status {
 }
 
 model User {
-  id                  Int                 @id @default(autoincrement())
+  id                  Int           @id @default(autoincrement())
   name                String
-  email               String              @unique
+  email               String        @unique
   secondaryEmail      String?
   phoneNumber         String?
   password            String?
-  profile_url         String?
-  username            String?             @unique
+  profileUrl          String?
+  username            String?       @unique
   timezone            String?
   workHoursFrom       String?
   workHoursTo         String?
-  premium_user        Boolean             @default(false)
+  premiumUser         Boolean       @default(false)
   validTill           DateTime?
-  admin               Boolean             @default(false)
-  createdAt           DateTime            @default(now())
-  trialEndsAt         DateTime?           @default(dbgenerated("CURRENT_TIMESTAMP + INTERVAL '14 days'"))
+  admin               Boolean       @default(false)
+  createdAt           DateTime      @default(now())
+  trialEndsAt         DateTime?     @default(dbgenerated("CURRENT_TIMESTAMP + INTERVAL '14 days'"))
   provider            String
-  hasSubmittedDetails Boolean             @default(false)
-  isVerified          Boolean             @default(false)
+  hasSubmittedDetails Boolean       @default(false)
+  isVerified          Boolean       @default(false)
   firstName           String?
   lastName            String?
-  role                UserRole            @default(MEMBER)
-  teamName            String?
-  status              Status              @default(AVAILABLE)
+  role                UserRole      @default(MEMBER)
+  status              Status        @default(AVAILABLE)
   onCurrentlyWorking  String?
   tasks               Task[]
   spaces              Space[]
-  teamMembers         TeamMembers[]
+  spaceMembers        SpaceMember[]
   reminders           Reminder[]
-  notifications       Notification[]
   deadlines           Deadline[]
-  teamMemberships     TeamMember[]
-  Team                Team[]
-  ProjectAssignment   ProjectAssignment[]
+  teams               Team[]
+  teamMembers         TeamMember[]
 
   @@unique([email], map: "unique_user_email")
   @@index([email], name: "email_idx")
 }
 
-model Project {
-  id          Int                 @id @default(autoincrement())
-  projectName String
-  description String?
-  deadline    DateTime
-  status      String              @default("Active")
-  createdAt   DateTime            @default(now())
-  assignments ProjectAssignment[]
-}
-
-model ProjectAssignment {
-  id         Int       @id @default(autoincrement())
-  projectId  Int
-  userId     Int?
-  teamId     Int?
-  assignedAt DateTime  @default(now())
-  deadline   DateTime?
-  Project    Project   @relation(fields: [projectId], references: [id], onDelete: Cascade)
-  User       User?     @relation(fields: [userId], references: [id], onDelete: Cascade)
-  Team       Team?     @relation(fields: [teamId], references: [id], onDelete: Cascade)
-
-  @@unique([projectId, userId, teamId]) // Prevent duplicate assignments
-  @@index([projectId, userId], name: "project_user_idx")
-  @@index([projectId, teamId], name: "project_team_idx")
-}
-
-model Team {
-  id                Int                 @id @default(autoincrement())
-  teamName          String
-  createdBy         Int
-  createdAt         DateTime            @default(now())
-  updatedAt         DateTime            @updatedAt
-  members           TeamMember[]
-  User              User                @relation(fields: [createdBy], references: [id], onDelete: Cascade)
-  ProjectAssignment ProjectAssignment[]
-}
-
-model Deadline {
-  id                  Int      @id @default(autoincrement())
-  deadline            DateTime
-  deadlineTitle       String
-  deadlineDescription String
-  userId              Int
-  User                User     @relation(fields: [userId], references: [id], onDelete: Cascade)
-  createdAt           DateTime @default(now())
-}
-
-model Notification {
-  id              Int      @id @default(autoincrement())
-  directMessage   Boolean  @default(false)
-  meetingReminder Boolean  @default(false)
-  userId          Int
-  User            User     @relation(fields: [userId], references: [id], onDelete: Cascade)
-  createdAt       DateTime @default(now())
-}
-
 model Reminder {
-  id                  Int      @id @default(autoincrement())
-  reminderTitle       String
-  reminderDescription String
-  reminderTime        DateTime
-  userId              Int
-  User                User     @relation(fields: [userId], references: [id], onDelete: Cascade)
-  createdAt           DateTime @default(now())
+  id          Int      @id @default(autoincrement())
+  title       String
+  description String
+  time        DateTime
+  userId      Int
+  user        User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  createdAt   DateTime @default(now())
 }
 
 model Task {
   id        Int          @id @default(autoincrement())
-  taskName  String
+  name      String
   priority  TaskPriority @default(MEDIUM)
   completed Boolean      @default(false)
   userId    Int
-  dueDate   String?
-  User      User         @relation(fields: [userId], references: [id], onDelete: Cascade)
+  dueDate   DateTime?
+  user      User         @relation(fields: [userId], references: [id], onDelete: Cascade)
   createdAt DateTime     @default(now())
 }
 
 model Space {
-  id             Int              @id @default(autoincrement())
-  spaceName      String
-  url            String
-  teamSize       String
-  spaceCode      String           @unique
-  primaryGoal    String
-  userId         Int
-  teamMembers    TeamMembers[]
-  teamInvitation TeamInvitation[]
-  User           User             @relation(fields: [userId], references: [id], onDelete: Cascade)
-  createdAt      DateTime         @default(now())
-  @@unique([spaceCode, userId])
+  id          Int              @id @default(autoincrement())
+  name        String
+  url         String
+  teamSize    Int
+  code        String           @unique
+  primaryGoal String
+  userId      Int
+  members     SpaceMember[]
+  invitations TeamInvitation[]
+  teams       Team[]
+  user        User             @relation(fields: [userId], references: [id], onDelete: Cascade)
+  createdAt   DateTime         @default(now())
+
+  @@unique([code, userId])
 }
 
-model TeamMembers {
+model Team {
+  id        Int          @id @default(autoincrement())
+  name      String
+  createdBy Int
+  createdAt DateTime     @default(now())
+  updatedAt DateTime     @updatedAt
+  members   TeamMember[]
+  user      User         @relation(fields: [createdBy], references: [id], onDelete: Cascade)
+  spaceId   Int
+  space     Space        @relation(fields: [spaceId], references: [id], onDelete: Cascade)
+}
+
+model Deadline {
+  id          Int      @id @default(autoincrement())
+  date        DateTime
+  title       String
+  description String
+  userId      Int
+  user        User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  createdAt   DateTime @default(now())
+}
+
+model SpaceMember {
   id       Int       @id @default(autoincrement())
   email    String
-  role     String    @default("member")
+  role     UserRole  @default(MEMBER)
   joinedAt DateTime?
   userId   Int
   spaceId  Int
-  Space    Space     @relation(fields: [spaceId], references: [id], onDelete: Cascade)
-  User     User      @relation(fields: [userId], references: [id], onDelete: Cascade)
+  space    Space     @relation(fields: [spaceId], references: [id], onDelete: Cascade)
+  user     User      @relation(fields: [userId], references: [id], onDelete: Cascade)
 
   @@unique([email, spaceId])
 }
 
 model TeamMember {
   id        Int       @id @default(autoincrement())
+  email     String
   userId    Int
-  teamId    Int
+  spaceId   Int
   role      UserRole  @default(MEMBER)
   invitedAt DateTime  @default(now())
   joinedAt  DateTime?
-  User      User      @relation(fields: [userId], references: [id], onDelete: Cascade)
-  Team      Team      @relation(fields: [teamId], references: [id], onDelete: Cascade)
+  user      User      @relation(fields: [userId], references: [id], onDelete: Cascade)
+  team      Team      @relation(fields: [spaceId], references: [id], onDelete: Cascade)
 
-  @@unique([userId, teamId])
+  @@unique([spaceId, userId])
 }
 
 model TeamInvitation {
@@ -194,6 +160,7 @@ model TeamInvitation {
   invitedAt DateTime  @default(now())
   joinedAt  DateTime?
   email     String
-  Space     Space     @relation(fields: [spaceId], references: [id], onDelete: Cascade)
+  space     Space     @relation(fields: [spaceId], references: [id], onDelete: Cascade)
+
   @@unique([spaceId, email])
 }

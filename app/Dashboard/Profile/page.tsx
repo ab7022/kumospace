@@ -20,7 +20,7 @@ const page = () => {
       {/* <ActiveTask /> */}
       {/* <ProjectAssign /> */}
        <Reminders /> 
-      {/* <TeamDirectory /> */}
+       <TeamDirectory /> 
       <Setting  />
     </div>
   );
