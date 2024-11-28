@@ -29,30 +29,31 @@ enum Status {
 }
 
 model User {
-  id                  Int           @id @default(autoincrement())
+  id                  Int              @id @default(autoincrement())
   name                String
-  email               String        @unique
+  email               String           @unique
   secondaryEmail      String?
   phoneNumber         String?
   password            String?
   profileUrl          String?
-  username            String?       @unique
+  username            String?          @unique
   timezone            String?
   workHoursFrom       String?
   workHoursTo         String?
-  premiumUser         Boolean       @default(false)
+  premiumUser         Boolean          @default(false)
   validTill           DateTime?
-  admin               Boolean       @default(false)
-  createdAt           DateTime      @default(now())
-  trialEndsAt         DateTime?     @default(dbgenerated("CURRENT_TIMESTAMP + INTERVAL '14 days'"))
+  admin               Boolean          @default(false)
+  createdAt           DateTime         @default(now())
+  trialEndsAt         DateTime?        @default(dbgenerated("CURRENT_TIMESTAMP + INTERVAL '14 days'"))
   provider            String
-  hasSubmittedDetails Boolean       @default(false)
-  isVerified          Boolean       @default(false)
+  hasSubmittedDetails Boolean          @default(false)
+  isVerified          Boolean          @default(false)
   firstName           String?
   lastName            String?
-  role                UserRole      @default(MEMBER)
-  status              Status        @default(AVAILABLE)
+  designation         String?
+  status              Status           @default(AVAILABLE)
   onCurrentlyWorking  String?
+  teamName            String?
   tasks               Task[]
   spaces              Space[]
   spaceMembers        SpaceMember[]
@@ -60,7 +61,7 @@ model User {
   deadlines           Deadline[]
   teams               Team[]
   teamMembers         TeamMember[]
-
+  joinRequests        JoinRequest[]
   @@unique([email], map: "unique_user_email")
   @@index([email], name: "email_idx")
 }
@@ -87,20 +88,35 @@ model Task {
 }
 
 model Space {
-  id          Int              @id @default(autoincrement())
-  name        String
-  url         String
-  teamSize    Int
-  code        String           @unique
-  primaryGoal String
-  userId      Int
-  members     SpaceMember[]
-  invitations TeamInvitation[]
-  teams       Team[]
-  user        User             @relation(fields: [userId], references: [id], onDelete: Cascade)
-  createdAt   DateTime         @default(now())
+  id           Int              @id @default(autoincrement())
+  name         String
+  url          String
+  teamSize     String
+  code         String           @unique
+  primaryGoal  String
+  createdBy    String
+  userId       Int
+  members      SpaceMember[]
+  invitations  Invitation[]
+  joinRequests JoinRequest[]
+  teams        Team[]
+  user         User             @relation(fields: [userId], references: [id], onDelete: Cascade)
+  createdAt    DateTime         @default(now())
 
   @@unique([code, userId])
+}
+
+model JoinRequest {
+  id          Int      @id @default(autoincrement())
+  email       String
+  name        String
+  spaceId     Int
+  userId      Int
+  accepted    Boolean  @default(false)
+  requestedAT DateTime @default(now())
+  space       Space    @relation(fields: [spaceId], references: [id], onDelete: Cascade)
+  user       User     @relation(fields: [email], references: [email], onDelete: Cascade)
+  @@unique([spaceId, email])
 }
 
 model Team {
@@ -152,7 +168,7 @@ model TeamMember {
   @@unique([spaceId, userId])
 }
 
-model TeamInvitation {
+model Invitation {
   id        Int       @id @default(autoincrement())
   spaceId   Int
   role      UserRole  @default(MEMBER)

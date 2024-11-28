@@ -7,9 +7,9 @@ const Reminders = () => {
   const [reminders, setReminders] = useState<
     {
       id: string;
-      reminderTitle: string;
-      reminderDescription: string;
-      reminderTime: string;
+      title: string;
+      description: string;
+      time: string;
     }[]
   >([]);
 
@@ -39,10 +39,10 @@ const Reminders = () => {
     const checkExpiredReminders = () => {
       const now = new Date();
       const updatedReminders = reminders.filter((reminder) => {
-        const reminderDate = new Date(reminder.reminderTime);
+        const reminderDate = new Date(reminder.time);
         if (reminderDate <= now) {
           showNotification(
-            `Reminder expired: ${reminder.reminderTitle}`,
+            `Reminder expired: ${reminder.title}`,
             "warning"
           );
           return false;
@@ -203,14 +203,14 @@ const Reminders = () => {
                     </div>
                     <div className="flex-grow">
                       <h4 className="text-sm font-semibold text-neutral-200">
-                        {reminder.reminderTitle || "No Title"}
+                        {reminder.title || "No Title"}
                       </h4>
                       <p className="text-sm text-neutral-400">
-                        {reminder.reminderDescription || "No Description"}
+                        {reminder.description || "No Description"}
                       </p>
                     </div>
                     <span className="text-xs font-medium px-3 py-1 rounded-full bg-yellow-100 text-yellow-800">
-                      {calculateTimeRemaining(reminder.reminderTime) ||
+                      {calculateTimeRemaining(reminder.time) ||
                         "No Time"}
                     </span>
                     <button

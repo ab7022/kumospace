@@ -3,7 +3,9 @@
 import React, { useEffect, useState, useCallback } from "react";
 import { io, Socket } from "socket.io-client";
 import Image from "next/image";
-
+import axios from "axios";
+import { useRouter } from "next/navigation";
+// @ts-ignore
 import { debounce } from "lodash";
 
 // Types
@@ -118,7 +120,6 @@ const Avatar = ({
   );
 };
 
-// Main Canvas Component
 const Canvas = ({ open, session }: any) => {
   const sessionData = session?.value ? JSON.parse(session.value) : {};
   const name = sessionData?.user?.name || ""; // Fallback to empty string
@@ -131,7 +132,23 @@ const Canvas = ({ open, session }: any) => {
   });
   const [otherAvatars, setOtherAvatars] = useState<Record<string, User>>({});
   const [boundaries, setBoundaries] = useState({ width: 0, height: 0 });
-
+  const router = useRouter();
+  async function getData() {
+    try {
+      const response = await axios.get("/api/dashboard/isLoggedIn");
+      if (response.status === 200) {
+        console.log("Loggedin:");
+      } else {
+        router.push("/setup");
+      }
+    } catch (error: any) {
+      console.error("Error:", error.message);
+      router.push("/setup");
+    }
+  }
+  useEffect(() => {
+    getData();
+  }, []);
   useEffect(() => {
     const newSocket = io(SOCKET_URL);
     setSocket(newSocket);

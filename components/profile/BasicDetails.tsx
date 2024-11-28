@@ -15,7 +15,7 @@ const BasicDetails = () => {
     firstName: "",
     lastName: "",
     teamName: "",
-    role: "",
+    designation: "",
   });
   const [loading, setLoading] = useState(true); // Track loading state
 
@@ -166,8 +166,8 @@ const BasicDetails = () => {
                   />
                   <Input
                     placeholder="Enter your Role"
-                    name="role"
-                    value={formData.role}
+                    name="designation"
+                    value={formData.designation}
                     onChange={handleChange}
                     icon={
                       <BriefcaseIcon className="h-5 w-5 text-neutral-500" />

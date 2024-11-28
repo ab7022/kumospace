@@ -63,7 +63,7 @@ export const NEXT_AUTH_CONFIG: NextAuthOptions = {
             data: {
               name: user.name ?? "",
               email: email ?? "",
-              profile_url: user.image,
+              profileUrl: user.image,
               provider: account?.provider ?? "",
               isVerified:true,
             },

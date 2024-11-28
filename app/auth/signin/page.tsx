@@ -72,7 +72,7 @@ const SignInComponent = () => {
               className="flex items-center justify-center py-2.5 border rounded-lg hover:bg-gray-200 duration-150 bg-gray-100 border-black active:bg-gray-100"
               onClick={async () => {
                 await signIn("google", {
-                  callbackUrl: "/Dashboard/Workspace",
+                  callbackUrl: "/setup",
                 });
               }}
             >
@@ -113,7 +113,7 @@ const SignInComponent = () => {
               className="flex items-center border-black justify-center py-2.5 border rounded-lg hover:bg-gray-200  bg-gray-100 duration-150 active:bg-gray-100"
               onClick={async () => {
                 await signIn("github", {
-                  callbackUrl: "/Dashboard/Workspace",
+                  callbackUrl: "/setup",
                   
                 });
               }}

@@ -17,7 +17,7 @@ export async function POST(req: NextRequest, res: NextResponse) {
         { status: 400 }
       );
     }
-    const existingMember = await prisma.teamMembers.findFirst({
+    const existingMember = await prisma.spaceMember.findFirst({
       where: {
         email,
       },
@@ -29,9 +29,9 @@ export async function POST(req: NextRequest, res: NextResponse) {
         { status: 409 }
       );
     }
-    const space = await prisma.teamMembers.findUnique({
+    const space = await prisma.spaceMember.findFirst({
       where: {
-        id: user.id,
+        userId: user.id,
       },
       select: {
         id: true,
@@ -47,7 +47,7 @@ export async function POST(req: NextRequest, res: NextResponse) {
       );
     }
 
-    const newMember = await prisma.teamInvitation.create({
+    const newMember = await prisma.invitation.create({
       data: {
         email,
         spaceId: space.spaceId,
@@ -90,7 +90,7 @@ export async function GET(req: NextRequest, res: NextResponse) {
         { status: 400 }
       );
     }
-    const existingInvites = await prisma.teamInvitation.findMany({
+    const existingInvites = await prisma.invitation.findMany({
       where: {
         spaceId: space.id,
       },
@@ -137,9 +137,9 @@ export async function DELETE(req: NextRequest, res: NextResponse) {
       return NextResponse.json({ error }, { status });
     }
 
-    const deletionRequest = await prisma.teamInvitation.delete({
+    const deletionRequest = await prisma.invitation.delete({
       where: {
-        id: Number(inviteId), // Ensure it's a number
+        id: Number(inviteId), 
       },
     });
 

@@ -32,9 +32,9 @@ export async function POST(req: NextRequest, res: NextResponse) {
 
     const newReminder = await prisma.reminder.create({
       data: {
-        reminderTitle: title,
-        reminderDescription: description,
-        reminderTime: reminderTime,
+        title,
+       description,
+        time: reminderTime,
         userId: user.id,
       },
     });
@@ -55,13 +55,12 @@ export async function GET(req: NextRequest, res: NextResponse) {
     if (!success || !user) {
       return NextResponse.json({ error }, { status });
     }
-    // Fetch all reminders for the authenticated user
     const reminders = await prisma.reminder.findMany({
       where: {
         userId: user.id,
       },
       include: {
-        User: true,
+        user : true,
       },
     });
 

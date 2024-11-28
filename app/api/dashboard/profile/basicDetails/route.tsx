@@ -7,10 +7,10 @@ export async function POST(req: NextRequest, res: NextResponse) {
     return NextResponse.json({ error }, { status });
   }
   const body = await req.json();
-  const { firstName, lastName, teamName, role } = body;
+  const { firstName, lastName, teamName, designation } = body;
 
   try {
-    console.log("Data received:", { firstName, lastName, teamName, role });
+    console.log("Data received:", { firstName, lastName, teamName, designation });
 
     await prisma.user.update({
       where: {
@@ -20,7 +20,7 @@ export async function POST(req: NextRequest, res: NextResponse) {
         firstName,
         lastName,
         teamName,
-        role,
+        designation,
       },
     });
 
@@ -49,7 +49,8 @@ export async function GET(req: NextRequest, res: NextResponse) {
         firstName: true,
         lastName: true,
         teamName: true,
-        role: true,
+        designation: true,
+        
       },
     });
     return NextResponse.json(user1, { status: 200 });

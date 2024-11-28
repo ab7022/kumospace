@@ -6,11 +6,23 @@ type Invite = {
   email: string;
   invitedAt: string;
 };
+type Request = {
+  id: number;
+  name: string;
+  email: string;
+};
 
-const PendingInvites = ({ open }: { open: boolean }) => {
+const PendingInvites = ({
+  open,
+  userRole,
+}: {
+  open: boolean;
+  userRole: string;
+}) => {
   const [invites, setInvites] = useState<Invite[]>([]);
+  const [joinRequest, setJoinRequest] = useState<Request[]>([]);
   const [loading, setLoading] = useState(true);
-  const [error, setError] = useState(null);
+  const [error, setError] = useState<string | null>(null);
 
   const fetchInvites = async () => {
     try {
@@ -23,9 +35,21 @@ const PendingInvites = ({ open }: { open: boolean }) => {
       setLoading(false);
     }
   };
+  const fetchJoinRequests = async () => {
+    try {
+      const response = await axios.get("/api/dashboard/joinRequests");
+      setJoinRequest(response.data.existingInvites);
+    } catch (err) {
+      console.error("Error fetching invites:", err);
+      setError("Failed to load invites.");
+    } finally {
+      setLoading(false);
+    }
+  };
 
   useEffect(() => {
     fetchInvites();
+    fetchJoinRequests();
   }, []);
   async function deleteInvite(inviteId: number) {
     try {
@@ -58,9 +82,6 @@ const PendingInvites = ({ open }: { open: boolean }) => {
         )}
         {error && <p className="text-red-500">{error}</p>}
 
-        {!invites.length && (
-          <p className="text-neutral-400">No pending invites.</p>
-        )}
         {invites.map((invite) => (
           <div
             key={invite.id}
@@ -107,6 +128,87 @@ const PendingInvites = ({ open }: { open: boolean }) => {
             </div>
           </div>
         ))}
+        {joinRequest.map((request) => (
+          <div
+            className="bg-neutral-700/30 p-5 rounded-xl hover:bg-neutral-700/40 transition-all duration-300"
+            key={request.id}
+          >
+            <div className="flex items-center justify-between mb-4">
+              <div className="flex items-center space-x-3">
+                <img
+                  src={`https://ui-avatars.com/api/?name=${request.name}&rounded=true`}
+                  alt={request.name}
+                  className={`${
+                    open ? "h-8 w-8" : "h-12 w-12"
+                  } rounded-full ring-2 ring-primary-400`}
+                />
+                <div>
+                  <h3
+                    className={`${
+                      open ? "text-xs" : "text-sm"
+                    } text-white font-medium`}
+                  >
+                    {request.name}
+                  </h3>
+                  <p
+                    className={`${
+                      open ? "text-xs" : "text-sm"
+                    } text-neutral-400`}
+                  >
+                    {request.email}
+                  </p>
+                </div>
+              </div>
+            </div>
+            <div
+              className={`flex ${
+                open ? "flex-col space-y-2" : "space-x-2 lg:flex-row"
+              }`}
+            >
+              <button className="flex-1 px-4 py-2 bg-primary-500 rounded-lg text-black font-medium hover:bg-primary-400 transition-all text-sm flex items-center justify-center">
+                <svg
+                  className="w-4 h-4 mr-2"
+                  fill="none"
+                  stroke="currentColor"
+                  viewBox="0 0 24 24"
+                >
+                  <path
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    strokeWidth="2"
+                    d="M5 13l4 4L19 7"
+                  />
+                </svg>
+                Approve
+              </button>
+              <button className="flex-1 px-4 py-2 bg-neutral-700 rounded-lg text-white font-medium hover:bg-neutral-600 transition-all text-sm flex items-center justify-center">
+                <svg
+                  className="w-4 h-4 mr-2"
+                  fill="none"
+                  stroke="currentColor"
+                  viewBox="0 0 24 24"
+                >
+                  <path
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    strokeWidth="2"
+                    d="M6 18L18 6M6 6l12 12"
+                  />
+                </svg>
+                Decline
+              </button>
+            </div>
+          </div>
+        ))}
+        <p className="text-neutral-400 text-center">
+          No pending invites.{" "}
+          <button
+            onClick={fetchInvites}
+            className="text-blue-500 hover:underline"
+          >
+            Please refresh
+          </button>
+        </p>
       </div>
     </div>
   );
