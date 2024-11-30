@@ -67,7 +67,42 @@ const PendingInvites = ({
       alert("Error deleting invite");
     }
   }
-
+  async function approveRequest(requestId: number) {
+    try {
+      const res = await axios.post(`/api/dashboard/approveRequests`, {
+        requestId,
+      });
+      if (res.status === 200) {
+        const newRequests = joinRequest.filter(
+          (request) => request.id !== requestId
+        );
+        setJoinRequest(newRequests);
+      } else {
+        alert("Error approving request");
+      }
+    } catch (error) {
+      console.error("Error approving request:", error);
+      alert("Error approving request");
+    }
+  }
+  async function declineRequest(requestId: number) {
+    try {
+      const res = await axios.put(`/api/dashboard/approveRequests`, {
+        requestId,
+      });
+      if (res.status === 200) {
+        const newRequests = joinRequest.filter(
+          (request) => request.id !== requestId
+        );
+        setJoinRequest(newRequests);
+      } else {
+        alert("Error approving request");
+      }
+    } catch (error) {
+      console.error("Error approving request:", error);
+      alert("Error approving request");
+    }
+  }
   return (
     <div className="bg-neutral-800/50 backdrop-blur-xl rounded-2xl p-8 border border-neutral-700/50 shadow-xl">
       <div className="flex justify-between items-center mb-8">
@@ -165,7 +200,12 @@ const PendingInvites = ({
                 open ? "flex-col space-y-2" : "space-x-2 lg:flex-row"
               }`}
             >
-              <button className="flex-1 px-4 py-2 bg-primary-500 rounded-lg text-black font-medium hover:bg-primary-400 transition-all text-sm flex items-center justify-center">
+              <button
+                className="flex-1 px-4 py-2 bg-primary-500 rounded-lg text-black font-medium hover:bg-primary-400 transition-all text-sm flex items-center justify-center"
+                onClick={() => {
+                  approveRequest(request.id);
+                }}
+              >
                 <svg
                   className="w-4 h-4 mr-2"
                   fill="none"
@@ -181,7 +221,12 @@ const PendingInvites = ({
                 </svg>
                 Approve
               </button>
-              <button className="flex-1 px-4 py-2 bg-neutral-700 rounded-lg text-white font-medium hover:bg-neutral-600 transition-all text-sm flex items-center justify-center">
+              <button
+                className="flex-1 px-4 py-2 bg-neutral-700 rounded-lg text-white font-medium hover:bg-neutral-600 transition-all text-sm flex items-center justify-center"
+                onClick={() => {
+                  declineRequest(request.id);
+                }}
+              >
                 <svg
                   className="w-4 h-4 mr-2"
                   fill="none"
@@ -203,7 +248,10 @@ const PendingInvites = ({
         <p className="text-neutral-400 text-center">
           No pending invites.{" "}
           <button
-            onClick={fetchInvites}
+            onClick={() => {
+              fetchInvites();
+              fetchJoinRequests();
+            }}
             className="text-blue-500 hover:underline"
           >
             Please refresh

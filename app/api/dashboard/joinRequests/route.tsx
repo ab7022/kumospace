@@ -78,7 +78,7 @@ export async function GET(req: NextRequest, res: NextResponse) {
     }
     const space = await prisma.space.findFirst({
       where: {
-       userId:user.id
+       userId:user.id 
       },
       select: {
         id: true,

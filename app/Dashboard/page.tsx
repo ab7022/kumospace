@@ -52,14 +52,16 @@ const Dashboard = ({ open }: { open: boolean }) => {
         <DashboardHeader userRole={role} />
         <div className="grid grid-cols-12 gap-8">
           <div className="col-span-8 space-y-6">
-            <TeamMembers />
-            <TeamActivities />
+            <TeamMembers userRole={role} />
+            {/* <TeamActivities /> */}
             <SharedResources />
             <UpcomingEvents />
           </div>
           <div className="col-span-4 space-y-6">
             {/* <TeamPerformance /> */}
-            <PendingInvites open={open} userRole={role} />
+            {(role === "ADMIN" || role === "MODERATOR") && (
+              <PendingInvites open={open} userRole={role} />
+            )}
             <QuickActions />
             <UpcomingDeadline />
           </div>

@@ -1,6 +1,38 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
+import axios from "axios";
+import Image from "next/image";
+interface TeamMember {
+  id: number;
+  name: string;
+  status: string;
+  profileUrl: string;
+  designation: string;
+  lastName: string;
+  firstName: string;
+  teamName: string;
+}
 
-const TeamMembers = () => {
+const TeamMembers = ({ userRole }: { userRole: string }) => {
+  const [teamMembers, setTeamMembers] = useState<TeamMember[]>([]);
+  const [isLoading, setIsLoading] = useState(true);
+
+  useEffect(() => {
+    const fetchTeamMembers = async () => {
+      try {
+        const response = await axios.get("/api/dashboard/spaceMembers");
+        console.log(response.data.mySpaceMembers);
+        const data = response.data.mySpaceMembers.map((item: any) => item.user);
+        setTeamMembers(data);
+      } catch (error) {
+        console.error("Failed to fetch team members", error);
+      } finally {
+        setIsLoading(false);
+      }
+    };
+
+    fetchTeamMembers();
+  }, []);
+
   return (
     <div className="bg-neutral-800/50 backdrop-blur-xl rounded-2xl p-8 border border-neutral-700/50">
       <div className="flex justify-between items-center mb-8">
@@ -57,182 +89,112 @@ const TeamMembers = () => {
           Management
         </button>
       </div>
-      <div className="space-y-4">
-        <div className="flex items-center justify-between p-5 bg-neutral-700/20 hover:bg-neutral-700/30 rounded-xl transition-all duration-200">
-          <div className="flex items-center gap-4">
-            <div className="relative">
-              <img
-                src="https://ui-avatars.com/api/?name=Sarah+Johnson&background=6366f1&color=fff"
-                className="w-14 h-14 rounded-full ring-2 ring-indigo-500/50"
-              />
-              <div className="absolute -bottom-1 -right-1 w-4 h-4 bg-green-400 rounded-full border-2 border-neutral-800"></div>
-            </div>
-            <div>
-              <h3 className="text-white font-medium text-lg">Sarah Johnson</h3>
-              <div className="flex items-center gap-2 mt-1">
-                <span className="text-neutral-400 text-sm">Lead Designer</span>
-                <span className="w-1 h-1 bg-neutral-500 rounded-full"></span>
-                <span className="text-neutral-400 text-sm">Design System</span>
-              </div>
-            </div>
-          </div>
-          <div className="flex items-center gap-6">
-            <span className="inline-flex items-center px-3 py-1 rounded-full text-xs font-medium bg-green-400/10 text-green-400">
-              Active
-            </span>
-            <div className="flex -space-x-2">
-              <button className="p-2 hover:bg-neutral-700 rounded-lg transition-all">
-                <svg
-                  className="w-5 h-5 text-neutral-400"
-                  fill="none"
-                  stroke="currentColor"
-                  viewBox="0 0 24 24"
-                >
-                  <path
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                    strokeWidth="2"
-                    d="M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z"
-                  />
-                </svg>
-              </button>
-            </div>
-            <button className="text-neutral-400 hover:text-red-400 transition-colors">
-              <svg
-                className="w-5 h-5"
-                fill="none"
-                stroke="currentColor"
-                viewBox="0 0 24 24"
+      {isLoading ? (
+        <p className="text-white text-center">Loading...</p>
+      ) : (
+        <div className="space-y-4">
+          {teamMembers.length > 0 &&
+            teamMembers?.map((member) => (
+              <div
+                key={member.id}
+                className="flex items-center justify-between p-5 bg-neutral-700/20 hover:bg-neutral-700/30 rounded-xl transition-all duration-200"
               >
-                <path
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                  strokeWidth="2"
-                  d="M12 5v.01M12 12v.01M12 19v.01M12 6a1 1 0 110-2 1 1 0 010 2zm0 7a1 1 0 110-2 1 1 0 010 2zm0 7a1 1 0 110-2 1 1 0 010 2z"
-                />
-              </svg>
-            </button>
-          </div>
-        </div>
-
-        <div className="flex items-center justify-between p-5 bg-neutral-700/20 hover:bg-neutral-700/30 rounded-xl transition-all duration-200">
-          <div className="flex items-center gap-4">
-            <div className="relative">
-              <img
-                src="https://ui-avatars.com/api/?name=Alex+Chen&background=ec4899&color=fff"
-                className="w-14 h-14 rounded-full ring-2 ring-pink-500/50"
-              />
-              <div className="absolute -bottom-1 -right-1 w-4 h-4 bg-yellow-400 rounded-full border-2 border-neutral-800"></div>
-            </div>
-            <div>
-              <h3 className="text-white font-medium text-lg">Alex Chen</h3>
-              <div className="flex items-center gap-2 mt-1">
-                <span className="text-neutral-400 text-sm">Frontend Dev</span>
-                <span className="w-1 h-1 bg-neutral-500 rounded-full"></span>
-                <span className="text-neutral-400 text-sm">
-                  Client Dashboard
-                </span>
+                <div className="flex items-center gap-4">
+                  <div className="relative">
+                    <Image
+                      src={
+                        member.profileUrl ||
+                        `https://ui-avatars.com/api/?name=${member.name}&background=ec4899&color=fff`
+                      }
+                      alt={member.name}
+                      width={48}
+                      height={48}
+                      className=" z-50 rounded-full ring-2 ring-indigo-500/50"
+                    />
+                    <div
+                      className={`absolute -bottom-1 z-40 -right-1 w-4 h-4 rounded-full border-2 border-neutral-800 ${
+                        member.status === "AVAILABLE"
+                          ? "bg-green-400"
+                          : member.status === "BUSY" || member.status === "DND"
+                          ? "bg-yellow-400"
+                          : "bg-neutral-400"
+                      }`}
+                    ></div>
+                  </div>
+                  <div>
+                    <h3 className="text-white font-medium text-lg">
+                      {member.firstName?.length > 0 ||
+                      member.lastName?.length > 0 ? (
+                        <>
+                          {member.firstName} {member.lastName}
+                        </>
+                      ) : (
+                        <> {member.name}</>
+                      )}
+                    </h3>
+                    <div className="flex items-center gap-2 mt-1">
+                      <span className="text-neutral-400 text-sm">
+                        {member.designation}
+                      </span>
+                      {member.teamName?.length >0 &&(
+                          <>
+                            {" "}
+                            <span className="w-1 h-1 bg-neutral-500 rounded-full"></span>
+                            <span className="text-neutral-400 text-sm">
+                              {member.teamName}
+                            </span>
+                          </>
+                        )}
+                    </div>
+                  </div>
+                </div>
+                <div className="flex items-center gap-6">
+                  <span
+                    className={`inline-flex items-center px-3 py-1 rounded-full text-xs font-medium ${
+                      member.status === "AVAILABLE"
+                        ? "bg-green-400"
+                        : member.status === "BUSY" || member.status === "DND"
+                        ? "bg-yellow-400"
+                        : "bg-neutral-400"
+                    }`}
+                  >
+                    {member.status}
+                  </span>
+                  <button className="p-2 hover:bg-neutral-700 rounded-lg transition-all">
+                    <svg
+                      className="w-5 h-5 text-neutral-400"
+                      fill="none"
+                      stroke="currentColor"
+                      viewBox="0 0 24 24"
+                    >
+                      <path
+                        strokeLinecap="round"
+                        strokeLinejoin="round"
+                        strokeWidth="2"
+                        d="M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z"
+                      />
+                    </svg>
+                  </button>
+                  <button className="text-neutral-400 hover:text-red-400 transition-colors">
+                    <svg
+                      className="w-5 h-5"
+                      fill="none"
+                      stroke="currentColor"
+                      viewBox="0 0 24 24"
+                    >
+                      <path
+                        strokeLinecap="round"
+                        strokeLinejoin="round"
+                        strokeWidth="2"
+                        d="M12 5v.01M12 12v.01M12 19v.01M12 6a1 1 0 110-2 1 1 0 010 2zm0 7a1 1 0 110-2 1 1 0 010 2zm0 7a1 1 0 110-2 1 1 0 010 2z"
+                      />
+                    </svg>
+                  </button>
+                </div>
               </div>
-            </div>
-          </div>
-          <div className="flex items-center gap-6">
-            <span className="inline-flex items-center px-3 py-1 rounded-full text-xs font-medium bg-yellow-400/10 text-yellow-400">
-              In Meeting
-            </span>
-            <div className="flex -space-x-2">
-              <button className="p-2 hover:bg-neutral-700 rounded-lg transition-all">
-                <svg
-                  className="w-5 h-5 text-neutral-400"
-                  fill="none"
-                  stroke="currentColor"
-                  viewBox="0 0 24 24"
-                >
-                  <path
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                    strokeWidth="2"
-                    d="M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z"
-                  />
-                </svg>
-              </button>
-            </div>
-            <button className="text-neutral-400 hover:text-red-400 transition-colors">
-              <svg
-                className="w-5 h-5"
-                fill="none"
-                stroke="currentColor"
-                viewBox="0 0 24 24"
-              >
-                <path
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                  strokeWidth="2"
-                  d="M12 5v.01M12 12v.01M12 19v.01M12 6a1 1 0 110-2 1 1 0 010 2zm0 7a1 1 0 110-2 1 1 0 010 2zm0 7a1 1 0 110-2 1 1 0 010 2z"
-                />
-              </svg>
-            </button>
-          </div>
+            ))}
         </div>
-
-        <div className="flex items-center justify-between p-5 bg-neutral-700/20 hover:bg-neutral-700/30 rounded-xl transition-all duration-200">
-          <div className="flex items-center gap-4">
-            <div className="relative">
-              <img
-                src="https://ui-avatars.com/api/?name=Emily+Wilson&background=84cc16&color=fff"
-                className="w-14 h-14 rounded-full ring-2 ring-lime-500/50"
-              />
-              <div className="absolute -bottom-1 -right-1 w-4 h-4 bg-neutral-400 rounded-full border-2 border-neutral-800"></div>
-            </div>
-            <div>
-              <h3 className="text-white font-medium text-lg">Emily Wilson</h3>
-              <div className="flex items-center gap-2 mt-1">
-                <span className="text-neutral-400 text-sm">
-                  Product Manager
-                </span>
-                <span className="w-1 h-1 bg-neutral-500 rounded-full"></span>
-                <span className="text-neutral-400 text-sm">Mobile App</span>
-              </div>
-            </div>
-          </div>
-          <div className="flex items-center gap-6">
-            <span className="inline-flex items-center px-3 py-1 rounded-full text-xs font-medium bg-neutral-400/10 text-neutral-400">
-              Away
-            </span>
-            <div className="flex -space-x-2">
-              <button className="p-2 hover:bg-neutral-700 rounded-lg transition-all">
-                <svg
-                  className="w-5 h-5 text-neutral-400"
-                  fill="none"
-                  stroke="currentColor"
-                  viewBox="0 0 24 24"
-                >
-                  <path
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                    strokeWidth="2"
-                    d="M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z"
-                  />
-                </svg>
-              </button>
-            </div>
-            <button className="text-neutral-400 hover:text-red-400 transition-colors">
-              <svg
-                className="w-5 h-5"
-                fill="none"
-                stroke="currentColor"
-                viewBox="0 0 24 24"
-              >
-                <path
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                  strokeWidth="2"
-                  d="M12 5v.01M12 12v.01M12 19v.01M12 6a1 1 0 110-2 1 1 0 010 2zm0 7a1 1 0 110-2 1 1 0 010 2zm0 7a1 1 0 110-2 1 1 0 010 2z"
-                />
-              </svg>
-            </button>
-          </div>
-        </div>
-      </div>
+      )}
     </div>
   );
 };

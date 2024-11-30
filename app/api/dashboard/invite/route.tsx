@@ -52,6 +52,7 @@ export async function POST(req: NextRequest, res: NextResponse) {
         email,
         spaceId: space.spaceId,
         role: role.toUpperCase() || "MEMBER",
+        
       },
     });
 

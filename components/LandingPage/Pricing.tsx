@@ -88,8 +88,8 @@ const Pricing = () => {
                   >
                     <path
                       strokeLinecap="round"
-                      strokelinejoin="round"
-                      strokewidth="2"
+                      strokeLinejoin="round"
+                      strokeWidth="2"
                       d="M5 13l4 4L19 7"
                     />
                   </svg>
@@ -104,8 +104,8 @@ const Pricing = () => {
                   >
                     <path
                       strokeLinecap="round"
-                      strokelinejoin="round"
-                      strokewidth="2"
+                      strokeLinejoin="round"
+                      strokeWidth="2"
                       d="M5 13l4 4L19 7"
                     />
                   </svg>
@@ -120,8 +120,8 @@ const Pricing = () => {
                   >
                     <path
                       strokeLinecap="round"
-                      strokelinejoin="round"
-                      strokewidth="2"
+                      strokeLinejoin="round"
+                      strokeWidth="2"
                       d="M5 13l4 4L19 7"
                     />
                   </svg>
@@ -136,8 +136,8 @@ const Pricing = () => {
                   >
                     <path
                       strokeLinecap="round"
-                      strokelinejoin="round"
-                      strokewidth="2"
+                      strokeLinejoin="round"
+                      strokeWidth="2"
                       d="M5 13l4 4L19 7"
                     />
                   </svg>
@@ -178,8 +178,8 @@ const Pricing = () => {
                   >
                     <path
                       strokeLinecap="round"
-                      strokelinejoin="round"
-                      strokewidth="2"
+                      strokeLinejoin="round"
+                      strokeWidth="2"
                       d="M5 13l4 4L19 7"
                     />
                   </svg>
@@ -194,8 +194,8 @@ const Pricing = () => {
                   >
                     <path
                       strokeLinecap="round"
-                      strokelinejoin="round"
-                      strokewidth="2"
+                      strokeLinejoin="round"
+                      strokeWidth="2"
                       d="M5 13l4 4L19 7"
                     />
                   </svg>
@@ -210,8 +210,8 @@ const Pricing = () => {
                   >
                     <path
                       strokeLinecap="round"
-                      strokelinejoin="round"
-                      strokewidth="2"
+                      strokeLinejoin="round"
+                      strokeWidth="2"
                       d="M5 13l4 4L19 7"
                     />
                   </svg>
@@ -226,8 +226,8 @@ const Pricing = () => {
                   >
                     <path
                       strokeLinecap="round"
-                      strokelinejoin="round"
-                      strokewidth="2"
+                      strokeLinejoin="round"
+                      strokeWidth="2"
                       d="M5 13l4 4L19 7"
                     />
                   </svg>
@@ -242,8 +242,8 @@ const Pricing = () => {
                   >
                     <path
                       strokeLinecap="round"
-                      strokelinejoin="round"
-                      strokewidth="2"
+                      strokeLinejoin="round"
+                      strokeWidth="2"
                       d="M5 13l4 4L19 7"
                     />
                   </svg>
@@ -281,8 +281,8 @@ const Pricing = () => {
                   >
                     <path
                       strokeLinecap="round"
-                      strokelinejoin="round"
-                      strokewidth="2"
+                      strokeLinejoin="round"
+                      strokeWidth="2"
                       d="M5 13l4 4L19 7"
                     />
                   </svg>
@@ -297,8 +297,8 @@ const Pricing = () => {
                   >
                     <path
                       strokeLinecap="round"
-                      strokelinejoin="round"
-                      strokewidth="2"
+                      strokeLinejoin="round"
+                      strokeWidth="2"
                       d="M5 13l4 4L19 7"
                     />
                   </svg>
@@ -313,8 +313,8 @@ const Pricing = () => {
                   >
                     <path
                       strokeLinecap="round"
-                      strokelinejoin="round"
-                      strokewidth="2"
+                      strokeLinejoin="round"
+                      strokeWidth="2"
                       d="M5 13l4 4L19 7"
                     />
                   </svg>
@@ -329,8 +329,8 @@ const Pricing = () => {
                   >
                     <path
                       strokeLinecap="round"
-                      strokelinejoin="round"
-                      strokewidth="2"
+                      strokeLinejoin="round"
+                      strokeWidth="2"
                       d="M5 13l4 4L19 7"
                     />
                   </svg>
@@ -403,8 +403,8 @@ const Pricing = () => {
                 >
                   <path
                     strokeLinecap="round"
-                    strokelinejoin="round"
-                    strokewidth="2"
+                    strokeLinejoin="round"
+                    strokeWidth="2"
                     d="M9 5l7 7-7 7"
                   />
                 </svg>
