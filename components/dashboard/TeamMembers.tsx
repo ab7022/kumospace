@@ -90,7 +90,27 @@ const TeamMembers = ({ userRole }: { userRole: string }) => {
         </button>
       </div>
       {isLoading ? (
-        <p className="text-white text-center">Loading...</p>
+        <div className="space-y-4">
+          {[...Array(4)].map((_, idx) => (
+            <div
+              key={idx}
+              className="flex items-center justify-between p-5 bg-neutral-700/20 rounded-xl animate-pulse"
+            >
+              <div className="flex items-center gap-4">
+                <div className="w-12 h-12 bg-neutral-600 rounded-full"></div>
+                <div>
+                  <div className="w-32 h-4 bg-neutral-600 rounded"></div>
+                  <div className="w-24 h-3 bg-neutral-600 rounded mt-2"></div>
+                </div>
+              </div>
+              <div className="flex items-center gap-6">
+                <div className="w-16 h-5 bg-neutral-600 rounded-full"></div>
+                <div className="w-5 h-5 bg-neutral-600 rounded-full"></div>
+                <div className="w-5 h-5 bg-neutral-600 rounded-full"></div>
+              </div>
+            </div>
+          ))}
+        </div>
       ) : (
         <div className="space-y-4">
           {teamMembers.length > 0 &&
@@ -109,7 +129,7 @@ const TeamMembers = ({ userRole }: { userRole: string }) => {
                       alt={member.name}
                       width={48}
                       height={48}
-                      className=" z-50 rounded-full ring-2 ring-indigo-500/50"
+                      className="z-50 rounded-full ring-2 ring-indigo-500/50"
                     />
                     <div
                       className={`absolute -bottom-1 z-40 -right-1 w-4 h-4 rounded-full border-2 border-neutral-800 ${
@@ -136,15 +156,15 @@ const TeamMembers = ({ userRole }: { userRole: string }) => {
                       <span className="text-neutral-400 text-sm">
                         {member.designation}
                       </span>
-                      {member.teamName?.length >0 &&(
-                          <>
-                            {" "}
-                            <span className="w-1 h-1 bg-neutral-500 rounded-full"></span>
-                            <span className="text-neutral-400 text-sm">
-                              {member.teamName}
-                            </span>
-                          </>
-                        )}
+                      {member.teamName?.length > 0 && (
+                        <>
+                          {" "}
+                          <span className="w-1 h-1 bg-neutral-500 rounded-full"></span>
+                          <span className="text-neutral-400 text-sm">
+                            {member.teamName}
+                          </span>
+                        </>
+                      )}
                     </div>
                   </div>
                 </div>

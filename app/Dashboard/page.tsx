@@ -54,7 +54,7 @@ const Dashboard = ({ open }: { open: boolean }) => {
           <div className="col-span-8 space-y-6">
             <TeamMembers userRole={role} />
             {/* <TeamActivities /> */}
-            <SharedResources />
+            {/* <SharedResources /> */}
             <UpcomingEvents />
           </div>
           <div className="col-span-4 space-y-6">

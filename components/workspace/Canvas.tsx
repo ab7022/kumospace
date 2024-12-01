@@ -8,7 +8,6 @@ import { useRouter } from "next/navigation";
 // @ts-ignore
 import { debounce } from "lodash";
 
-// Types
 interface Position {
   x: number;
   y: number;
@@ -33,7 +32,6 @@ interface AvatarProps {
   status?: string;
 }
 
-// Constants
 const STEP_SIZE = 20;
 const AVATAR_SIZE = 48;
 const SOCKET_URL = "http://localhost:3001";
@@ -53,7 +51,7 @@ const Avatar = ({
   name,
   image,
   email = "Unknown",
-  status = "Active",
+  status = "ACTIVE",
   isCurrentUser = false,
 }: AvatarProps) => {
   const [showModal, setShowModal] = useState(false);
@@ -98,9 +96,11 @@ const Avatar = ({
           <div className="mt-3">
             <span
               className={`inline-block px-3 py-1 text-xs font-medium rounded-full ${
-                status === "Active"
-                  ? "bg-green-100 text-green-600"
-                  : "bg-gray-100 text-gray-600"
+                status === "AVAILABLE"
+                  ? "bg-green-400"
+                  : status === "BUSY" || status === "DND"
+                  ? "bg-yellow-400"
+                  : "bg-neutral-400"
               }`}
             >
               {status}
@@ -121,8 +121,10 @@ const Avatar = ({
 };
 
 const Canvas = ({ open, session }: any) => {
+  const [userDetails, setUserDetails] = useState("");
+
   const sessionData = session?.value ? JSON.parse(session.value) : {};
-  const name = sessionData?.user?.name || ""; // Fallback to empty string
+  const name = sessionData?.user?.name || "";
   const email = sessionData?.user?.email || "";
   const image = sessionData?.user?.image || "";
   const [socket, setSocket] = useState<Socket | null>(null);
@@ -137,7 +139,7 @@ const Canvas = ({ open, session }: any) => {
     try {
       const response = await axios.get("/api/dashboard/isLoggedIn");
       if (response.status === 200) {
-        console.log("Loggedin:");
+        console.log("Logged in:");
       } else {
         router.push("/setup");
       }
@@ -149,6 +151,11 @@ const Canvas = ({ open, session }: any) => {
   useEffect(() => {
     getData();
   }, []);
+  useEffect(() => {
+    async function fetchData() {}
+    fetchData();
+  }, []);
+
   useEffect(() => {
     const newSocket = io(SOCKET_URL);
     setSocket(newSocket);
@@ -181,11 +188,9 @@ const Canvas = ({ open, session }: any) => {
     return () => window.removeEventListener("resize", updateBoundaries);
   }, []);
 
-  // Socket event handlers
   useEffect(() => {
     if (!socket) return;
 
-    // Listen for users update from server
     socket.on("users", (users: Record<string, User>) => {
       setOtherAvatars(users);
     });
@@ -195,7 +200,6 @@ const Canvas = ({ open, session }: any) => {
     };
   }, [socket]);
 
-  // Debounced position update to server
   const updateServerPosition = useCallback(
     debounce((position: Position) => {
       if (!socket) return;
@@ -209,7 +213,6 @@ const Canvas = ({ open, session }: any) => {
     [socket, session]
   );
 
-  // Update server when position changes
   useEffect(() => {
     updateServerPosition(avatarPosition);
   }, [avatarPosition, updateServerPosition]);
@@ -277,7 +280,8 @@ const Canvas = ({ open, session }: any) => {
       {/* Current user's avatar */}
       <Avatar
         position={avatarPosition}
-        name={name || email || ""}
+        name={name || ""}
+        email={email}
         isCurrentUser={true}
         image={image}
       />
