@@ -22,7 +22,6 @@ const Dashboard = ({ open }: { open: boolean }) => {
         const response = await axios.get("/api/dashboard/fetchData");
         setUserDetails(response.data);
         setRole(response.data.spaceMembers[0].role);
-        console.log(response.data.spaceMembers[0].role);
       } catch (error) {
         console.error("Error fetching user details:", error);
         alert("An error occurred while fetching user details.");
@@ -34,7 +33,6 @@ const Dashboard = ({ open }: { open: boolean }) => {
     try {
       const response = await axios.get("/api/dashboard/isLoggedIn");
       if (response.status === 200) {
-        console.log("Loggedin:");
       } else {
         router.push("/setup");
       }

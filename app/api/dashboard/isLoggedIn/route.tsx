@@ -16,7 +16,6 @@ export async function GET(req: NextRequest, res: NextResponse) {
         user:true,
       },
     });
-    console.log(existingSpace);
     if (existingSpace == null) {
       return NextResponse.json(
         { message: "You are not associated with any of space" },

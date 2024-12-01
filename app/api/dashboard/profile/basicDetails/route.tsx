@@ -10,8 +10,6 @@ export async function POST(req: NextRequest, res: NextResponse) {
   const { firstName, lastName, teamName, designation } = body;
 
   try {
-    console.log("Data received:", { firstName, lastName, teamName, designation });
-
     await prisma.user.update({
       where: {
         id: user.id,

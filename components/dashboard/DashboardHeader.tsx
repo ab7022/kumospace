@@ -6,7 +6,6 @@ const DashboardHeader = ({ userRole }: { userRole: string }) => {
   const [email, setEmail] = useState("");
   const [role, setRole] = useState("");
   const [loading, setLoading] = useState(false);
-  console.log(userRole);
 
   const handleInvite = async () => {
     if (!email) {

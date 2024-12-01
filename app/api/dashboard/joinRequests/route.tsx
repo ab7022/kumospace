@@ -39,7 +39,6 @@ import prisma from "@/lib/prisma";
 //       },
 //     });
 
-//     console.log("space", space);
 //     if (!space) {
 //       return NextResponse.json(
 //         { message: "You are not associated with any space." },
@@ -102,7 +101,6 @@ export async function GET(req: NextRequest, res: NextResponse) {
     });
 
     if (existingInvites) {
-      console.log(existingInvites);
       
       return NextResponse.json({ existingInvites }, { status: 200 });
     } else {

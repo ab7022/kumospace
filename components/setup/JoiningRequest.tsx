@@ -17,7 +17,6 @@ const JoiningRequest = () => {
     const fetchJoinRequests = async () => {
       try {
         const response = await axios.get(url);
-        console.log(response.data);
 
         if (response.status === 200) {
           const { invitations, space } = response.data;
@@ -30,7 +29,6 @@ const JoiningRequest = () => {
                 spaceName: space.name,
               },
             ];
-            console.log("formattedRequests", formattedRequests);
 
             setJoinRequests(formattedRequests);
           }

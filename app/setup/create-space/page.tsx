@@ -46,7 +46,6 @@ export default function SetupForm() {
         setPrimaryGoal(data.primaryGoal);
         setUrl(data.url);
         router.push("/Dashboard/Workspace");
-        console.log("Space created successfully:", response.data.newSpace);
         setErrors({});
       }
     } catch (error: any) {

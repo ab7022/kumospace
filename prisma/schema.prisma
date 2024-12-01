@@ -67,7 +67,7 @@ model User {
 
   @@unique([email], map: "unique_user_email")
   @@index([email], name: "email_idx")
-}
+} 
 
 model Reminder {
   id          Int      @id @default(autoincrement())

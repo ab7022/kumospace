@@ -20,7 +20,6 @@ const TeamMembers = ({ userRole }: { userRole: string }) => {
     const fetchTeamMembers = async () => {
       try {
         const response = await axios.get("/api/dashboard/spaceMembers");
-        console.log(response.data.mySpaceMembers);
         const data = response.data.mySpaceMembers.map((item: any) => item.user);
         setTeamMembers(data);
       } catch (error) {

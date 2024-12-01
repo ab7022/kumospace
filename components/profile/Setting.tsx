@@ -83,7 +83,6 @@ const Setting = () => {
       const response = await axios.post(url, data);
       if (response.status === 200) {
         const updatedUser = response.data;
-        console.log("User settings updated:", updatedUser);
         setMessage("Settings updated successfully!");
         setMessageType("success");
       } else {

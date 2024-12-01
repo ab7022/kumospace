@@ -1,12 +1,13 @@
 "use client";
-
 import React, { useEffect, useState, useCallback } from "react";
 import { io, Socket } from "socket.io-client";
 import Image from "next/image";
 import axios from "axios";
 import { useRouter } from "next/navigation";
+
 // @ts-ignore
 import { debounce } from "lodash";
+import UserModal from "./UserModal";
 
 interface Position {
   x: number;
@@ -14,13 +15,18 @@ interface Position {
 }
 
 interface User {
+  timezone: string | undefined;
+  teamName: string | undefined;
+  designation: string | undefined;
   id: string;
   image: string;
   name: string;
   position: Position;
+  email: string;
   status: string;
   lastActive: number;
   otherAvatar: any;
+  onCurrentlyWorking?: string;
 }
 
 interface AvatarProps {
@@ -30,10 +36,14 @@ interface AvatarProps {
   image: string;
   email?: string;
   status?: string;
+  onCurrentlyWorking?: string;
+  designation?: string;
+  teamName?: string;
+  timezone?: any;
 }
 
 const STEP_SIZE = 20;
-const AVATAR_SIZE = 48;
+const AVATAR_SIZE = 68;
 const SOCKET_URL = "http://localhost:3001";
 const MOVEMENT_KEYS = {
   ArrowUp: "up",
@@ -50,11 +60,16 @@ const Avatar = ({
   position,
   name,
   image,
-  email = "Unknown",
-  status = "ACTIVE",
+  email,
+  status,
   isCurrentUser = false,
+  onCurrentlyWorking,
+  designation,
+  teamName,
+  timezone,
 }: AvatarProps) => {
   const [showModal, setShowModal] = useState(false);
+  const [currentTime, setCurrentTime] = useState(new Date());
 
   return (
     <div
@@ -71,58 +86,69 @@ const Avatar = ({
           height={AVATAR_SIZE}
           src={image}
           alt={`${name}`}
-          className="rounded-full shadow-md"
+          className="rounded-xl border-2 border-neutral-700 shadow-md"
         />
-        <span className="absolute bottom-0 left-0 bg-green-500 h-3 w-3 rounded-full border-2 border-white" />
+        {/* <span
+          className={`absolute bottom-0 -right-1 h-3 w-3 rounded-full border-2 border-white ${
+            status === "AVAILABLE"
+              ? "bg-green-500"
+              : status === "AWAY"
+              ? "bg-yellow-500"
+              : status === "DND"
+              ? "bg-red-400"
+              : status === "BUSY"
+              ? "bg-blue-400"
+              : "bg-neutral-900"
+          }`}
+        ></span> */}
       </div>
-      <span className="mt-2 text-center text-sm text-white">{name}</span>
+      <span className="mt-1 pl-6 pr-2 text-center bg-black p-1 rounded-2xl font-semibold text-sm text-white">
+        {" "}
+        <span
+          className={`absolute bottom-2 left-2 h-3 w-3 rounded-full border-2 border-white ${
+            status === "AVAILABLE"
+              ? "bg-green-500"
+              : status === "AWAY"
+              ? "bg-yellow-500"
+              : status === "DND"
+              ? "bg-red-400"
+              : status === "BUSY"
+              ? "bg-blue-400"
+              : "bg-neutral-900"
+          }`}
+        ></span>
+        {name}
+      </span>
 
-      {/* Modal */}
       {showModal && (
-        <div className="absolute top-12 w-60 bg-white rounded-lg shadow-lg p-4 z-50">
-          <div className="flex items-center">
-            <Image
-              width={48}
-              height={48}
-              src={image}
-              alt={`${name}'s avatar`}
-              className="rounded-full shadow-sm"
-            />
-            <div className="ml-4">
-              <h3 className="text-sm font-bold text-gray-800">{name}</h3>
-              <p className="text-xs text-gray-600">{email}</p>
-            </div>
-          </div>
-          <div className="mt-3">
-            <span
-              className={`inline-block px-3 py-1 text-xs font-medium rounded-full ${
-                status === "AVAILABLE"
-                  ? "bg-green-400"
-                  : status === "BUSY" || status === "DND"
-                  ? "bg-yellow-400"
-                  : "bg-neutral-400"
-              }`}
-            >
-              {status}
-            </span>
-          </div>
-          <div className="mt-4 flex space-x-2">
-            <button className="flex-1 bg-blue-500 text-white text-xs font-medium rounded-md py-1.5 hover:bg-blue-600">
-              View Profile
-            </button>
-            <button className="flex-1 bg-gray-100 text-gray-800 text-xs font-medium rounded-md py-1.5 hover:bg-gray-200">
-              Message
-            </button>
-          </div>
-        </div>
+        <UserModal
+          email={email}
+          name={name}
+          designation={designation}
+          onCurrentlyWorking={onCurrentlyWorking}
+          currentTime={currentTime}
+          image={image}
+          status={status}
+          teamName={teamName}
+          timeZone={timezone}
+        />
       )}
     </div>
   );
 };
-
+type UserDetails = {
+  id: string;
+  name: string;
+  email: string;
+  image: string;
+  onCurrentlyWorking: string;
+  designation: string;
+  teamName: string;
+  timezone: string;
+  status: string;
+};
 const Canvas = ({ open, session }: any) => {
-  const [userDetails, setUserDetails] = useState("");
-
+  const [userDetails, setUserDetails] = useState<UserDetails | null>(null);
   const sessionData = session?.value ? JSON.parse(session.value) : {};
   const name = sessionData?.user?.name || "";
   const email = sessionData?.user?.email || "";
@@ -139,7 +165,9 @@ const Canvas = ({ open, session }: any) => {
     try {
       const response = await axios.get("/api/dashboard/isLoggedIn");
       if (response.status === 200) {
-        console.log("Logged in:");
+        const data = response.data.existingSpace.user;
+        setUserDetails(data);
+        console.log(response.data.existingSpace.user);
       } else {
         router.push("/setup");
       }
@@ -151,29 +179,32 @@ const Canvas = ({ open, session }: any) => {
   useEffect(() => {
     getData();
   }, []);
-  useEffect(() => {
-    async function fetchData() {}
-    fetchData();
-  }, []);
 
   useEffect(() => {
     const newSocket = io(SOCKET_URL);
     setSocket(newSocket);
 
     newSocket.on("connect", () => {
-      newSocket.emit("register", {
-        name: name || email,
-        image: image || "image",
-        position: { x: 100, y: 100 },
-      });
+      if (userDetails) {
+        newSocket.emit("register", {
+          name: name,
+          image: image || "image",
+          position: { x: 100, y: 100 },
+          onCurrentlyWorking: userDetails?.onCurrentlyWorking,
+          teamName: userDetails?.teamName,
+          designation: userDetails?.designation,
+          timezone: userDetails?.timezone,
+          status: userDetails?.status,
+          email: email,
+        });
+      }
     });
 
     return () => {
       newSocket.disconnect();
     };
-  }, [session]);
+  }, [session, userDetails]);
 
-  // Update boundaries on window resize
   useEffect(() => {
     const updateBoundaries = () => {
       setBoundaries({
@@ -276,7 +307,6 @@ const Canvas = ({ open, session }: any) => {
         height={1080}
         priority
       />
-
       {/* Current user's avatar */}
       <Avatar
         position={avatarPosition}
@@ -284,12 +314,15 @@ const Canvas = ({ open, session }: any) => {
         email={email}
         isCurrentUser={true}
         image={image}
+        onCurrentlyWorking={userDetails?.onCurrentlyWorking}
+        designation={userDetails?.designation}
+        teamName={userDetails?.teamName}
+        timezone={userDetails?.timezone}
+        status={userDetails?.status}
       />
-
+      //TODO: Add the status of the user
       {/* Other users' avatars */}
       {Object.entries(otherAvatars).map(([id, user]) => {
-        console.log(user);
-
         if (socket && id === socket.id) return null;
 
         return (
@@ -299,10 +332,15 @@ const Canvas = ({ open, session }: any) => {
             name={user.name}
             isCurrentUser={false}
             image={user.image}
+            onCurrentlyWorking={user?.onCurrentlyWorking}
+            designation={user?.designation}
+            teamName={user?.teamName}
+            timezone={user?.timezone}
+            status={user.status}
+            email={user.email}
           />
         );
       })}
-
       <div className="absolute top-0 left-0 bg-black/50 text-white p-2 text-sm">
         <div>Connected: {socket?.connected ? "Yes" : "No"}</div>
         <div>Users: {Object.keys(otherAvatars).length}</div>

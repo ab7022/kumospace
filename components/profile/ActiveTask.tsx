@@ -30,7 +30,6 @@ const ActiveTask = () => {
     const fetchTasks = async () => {
       try {
         const response = await axios.get(url);
-        console.log("Fetched tasks:", response.data.tasks);
         setTasks(response.data.tasks);
       } catch (error) {
         console.error("Error fetching tasks:", error);

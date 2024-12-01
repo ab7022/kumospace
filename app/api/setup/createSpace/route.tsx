@@ -42,7 +42,6 @@ export async function POST(req: NextRequest, res: NextResponse) {
         },
       },
     });
-    console.log(newSpace);
 
     return NextResponse.json({ newSpace }, { status: 201 });
   } catch (error) {
@@ -66,7 +65,6 @@ export async function GET(req: NextRequest, res: NextResponse) {
         userId,
       },
     });
-    console.log(existingSpace);
     if (existingSpace == null) {
       return NextResponse.json(
         { message: "Space already exists" },

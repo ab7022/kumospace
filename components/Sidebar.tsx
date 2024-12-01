@@ -58,7 +58,6 @@ const SidebarParent = ({ session }: any) => {
 
   useEffect(() => {
 
-    console.log(path);
     if (path=="/Dashboard/Profile") {
       setOpen(true)
       

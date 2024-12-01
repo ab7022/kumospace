@@ -22,7 +22,6 @@ export async function POST(req: NextRequest, res: NextResponse) {
     const month = String(today.getMonth() + 1).padStart(2, "0"); // Months are zero-based
     const day = String(today.getDate()).padStart(2, "0");
     const reminderTime = new Date(`${year}-${month}-${day}T${time}:00`);
-    console.log("Reminder Time:", reminderTime.toLocaleString());
     if (isNaN(reminderTime.getTime())) {
       return NextResponse.json(
         { error: "Invalid time format" },
@@ -76,8 +75,6 @@ export async function GET(req: NextRequest, res: NextResponse) {
 export async function PUT(req: NextRequest, res: NextResponse) {
   const url = new URL(req.url);
   const id = url.searchParams.get("id");
-  console.log(url);
-  console.log(id);
 
   if (!id) {
     return NextResponse.json(
