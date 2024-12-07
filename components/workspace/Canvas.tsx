@@ -8,6 +8,7 @@ import { useRouter } from "next/navigation";
 // @ts-ignore
 import { debounce } from "lodash";
 import UserModal from "./UserModal";
+import { DockDemo } from "./DockDemo";
 
 interface Position {
   x: number;
@@ -294,59 +295,64 @@ const Canvas = ({ open, session }: any) => {
     return () => window.removeEventListener("keydown", handleKeyDown);
   }, [moveAvatar]);
   return (
-    <div
-      className={`relative flex ${
-        open ? "flex-row" : "flex-col"
-      } overflow-hidden w-full h-full bg-gradient-to-br from-neutral-900 to-neutral-800`}
-    >
-      <Image
-        src="/images/updated.jpg"
-        alt="Virtual Workspace"
-        className="w-full h-full object-cover"
-        width={1920}
-        height={1080}
-        priority
-      />
-      {/* Current user's avatar */}
-      <Avatar
-        position={avatarPosition}
-        name={name || ""}
-        email={email}
-        isCurrentUser={true}
-        image={image}
-        onCurrentlyWorking={userDetails?.onCurrentlyWorking}
-        designation={userDetails?.designation}
-        teamName={userDetails?.teamName}
-        timezone={userDetails?.timezone}
-        status={userDetails?.status}
-      />
-      //TODO: Add the status of the user
-      {/* Other users' avatars */}
-      {Object.entries(otherAvatars).map(([id, user]) => {
-        if (socket && id === socket.id) return null;
+    <>
+      <div
+        className={`relative flex ${
+          open ? "flex-row" : "flex-col"
+        } overflow-hidden w-full h-full bg-gradient-to-br from-neutral-900 to-neutral-800`}
+      >
+        <div className="bg-transparent absolute z-50 bottom-4 inset-x-0 justify-center">
+          <DockDemo />
+        </div>
+        <Image
+          src="/images/updated.jpg"
+          alt="Virtual Workspace"
+          className="w-full h-full object-cover"
+          width={1920}
+          height={1080}
+          priority
+        />
+        {/* Current user's avatar */}
+        <Avatar
+          position={avatarPosition}
+          name={name || ""}
+          email={email}
+          isCurrentUser={true}
+          image={image}
+          onCurrentlyWorking={userDetails?.onCurrentlyWorking}
+          designation={userDetails?.designation}
+          teamName={userDetails?.teamName}
+          timezone={userDetails?.timezone}
+          status={userDetails?.status}
+        />
+        //TODO: Add the status of the user
+        {/* Other users' avatars */}
+        {Object.entries(otherAvatars).map(([id, user]) => {
+          if (socket && id === socket.id) return null;
 
-        return (
-          <Avatar
-            key={id}
-            position={user.position}
-            name={user.name}
-            isCurrentUser={false}
-            image={user.image}
-            onCurrentlyWorking={user?.onCurrentlyWorking}
-            designation={user?.designation}
-            teamName={user?.teamName}
-            timezone={user?.timezone}
-            status={user.status}
-            email={user.email}
-          />
-        );
-      })}
-      <div className="absolute top-0 left-0 bg-black/50 text-white p-2 text-sm">
-        <div>Connected: {socket?.connected ? "Yes" : "No"}</div>
-        <div>Users: {Object.keys(otherAvatars).length}</div>
-        <div>Position: {JSON.stringify(avatarPosition)}</div>
+          return (
+            <Avatar
+              key={id}
+              position={user.position}
+              name={user.name}
+              isCurrentUser={false}
+              image={user.image}
+              onCurrentlyWorking={user?.onCurrentlyWorking}
+              designation={user?.designation}
+              teamName={user?.teamName}
+              timezone={user?.timezone}
+              status={user.status}
+              email={user.email}
+            />
+          );
+        })}
+        <div className="absolute top-0 left-0 bg-black/50 text-white p-2 text-sm">
+          <div>Connected: {socket?.connected ? "Yes" : "No"}</div>
+          <div>Users: {Object.keys(otherAvatars).length}</div>
+          <div>Position: {JSON.stringify(avatarPosition)}</div>
+        </div>
       </div>
-    </div>
+    </>
   );
 };
 

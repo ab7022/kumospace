@@ -21,7 +21,7 @@ const UserModal = ({
   image: string;
   status?: string;
   teamName?: string;
-  timeZone?: any;
+  timeZone?: any
 }) => {
   const formatTime = (date: any) => {
     if (!date) return "";
