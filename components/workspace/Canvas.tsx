@@ -4,11 +4,12 @@ import { io, Socket } from "socket.io-client";
 import Image from "next/image";
 import axios from "axios";
 import { useRouter } from "next/navigation";
-
+import peer from "@/lib/peer";
 // @ts-ignore
 import { debounce } from "lodash";
 import UserModal from "./UserModal";
 import { DockDemo } from "./DockDemo";
+import ReactPlayer from "react-player";
 
 interface Position {
   x: number;
@@ -41,6 +42,8 @@ interface AvatarProps {
   designation?: string;
   teamName?: string;
   timezone?: any;
+  remoteStream?: MediaStream | null;
+  myStream?: MediaStream | null;
 }
 
 const STEP_SIZE = 20;
@@ -67,14 +70,15 @@ const Avatar = ({
   onCurrentlyWorking,
   designation,
   teamName,
-  timezone,
+  remoteStream,
+  myStream,
 }: AvatarProps) => {
   const [showModal, setShowModal] = useState(false);
   const [currentTime, setCurrentTime] = useState(new Date());
 
   return (
     <div
-      className={`absolute flex flex-col items-center transition-all duration-200`}
+      className="absolute flex flex-col items-center transition-all duration-200"
       style={{
         transform: `translate(${position.x}px, ${position.y}px)`,
       }}
@@ -82,26 +86,43 @@ const Avatar = ({
       onMouseLeave={() => setShowModal(false)}
     >
       <div className="relative">
-        <Image
-          width={AVATAR_SIZE}
-          height={AVATAR_SIZE}
-          src={image}
-          alt={`${name}`}
-          className="rounded-xl border-2 border-neutral-700 shadow-md"
-        />
-        {/* <span
-          className={`absolute bottom-0 -right-1 h-3 w-3 rounded-full border-2 border-white ${
-            status === "AVAILABLE"
-              ? "bg-green-500"
-              : status === "AWAY"
-              ? "bg-yellow-500"
-              : status === "DND"
-              ? "bg-red-400"
-              : status === "BUSY"
-              ? "bg-blue-400"
-              : "bg-neutral-900"
-          }`}
-        ></span> */}
+        {myStream ? (
+          <ReactPlayer
+            style={{
+              borderRadius: "8px",
+              border: "2px solid #4B5563",
+              boxShadow: "0 4px 6px rgba(0, 0, 0, 0.1)",
+              objectFit: "contain",
+            }}
+            playing
+            muted
+            height="full" // Increased height
+            width="150px" // Increased width
+            url={myStream}
+          />
+        ) : remoteStream ? (
+          <ReactPlayer
+            style={{
+              borderRadius: "8px",
+              border: "2px solid #4B5563",
+              boxShadow: "0 4px 6px rgba(0, 0, 0, 0.1)",
+              objectFit: "contain",
+            }}
+            playing
+            muted
+            height="full" // Increased height
+            width="150px" // Increased width
+            url={remoteStream}
+          />
+        ) : (
+          <Image
+            width={100} // Increased width
+            height={150} // Increased height
+            src={image}
+            alt={`${name}`}
+            className="rounded-xl border-2 border-neutral-700 shadow-md"
+          />
+        )}
       </div>
       <span className="mt-1 pl-6 pr-2 text-center bg-black p-1 rounded-2xl font-semibold text-sm text-white">
         {" "}
@@ -120,7 +141,6 @@ const Avatar = ({
         ></span>
         {name}
       </span>
-
       {showModal && (
         <UserModal
           email={email}
@@ -131,11 +151,11 @@ const Avatar = ({
           image={image}
           status={status}
           teamName={teamName}
-          timeZone={timezone}
         />
       )}
     </div>
   );
+  
 };
 type UserDetails = {
   id: string;
@@ -150,6 +170,7 @@ type UserDetails = {
 };
 const Canvas = ({ open, session }: any) => {
   const [userDetails, setUserDetails] = useState<UserDetails | null>(null);
+  const [room, setRoom] = useState("");
   const sessionData = session?.value ? JSON.parse(session.value) : {};
   const name = sessionData?.user?.name || "";
   const email = sessionData?.user?.email || "";
@@ -168,7 +189,8 @@ const Canvas = ({ open, session }: any) => {
       if (response.status === 200) {
         const data = response.data.existingSpace.user;
         setUserDetails(data);
-        console.log(response.data.existingSpace.user);
+        setRoom(response.data.existingSpace.space.code);
+        console.log(response.data.existingSpace.space.code);
       } else {
         router.push("/setup");
       }
@@ -199,6 +221,7 @@ const Canvas = ({ open, session }: any) => {
           email: email,
         });
       }
+      newSocket.emit("room:join", { email, room });
     });
 
     return () => {
@@ -294,6 +317,117 @@ const Canvas = ({ open, session }: any) => {
     window.addEventListener("keydown", handleKeyDown);
     return () => window.removeEventListener("keydown", handleKeyDown);
   }, [moveAvatar]);
+
+  const [remoteSocketId, setRemoteSocketId] = useState(null);
+  const [myStream, setMyStream] = useState<MediaStream | null>(null);
+  const [remoteStream, setRemoteStream] = useState<MediaStream | null>(null);
+
+  const handleUserJoined = useCallback(({ email, id }: any) => {
+    console.log(`Email ${email} joined room`);
+    setRemoteSocketId(id);
+  }, []);
+
+  const handleCallUser = useCallback(async () => {
+    const stream = await navigator.mediaDevices.getUserMedia({
+      audio: true,
+      video: true,
+    });
+    const offer = await peer.getOffer();
+    if (!socket) return console.error("Socket not connected");
+    socket.emit("user:call", { to: remoteSocketId, offer });
+    setMyStream(stream);
+  }, [remoteSocketId, socket]);
+
+  const handleIncommingCall = useCallback(
+    async ({ from, offer }: any) => {
+      setRemoteSocketId(from);
+      const stream = await navigator.mediaDevices.getUserMedia({
+        audio: true,
+        video: true,
+      });
+      setMyStream(stream);
+      console.log(`Incoming Call`, from, offer);
+      const ans = await peer.getAnswer(offer);
+      if (!socket) return console.error("Socket not connected");
+      socket.emit("call:accepted", { to: from, ans });
+    },
+    [socket]
+  );
+
+  const sendStreams = useCallback(() => {
+    if (!myStream) return;
+    for (const track of myStream.getTracks()) {
+      peer.peer.addTrack(track, myStream);
+    }
+  }, [myStream]);
+
+  const handleCallAccepted = useCallback(
+    ({ from, ans }: any) => {
+      peer.setLocalDescription(ans);
+      console.log("Call Accepted!");
+      sendStreams();
+    },
+    [sendStreams]
+  );
+
+  const handleNegoNeeded = useCallback(async () => {
+    const offer = await peer.getOffer();
+    if (!socket) return console.error("Socket not connected");
+    socket.emit("peer:nego:needed", { offer, to: remoteSocketId });
+  }, [remoteSocketId, socket]);
+
+  useEffect(() => {
+    peer.peer.addEventListener("negotiationneeded", handleNegoNeeded);
+    return () => {
+      peer.peer.removeEventListener("negotiationneeded", handleNegoNeeded);
+    };
+  }, [handleNegoNeeded]);
+
+  const handleNegoNeedIncomming = useCallback(
+    async ({ from, offer }: any) => {
+      const ans = await peer.getAnswer(offer);
+      if (!socket) return console.error("Socket not connected");
+      socket.emit("peer:nego:done", { to: from, ans });
+    },
+    [socket]
+  );
+
+  const handleNegoNeedFinal = useCallback(async ({ ans }: any) => {
+    await peer.setLocalDescription(ans);
+  }, []);
+
+  useEffect(() => {
+    peer.peer.addEventListener("track", async (ev) => {
+      const remoteStream = ev.streams;
+      console.log("GOT TRACKS!!");
+      setRemoteStream(remoteStream[0]);
+    });
+  }, []);
+
+  useEffect(() => {
+    if (!socket) return console.error("Socket not connected");
+    socket.on("user:joined", handleUserJoined);
+    socket.on("incomming:call", handleIncommingCall);
+    socket.on("call:accepted", handleCallAccepted);
+    socket.on("peer:nego:needed", handleNegoNeedIncomming);
+    socket.on("peer:nego:final", handleNegoNeedFinal);
+
+    return () => {
+      socket.off("user:joined", handleUserJoined);
+      socket.off("incomming:call", handleIncommingCall);
+      socket.off("call:accepted", handleCallAccepted);
+      socket.off("peer:nego:needed", handleNegoNeedIncomming);
+      socket.off("peer:nego:final", handleNegoNeedFinal);
+    };
+  }, [
+    socket,
+    handleUserJoined,
+    handleIncommingCall,
+    handleCallAccepted,
+    handleNegoNeedIncomming,
+    handleNegoNeedFinal,
+  ]);
+
   return (
     <>
       <div
@@ -301,9 +435,9 @@ const Canvas = ({ open, session }: any) => {
           open ? "flex-row" : "flex-col"
         } overflow-hidden w-full h-full bg-gradient-to-br from-neutral-900 to-neutral-800`}
       >
-        <div className="bg-transparent absolute z-50 bottom-4 inset-x-0 justify-center">
+        {/* <div className="bg-transparent absolute z-50 bottom-4 inset-x-0 justify-center">
           <DockDemo />
-        </div>
+        </div> */}
         <Image
           src="/images/updated.jpg"
           alt="Virtual Workspace"
@@ -314,6 +448,7 @@ const Canvas = ({ open, session }: any) => {
         />
         {/* Current user's avatar */}
         <Avatar
+          myStream={myStream}
           position={avatarPosition}
           name={name || ""}
           email={email}
@@ -331,6 +466,7 @@ const Canvas = ({ open, session }: any) => {
 
           return (
             <Avatar
+              remoteStream={remoteStream}
               key={id}
               position={user.position}
               name={user.name}
@@ -349,6 +485,9 @@ const Canvas = ({ open, session }: any) => {
           <div>Connected: {socket?.connected ? "Yes" : "No"}</div>
           <div>Users: {Object.keys(otherAvatars).length}</div>
           <div>Position: {JSON.stringify(avatarPosition)}</div>
+          <h4>{remoteSocketId ? "Connected" : "No one in room"}</h4>
+          {myStream && <button onClick={sendStreams}>Send Stream</button>}
+          {remoteSocketId && <button onClick={handleCallUser}>CALL</button>}
         </div>
       </div>
     </>
