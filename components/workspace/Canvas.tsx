@@ -155,7 +155,6 @@ const Avatar = ({
       )}
     </div>
   );
-  
 };
 type UserDetails = {
   id: string;
@@ -326,6 +325,14 @@ const Canvas = ({ open, session }: any) => {
     console.log(`Email ${email} joined room`);
     setRemoteSocketId(id);
   }, []);
+  const handleEndCall = useCallback(() => {
+    if (myStream) {
+      myStream.getTracks().forEach((track) => track.stop());
+      setMyStream(null);
+    }
+    setRemoteStream(null);
+    setRemoteSocketId(null);
+  }, [myStream]);
 
   const handleCallUser = useCallback(async () => {
     const stream = await navigator.mediaDevices.getUserMedia({
@@ -481,13 +488,68 @@ const Canvas = ({ open, session }: any) => {
             />
           );
         })}
-        <div className="absolute top-0 left-0 bg-black/50 text-white p-2 text-sm">
-          <div>Connected: {socket?.connected ? "Yes" : "No"}</div>
-          <div>Users: {Object.keys(otherAvatars).length}</div>
-          <div>Position: {JSON.stringify(avatarPosition)}</div>
-          <h4>{remoteSocketId ? "Connected" : "No one in room"}</h4>
-          {myStream && <button onClick={sendStreams}>Send Stream</button>}
-          {remoteSocketId && <button onClick={handleCallUser}>CALL</button>}
+        <div className="absolute top-0 left-0 bg-black/70 text-white p-4 rounded-lg shadow-lg space-y-4 w-64">
+          <div className="space-y-1">
+            <div className="flex justify-between items-center">
+              <span className="font-medium">Connected:</span>
+              <span
+                className={`font-semibold ${
+                  socket?.connected ? "text-green-400" : "text-red-400"
+                }`}
+              >
+                {socket?.connected ? "Yes" : "No"}
+              </span>
+            </div>
+            <div className="flex justify-between items-center">
+              <span className="font-medium">Users:</span>
+              <span className="font-semibold">
+                {Object.keys(otherAvatars).length}
+              </span>
+            </div>
+            <div className="flex justify-between items-center">
+              <span className="font-medium">Position:</span>
+              <span className="text-gray-300 text-xs truncate">
+                {JSON.stringify(avatarPosition)}
+              </span>
+            </div>
+          </div>
+
+          <h4
+            className={`text-center text-sm font-semibold p-2 rounded-md ${
+              remoteSocketId
+                ? "bg-green-600 text-white"
+                : "bg-gray-600 text-gray-300"
+            }`}
+          >
+            {remoteSocketId ? "Connected" : "No one in room"}
+          </h4>
+
+          <div className="flex flex-col space-y-2">
+            {myStream && (
+              <button
+                onClick={sendStreams}
+                className="w-full bg-blue-600 hover:bg-blue-500 focus:ring-2 focus:ring-blue-400 text-white font-semibold py-2 px-4 rounded-md transition"
+              >
+                Send Stream
+              </button>
+            )}
+            {remoteSocketId && (
+              <button
+                onClick={handleCallUser}
+                className="w-full bg-green-600 hover:bg-green-500 focus:ring-2 focus:ring-green-400 text-white font-semibold py-2 px-4 rounded-md transition"
+              >
+                CALL
+              </button>
+            )}
+            {myStream && (
+              <button
+                onClick={handleEndCall}
+                className="w-full bg-red-600 hover:bg-red-500 focus:ring-2 focus:ring-red-400 text-white font-semibold py-2 px-4 rounded-md transition"
+              >
+                END
+              </button>
+            )}
+          </div>
         </div>
       </div>
     </>
@@ -495,3 +557,8 @@ const Canvas = ({ open, session }: any) => {
 };
 
 export default Canvas;
+//TODO: add a button to end call from both side
+//TODO: add a button to mute and unmute audio
+//TODO: add a button to mute and unmute video
+//TODO: add a button to share screen
+//TODO: add a small div for incoming call and accepting call and oncall screen
