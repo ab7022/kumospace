@@ -325,7 +325,6 @@ const Canvas = ({ open, session }: any) => {
           timezone={userDetails?.timezone}
           status={userDetails?.status}
         />
-        //TODO: Add the status of the user
         {/* Other users' avatars */}
         {Object.entries(otherAvatars).map(([id, user]) => {
           if (socket && id === socket.id) return null;
