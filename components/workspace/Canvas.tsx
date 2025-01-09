@@ -561,4 +561,4 @@ export default Canvas;
 //TODO: add a button to mute and unmute audio
 //TODO: add a button to mute and unmute video
 //TODO: add a button to share screen
-//TODO: add a small div for incoming call and accepting call and oncall screen
+//TODO: add a small div for incoming call and accepting call and onCall screen
