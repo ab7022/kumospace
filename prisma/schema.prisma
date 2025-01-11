@@ -85,7 +85,7 @@ model Task {
   priority  TaskPriority @default(MEDIUM)
   completed Boolean      @default(false)
   userId    Int
-  dueDate   DateTime?
+  dueDate   String?
   user      User         @relation(fields: [userId], references: [id], onDelete: Cascade)
   createdAt DateTime     @default(now())
 }

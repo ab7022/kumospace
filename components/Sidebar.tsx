@@ -19,35 +19,29 @@ const SidebarParent = ({ session }: any) => {
       label: "Workspace",
       href: "/Dashboard/Workspace",
       icon: (
-        <IconBrandTabler className="text-neutral-700 dark:text-neutral-200 h-5 w-5 flex-shrink-0" />
+        <IconBrandTabler className="text-neutral-200 h-5 w-5 flex-shrink-0" />
       ),
     },
     {
       label: "Dashboard",
       href: "/Dashboard",
       icon: (
-        <IconBrandTabler className="text-neutral-700 dark:text-neutral-200 h-5 w-5 flex-shrink-0" />
+        <IconBrandTabler className="text-neutral-200 h-5 w-5 flex-shrink-0" />
       ),
     },
     {
       label: "Profile",
       href: "/Dashboard/Profile",
       icon: (
-        <IconUserBolt className="text-neutral-700 dark:text-neutral-200 h-5 w-5 flex-shrink-0" />
+        <IconUserBolt className="text-neutral-200 h-5 w-5 flex-shrink-0" />
       ),
     },
-    {
-      label: "Settings",
-      href: "#",
-      icon: (
-        <IconSettings className="text-neutral-700 dark:text-neutral-200 h-5 w-5 flex-shrink-0" />
-      ),
-    },
+   
     {
       label: "Logout",
       href: "#",
       icon: (
-        <IconArrowLeft className="text-neutral-700 dark:text-neutral-200 h-5 w-5 flex-shrink-0" onClick={()=>{
+        <IconArrowLeft className="text-neutral-200 h-5 w-5 flex-shrink-0" onClick={()=>{
           signOut()
         }}/>
       ),

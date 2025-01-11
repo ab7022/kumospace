@@ -8,7 +8,7 @@ const ActiveTask = () => {
   const [tasks, setTasks] = useState<
     {
       id: number;
-      taskName: string;
+      name: string;
       priority: string;
       completed: boolean;
       dueDate?: String;
@@ -16,7 +16,7 @@ const ActiveTask = () => {
   >([]);
   const [isCreating, setIsCreating] = useState(false);
   const [newTask, setNewTask] = useState({
-    taskName: "",
+    name: "",
     priority: "HIGH",
     dueDate: "",
   });
@@ -46,7 +46,7 @@ const ActiveTask = () => {
       const addedTask = response.data.task;
       setTasks((prevTasks) => [addedTask, ...prevTasks]);
       setIsCreating(false);
-      setNewTask({ taskName: "", priority: "HIGH", dueDate: "" });
+      setNewTask({ name: "", priority: "HIGH", dueDate: "" });
       setMessage({ text: "Task created successfully!", type: "success" });
       setTimeout(() => setMessage(null), 3000);
     } catch (error) {
@@ -139,7 +139,7 @@ const ActiveTask = () => {
                 >
                   <div className="flex flex-row justify-between">
                     <h4 className="text-lg font-bold text-white mb-2 w-full">
-                      {task.taskName}
+                      {task.name}
                     </h4>
                     <span className="text-sm font-bold text-white mb-2">
                       {task?.dueDate}
@@ -181,11 +181,11 @@ const ActiveTask = () => {
                     type="text"
                     required
                     placeholder="Task Title"
-                    value={newTask.taskName}
+                    value={newTask.name}
                     onChange={(e) =>
                       setNewTask((prev) => ({
                         ...prev,
-                        taskName: e.target.value,
+                        name: e.target.value,
                       }))
                     }
                     className="w-full px-4 py-2 bg-neutral-700/30 text-white rounded-md border border-neutral-600 focus:ring-2 focus:ring-primary focus:outline-none"

@@ -7,44 +7,10 @@ import { useRouter } from "next/navigation";
 import peer from "@/lib/peer";
 // @ts-ignore
 import { debounce } from "lodash";
-import UserModal from "./UserModal";
-import { DockDemo } from "./DockDemo";
-import ReactPlayer from "react-player";
-
-interface Position {
-  x: number;
-  y: number;
-}
-
-interface User {
-  timezone: string | undefined;
-  teamName: string | undefined;
-  designation: string | undefined;
-  id: string;
-  image: string;
-  name: string;
-  position: Position;
-  email: string;
-  status: string;
-  lastActive: number;
-  otherAvatar: any;
-  onCurrentlyWorking?: string;
-}
-
-interface AvatarProps {
-  position: Position;
-  name: string;
-  isCurrentUser?: boolean;
-  image: string;
-  email?: string;
-  status?: string;
-  onCurrentlyWorking?: string;
-  designation?: string;
-  teamName?: string;
-  timezone?: any;
-  remoteStream?: MediaStream | null;
-  myStream?: MediaStream | null;
-}
+import Dock from "./Dock";
+import Modal from "./Modal";
+import "react-responsive-modal/styles.css";
+import { Avatar } from "./Avatar";
 
 const STEP_SIZE = 20;
 const AVATAR_SIZE = 68;
@@ -60,113 +26,6 @@ const MOVEMENT_KEYS = {
   KeyD: "right",
 } as const;
 
-const Avatar = ({
-  position,
-  name,
-  image,
-  email,
-  status,
-  isCurrentUser = false,
-  onCurrentlyWorking,
-  designation,
-  teamName,
-  remoteStream,
-  myStream,
-}: AvatarProps) => {
-  const [showModal, setShowModal] = useState(false);
-  const [currentTime, setCurrentTime] = useState(new Date());
-
-  return (
-    <div
-      className="absolute flex flex-col items-center transition-all duration-200"
-      style={{
-        transform: `translate(${position.x}px, ${position.y}px)`,
-      }}
-      onMouseEnter={() => setShowModal(true)}
-      onMouseLeave={() => setShowModal(false)}
-    >
-      <div className="relative">
-        {myStream ? (
-          <ReactPlayer
-            style={{
-              borderRadius: "6px",
-              border: "2px solid #4B5563",
-              boxShadow: "0 4px 6px rgba(0, 0, 0, 0.1)",
-              objectFit: "contain",
-            }}
-            playing
-            muted
-            height="full" // Increased height
-            width="150px" // Increased width
-            url={myStream}
-          />
-        ) : remoteStream ? (
-          <ReactPlayer
-            style={{
-              borderRadius: "6px",
-              border: "2px solid #4B5563",
-              boxShadow: "0 4px 6px rgba(0, 0, 0, 0.1)",
-              objectFit: "contain",
-            }}
-            playing
-            muted
-            height="full" // Increased height
-            width="150px" // Increased width
-            url={remoteStream}
-          />
-        ) : (
-          <Image
-            width={100} // Increased width
-            height={150} // Increased height
-            src={image}
-            alt={`${name}`}
-            className="rounded-xl border-2 border-neutral-700 shadow-md"
-          />
-        )}
-      </div>
-      <span className="mt-1 pl-6 pr-2 text-center bg-black p-1 rounded-2xl font-semibold text-sm text-white">
-        {" "}
-        <span
-          className={`absolute bottom-2 left-2 h-3 w-3 rounded-full border-2 border-white ${
-            status === "AVAILABLE"
-              ? "bg-green-500"
-              : status === "AWAY"
-              ? "bg-yellow-500"
-              : status === "DND"
-              ? "bg-red-400"
-              : status === "BUSY"
-              ? "bg-blue-400"
-              : "bg-neutral-900"
-          }`}
-        ></span>
-        {name}
-      </span>
-      {showModal && (
-        <UserModal
-          email={email}
-          name={name}
-          designation={designation}
-          onCurrentlyWorking={onCurrentlyWorking}
-          currentTime={currentTime}
-          image={image}
-          status={status}
-          teamName={teamName}
-        />
-      )}
-    </div>
-  );
-};
-type UserDetails = {
-  id: string;
-  name: string;
-  email: string;
-  image: string;
-  onCurrentlyWorking: string;
-  designation: string;
-  teamName: string;
-  timezone: string;
-  status: string;
-};
 const Canvas = ({ open, session }: any) => {
   const [userDetails, setUserDetails] = useState<UserDetails | null>(null);
   const [room, setRoom] = useState("");
@@ -179,9 +38,11 @@ const Canvas = ({ open, session }: any) => {
     x: 100,
     y: 100,
   });
-  const [isUserNearby, setIsUserNearby] = useState(false);  
+  const [isUserNearby, setIsUserNearby] = useState(false);
   const [otherAvatars, setOtherAvatars] = useState<Record<string, User>>({});
   const [boundaries, setBoundaries] = useState({ width: 0, height: 0 });
+  const [screenStream, setScreenStream] = useState<MediaStream | null>(null);
+  const [isFullScreen, setIsFullScreen] = useState(false);
   const router = useRouter();
   async function getData() {
     try {
@@ -247,7 +108,6 @@ const Canvas = ({ open, session }: any) => {
 
     socket.on("users", (users: Record<string, User>) => {
       setOtherAvatars(users);
-
     });
 
     return () => {
@@ -317,48 +177,117 @@ const Canvas = ({ open, session }: any) => {
     window.addEventListener("keydown", handleKeyDown);
     return () => window.removeEventListener("keydown", handleKeyDown);
   }, [moveAvatar]);
- 
-const PROXIMITY_THRESHOLD_PX = 100; // 50px
 
-useEffect(() => {
-  Object.entries(otherAvatars).forEach(([id, user]) => {
-    if (socket && id === socket.id) return;
-    const otherPosition = user.position;
+  const PROXIMITY_THRESHOLD_PX = 100; // 50px
 
-    // Check if the other avatar's position is within the threshold range
-    const isNearbyX = otherPosition.x >= avatarPosition.x - PROXIMITY_THRESHOLD_PX && otherPosition.x <= avatarPosition.x + PROXIMITY_THRESHOLD_PX;
-    const isNearbyY = otherPosition.y >= avatarPosition.y - PROXIMITY_THRESHOLD_PX && otherPosition.y <= avatarPosition.y + PROXIMITY_THRESHOLD_PX;
+  useEffect(() => {
+    Object.entries(otherAvatars).forEach(([id, user]) => {
+      if (socket && id === socket.id) return;
+      const otherPosition = user.position;
 
-    // If both x and y positions are within the proximity threshold, the user is nearby
-    if (isNearbyX && isNearbyY) {
-      setIsUserNearby(true);
-      console.log(`${user.name} is nearby!`);
-      if (!socket) return;
-      // Perform the action you want (e.g., show a call button)
-    }else{
+      // Check if the other avatar's position is within the threshold range
+      const isNearbyX =
+        otherPosition.x >= avatarPosition.x - PROXIMITY_THRESHOLD_PX &&
+        otherPosition.x <= avatarPosition.x + PROXIMITY_THRESHOLD_PX;
+      const isNearbyY =
+        otherPosition.y >= avatarPosition.y - PROXIMITY_THRESHOLD_PX &&
+        otherPosition.y <= avatarPosition.y + PROXIMITY_THRESHOLD_PX;
 
-    setIsUserNearby(false);
-    }
-  });
-}, [avatarPosition, otherAvatars]);
+      // If both x and y positions are within the proximity threshold, the user is nearby
+      if (isNearbyX && isNearbyY) {
+        setIsUserNearby(true);
 
+        console.log(`${user.name} is nearby!`);
+        if (!socket) return;
+        // Perform the action you want (e.g., show a call button)
+      } else {
+        setIsUserNearby(false);
+      }
+    });
+  }, [avatarPosition, otherAvatars]);
 
   const [remoteSocketId, setRemoteSocketId] = useState(null);
   const [myStream, setMyStream] = useState<MediaStream | null>(null);
   const [remoteStream, setRemoteStream] = useState<MediaStream | null>(null);
 
+  const handleScreenShare = useCallback(async () => {
+    try {
+      const stream = await navigator.mediaDevices.getDisplayMedia({
+        video: true,
+      });
+      setScreenStream(stream);
+      if (!socket) return console.error("Socket not connected");
+      const offer = await peer.getOffer();
+      socket.emit("user:screenShare", { to: remoteSocketId, offer });
+    } catch (error) {
+      console.error("Error sharing screen:", error);
+    }
+  }, [remoteSocketId, socket]);
   const handleUserJoined = useCallback(({ email, id }: any) => {
     console.log(`Email ${email} joined room`);
     setRemoteSocketId(id);
   }, []);
   const handleEndCall = useCallback(() => {
+    // Notify other peer about call ending
+    if (socket && remoteSocketId) {
+      socket.emit("call:end", { to: remoteSocketId });
+    }
     if (myStream) {
-      myStream.getTracks().forEach((track) => track.stop());
+      myStream.getTracks().forEach((track) => {
+        track.stop();
+      });
       setMyStream(null);
     }
-    setRemoteStream(null);
+    if (screenStream) {
+      screenStream.getTracks().forEach((track) => {
+        track.stop();
+      });
+      setScreenStream(null);
+    }
+    if (remoteStream) {
+      setRemoteStream(null);
+    }
+    if (peer.peer) {
+      peer.peer.close();
+    }
+
     setRemoteSocketId(null);
-  }, [myStream]);
+  }, [socket, remoteSocketId, myStream, screenStream, remoteStream]);
+
+  useEffect(() => {
+    if (!socket) return console.error("Socket not connected");
+    const handleCallEnded = () => {
+      console.log("Call ended by remote peer");
+
+      if (myStream) {
+        myStream.getTracks().forEach((track) => {
+          track.stop();
+        });
+        setMyStream(null);
+      }
+
+      if (screenStream) {
+        screenStream.getTracks().forEach((track) => {
+          track.stop();
+        });
+        setScreenStream(null);
+      }
+
+      if (remoteStream) {
+        setRemoteStream(null);
+      }
+      if (peer.peer) {
+        peer.peer.close();
+      }
+      setRemoteSocketId(null);
+    };
+
+    socket.on("call:ended", handleCallEnded);
+
+    return () => {
+      socket.off("call:ended", handleCallEnded);
+    };
+  }, [socket, myStream, screenStream, remoteStream]);
 
   const handleCallUser = useCallback(async () => {
     const stream = await navigator.mediaDevices.getUserMedia({
@@ -388,12 +317,14 @@ useEffect(() => {
   );
 
   const sendStreams = useCallback(() => {
-    if (!myStream) return;
-    for (const track of myStream.getTracks()) {
-      peer.peer.addTrack(track, myStream);
+    if (!myStream && !screenStream) return;
+    const streams = [myStream, screenStream].filter(Boolean) as MediaStream[];
+    for (const stream of streams) {
+      for (const track of stream.getTracks()) {
+        peer.peer.addTrack(track, stream);
+      }
     }
-  }, [myStream]);
-
+  }, [myStream, screenStream]);
   const handleCallAccepted = useCallback(
     ({ from, ans }: any) => {
       peer.setLocalDescription(ans);
@@ -437,6 +368,25 @@ useEffect(() => {
     });
   }, []);
 
+  const handleIncommingScreenShare = useCallback(
+    async ({ from, offer }: any) => {
+      setRemoteSocketId(from);
+      const ans = await peer.getAnswer(offer);
+      if (!socket) return console.error("Socket not connected");
+      socket.emit("screenShare:accepted", { to: from, ans });
+    },
+    [socket]
+  );
+
+  const handleScreenShareAccepted = useCallback(
+    ({ from, ans }: any) => {
+      peer.setLocalDescription(ans);
+      console.log("Screen Share Accepted!");
+      sendStreams();
+    },
+    [sendStreams]
+  );
+
   useEffect(() => {
     if (!socket) return console.error("Socket not connected");
     socket.on("user:joined", handleUserJoined);
@@ -444,6 +394,8 @@ useEffect(() => {
     socket.on("call:accepted", handleCallAccepted);
     socket.on("peer:nego:needed", handleNegoNeedIncomming);
     socket.on("peer:nego:final", handleNegoNeedFinal);
+    socket.on("incomming:screenShare", handleIncommingScreenShare);
+    socket.on("screenShare:accepted", handleScreenShareAccepted);
 
     return () => {
       socket.off("user:joined", handleUserJoined);
@@ -451,6 +403,8 @@ useEffect(() => {
       socket.off("call:accepted", handleCallAccepted);
       socket.off("peer:nego:needed", handleNegoNeedIncomming);
       socket.off("peer:nego:final", handleNegoNeedFinal);
+      socket.off("incomming:screenShare", handleIncommingScreenShare);
+      socket.off("screenShare:accepted", handleScreenShareAccepted);
     };
   }, [
     socket,
@@ -459,7 +413,17 @@ useEffect(() => {
     handleCallAccepted,
     handleNegoNeedIncomming,
     handleNegoNeedFinal,
+    handleIncommingScreenShare,
+    handleScreenShareAccepted,
   ]);
+
+  const handleFullScreen = () => {
+    setIsFullScreen(true);
+  };
+
+  const closeFullScreen = () => {
+    setIsFullScreen(false);
+  };
 
   return (
     <>
@@ -468,9 +432,6 @@ useEffect(() => {
           open ? "flex-row" : "flex-col"
         } overflow-hidden w-full h-full bg-gradient-to-br from-neutral-900 to-neutral-800`}
       >
-        {/* <div className="bg-transparent absolute z-50 bottom-4 inset-x-0 justify-center">
-          <DockDemo />
-        </div> */}
         <Image
           src="/images/updated.jpg"
           alt="Virtual Workspace"
@@ -492,6 +453,7 @@ useEffect(() => {
           teamName={userDetails?.teamName}
           timezone={userDetails?.timezone}
           status={userDetails?.status}
+          screenStream={screenStream}
         />
         {/* Other users' avatars */}
         {Object.entries(otherAvatars).map(([id, user]) => {
@@ -514,77 +476,33 @@ useEffect(() => {
             />
           );
         })}
-        <div className="absolute top-0 left-0 bg-black/70 text-white p-4 rounded-lg shadow-lg space-y-4 w-64">
-          <div className="space-y-1">
-            <div className="flex justify-between items-center">
-              <span className="font-medium">Connected:</span>
-              <span
-                className={`font-semibold ${
-                  socket?.connected ? "text-green-400" : "text-red-400"
-                }`}
-              >
-                {socket?.connected ? "Yes" : "No"}
-              </span>
-            </div>
-            <div className="flex justify-between items-center">
-              <span className="font-medium">Users:</span>
-              <span className="font-semibold">
-                {Object.keys(otherAvatars).length}
-              </span>
-            </div>
-            <div className="flex justify-between items-center">
-              <span className="font-medium">Position:</span>
-              <span className="text-gray-300 text-xs truncate">
-                {JSON.stringify(avatarPosition)}
-              </span>
-            </div>
-          </div>
 
-          <h4
-            className={`text-center text-sm font-semibold p-2 rounded-md ${
-              remoteSocketId
-                ? "bg-green-600 text-white"
-                : "bg-gray-600 text-gray-300"
-            }`}
-          >
-            {remoteSocketId ? "Connected" : "No one in room"}
-          </h4>
-
-          <div className="flex flex-col space-y-2">
-            {myStream && (
-              <button
-                onClick={sendStreams}
-                className="w-full bg-blue-600 hover:bg-blue-500 focus:ring-2 focus:ring-blue-400 text-white font-semibold py-2 px-4 rounded-md transition"
-              >
-                Send Stream
-              </button>
-            )}
-            {(remoteSocketId && isUserNearby && !remoteStream)&& (
-              <button
-                onClick={handleCallUser}
-                className="w-full bg-green-600 hover:bg-green-500 focus:ring-2 focus:ring-green-400 text-white font-semibold py-2 px-4 rounded-md transition"
-              >
-                Call {otherAvatars[remoteSocketId]?.name}
-              </button>
-            )}
-            {myStream && (
-              <button
-                onClick={handleEndCall}
-                className="w-full bg-red-600 hover:bg-red-500 focus:ring-2 focus:ring-red-400 text-white font-semibold py-2 px-4 rounded-md transition"
-              >
-                END
-              </button>
-            )}
-          </div>
-        </div>
+        <Dock
+          myStream={myStream}
+          sendStreams={sendStreams}
+          handleCallUser={handleCallUser}
+          handleEndCall={handleEndCall}
+          handleScreenShare={handleScreenShare}
+          setScreenStream={setScreenStream}
+          remoteStream={remoteStream}
+          screenStream={screenStream}
+          remoteSocketId={remoteSocketId}
+          isUserNearby={isUserNearby}
+          handleFullScreen={handleFullScreen}
+        />
       </div>
+      <Modal
+        isFullScreen={isFullScreen}
+        closeFullScreen={closeFullScreen}
+        myStream={myStream}
+        remoteStream={remoteStream}
+        screenStream={screenStream}
+        name={name}
+        remoteSocketId={remoteSocketId}
+        otherAvatars={otherAvatars}
+      />
     </>
   );
 };
 
 export default Canvas;
-//TODO: add a button to end call from both side
-//TODO: add a button to mute and unmute audio
-//TODO: add a button to mute and unmute video
-//TODO: add a button to share screen
-//TODO: add a small div for incoming call and accepting call and onCall screen

@@ -19,8 +19,9 @@ export async function POST(req: NextRequest, res: NextResponse) {
     return NextResponse.json({ error }, { status });
   }
   const body = await req.json();
-  const { taskName, priority, dueDate } = body;
-  if (!taskName) {
+  const { name, priority, dueDate } = body;
+  console.log("Creating task", { name, priority, dueDate });
+  if (!name) {
     return NextResponse.json(
       { error: "Task name is required" },
       { status: 400 }
@@ -34,7 +35,7 @@ export async function POST(req: NextRequest, res: NextResponse) {
 
   const task = await prisma.task.create({
     data: {
-      taskName,
+      name,
       priority,
       userId: user.id,
       dueDate,

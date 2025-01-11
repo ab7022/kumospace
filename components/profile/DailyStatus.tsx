@@ -90,7 +90,7 @@ const DailyStatus = () => {
                       rows={2}
                       value={task}
                       onChange={(e) => setTask(e.target.value)}
-                      className="w-full px-4 py-3 bg-neutral-700/30 hover:bg-neutral-700/50 rounded-lg border border-neutral-600 focus:outline-none focus:ring-2 focus:ring-primary dark:text-white resize-none"
+                      className="w-full px-4 py-3 bg-neutral-700/30 hover:bg-neutral-700/50 rounded-lg border border-neutral-600 focus:outline-none focus:ring-2 focus:ring-primary text-white resize-none"
                     ></textarea>
                   </div>
                 </div>
