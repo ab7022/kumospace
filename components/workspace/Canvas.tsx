@@ -89,7 +89,7 @@ const Avatar = ({
         {myStream ? (
           <ReactPlayer
             style={{
-              borderRadius: "8px",
+              borderRadius: "6px",
               border: "2px solid #4B5563",
               boxShadow: "0 4px 6px rgba(0, 0, 0, 0.1)",
               objectFit: "contain",
@@ -103,7 +103,7 @@ const Avatar = ({
         ) : remoteStream ? (
           <ReactPlayer
             style={{
-              borderRadius: "8px",
+              borderRadius: "6px",
               border: "2px solid #4B5563",
               boxShadow: "0 4px 6px rgba(0, 0, 0, 0.1)",
               objectFit: "contain",
@@ -179,6 +179,7 @@ const Canvas = ({ open, session }: any) => {
     x: 100,
     y: 100,
   });
+  const [isUserNearby, setIsUserNearby] = useState(false);  
   const [otherAvatars, setOtherAvatars] = useState<Record<string, User>>({});
   const [boundaries, setBoundaries] = useState({ width: 0, height: 0 });
   const router = useRouter();
@@ -189,7 +190,6 @@ const Canvas = ({ open, session }: any) => {
         const data = response.data.existingSpace.user;
         setUserDetails(data);
         setRoom(response.data.existingSpace.space.code);
-        console.log(response.data.existingSpace.space.code);
       } else {
         router.push("/setup");
       }
@@ -247,6 +247,7 @@ const Canvas = ({ open, session }: any) => {
 
     socket.on("users", (users: Record<string, User>) => {
       setOtherAvatars(users);
+
     });
 
     return () => {
@@ -316,6 +317,31 @@ const Canvas = ({ open, session }: any) => {
     window.addEventListener("keydown", handleKeyDown);
     return () => window.removeEventListener("keydown", handleKeyDown);
   }, [moveAvatar]);
+ 
+const PROXIMITY_THRESHOLD_PX = 100; // 50px
+
+useEffect(() => {
+  Object.entries(otherAvatars).forEach(([id, user]) => {
+    if (socket && id === socket.id) return;
+    const otherPosition = user.position;
+
+    // Check if the other avatar's position is within the threshold range
+    const isNearbyX = otherPosition.x >= avatarPosition.x - PROXIMITY_THRESHOLD_PX && otherPosition.x <= avatarPosition.x + PROXIMITY_THRESHOLD_PX;
+    const isNearbyY = otherPosition.y >= avatarPosition.y - PROXIMITY_THRESHOLD_PX && otherPosition.y <= avatarPosition.y + PROXIMITY_THRESHOLD_PX;
+
+    // If both x and y positions are within the proximity threshold, the user is nearby
+    if (isNearbyX && isNearbyY) {
+      setIsUserNearby(true);
+      console.log(`${user.name} is nearby!`);
+      if (!socket) return;
+      // Perform the action you want (e.g., show a call button)
+    }else{
+
+    setIsUserNearby(false);
+    }
+  });
+}, [avatarPosition, otherAvatars]);
+
 
   const [remoteSocketId, setRemoteSocketId] = useState(null);
   const [myStream, setMyStream] = useState<MediaStream | null>(null);
@@ -533,12 +559,12 @@ const Canvas = ({ open, session }: any) => {
                 Send Stream
               </button>
             )}
-            {remoteSocketId && (
+            {(remoteSocketId && isUserNearby && !remoteStream)&& (
               <button
                 onClick={handleCallUser}
                 className="w-full bg-green-600 hover:bg-green-500 focus:ring-2 focus:ring-green-400 text-white font-semibold py-2 px-4 rounded-md transition"
               >
-                CALL
+                Call {otherAvatars[remoteSocketId]?.name}
               </button>
             )}
             {myStream && (
