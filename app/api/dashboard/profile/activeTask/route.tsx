@@ -44,7 +44,7 @@ export async function POST(req: NextRequest, res: NextResponse) {
 
   return NextResponse.json({ success: true, task }, { status: 200 });
 }
-export async function PATCH(req: NextRequest, res: NextResponse) {
+export async function PATCH(req: NextRequest,  NextResponse:any) {
   const { success, user, error, status } = await getUserFromSession();
   if (!success) {
     return NextResponse.json({ error }, { status });

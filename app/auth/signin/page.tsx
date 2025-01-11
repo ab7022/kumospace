@@ -1,6 +1,6 @@
 "use client";
 import { signIn } from "next-auth/react";
-import React, { useRef } from "react";
+import React from "react";
 import Link from "next/link";
 import { useState } from "react";
 
@@ -42,12 +42,12 @@ const SignInComponent = () => {
           <p className="mb-4">
             Dive in and create a standout profile in minutes.
           </p>
-          <a
+          <Link
             href="/"
             className="font-semibold tracking-wide text-white underline underline-offset-4"
           >
             Start Building Now
-          </a>
+          </Link>
         </div>
       </div>
 

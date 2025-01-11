@@ -1,9 +1,9 @@
-import React, { useState } from "react";
+import React from "react";
 import { cn } from "@/lib/utils";
 import SidebarParent from "@/components/Sidebar";
 import { getUser } from "@/components/Sessions";
 
-export default async function workspace({ children }: any) {
+export default async function workspace({ children }: { children: any }) {
   const session = await getUser();
   return (
     <div

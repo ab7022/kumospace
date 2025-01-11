@@ -1,6 +1,6 @@
 // "use client"
 import { PrismaClient } from "@prisma/client";
-import CredentialsProvider from "next-auth/providers/credentials";
+//import CredentialsProvider from "next-auth/providers/credentials";
 import GoogleProvider from "next-auth/providers/google";
 import GitHubProvider from "next-auth/providers/github";
 import NextAuth, { NextAuthOptions } from "next-auth";
@@ -49,7 +49,7 @@ export const NEXT_AUTH_CONFIG: NextAuthOptions = {
   ],
   secret: process.env.NEXTAUTH_SECRET,
   callbacks: {
-    async signIn({ user, account, profile }) {
+    async signIn({ user, account }) {
       if (account && (account.provider === "google" || account.provider === "github")) {
         const { email } = user;
   

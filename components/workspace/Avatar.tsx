@@ -9,7 +9,6 @@ export const Avatar: React.FC<AvatarProps> = ({
   image,
   email,
   status,
-  isCurrentUser = false,
   onCurrentlyWorking,
   designation,
   teamName,

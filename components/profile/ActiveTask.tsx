@@ -2,7 +2,6 @@
 import React, { useState, useEffect } from "react";
 import axios from "axios";
 import Skeleton from "react-loading-skeleton";
-import TimePicker from "react-time-picker";  
 
 const ActiveTask = () => {
   const [tasks, setTasks] = useState<
@@ -11,7 +10,7 @@ const ActiveTask = () => {
       name: string;
       priority: string;
       completed: boolean;
-      dueDate?: String;
+      dueDate?: string;
     }[]
   >([]);
   const [isCreating, setIsCreating] = useState(false);
@@ -23,7 +22,7 @@ const ActiveTask = () => {
   const [message, setMessage] = useState<{ text: string; type: string } | null>(
     null
   );
-  const [loading, setLoading] = useState(true); // Add loading state
+  const [loading, setLoading] = useState(true); 
   const url = "/api/dashboard/profile/activeTask";
 
   useEffect(() => {
@@ -34,7 +33,7 @@ const ActiveTask = () => {
       } catch (error) {
         console.error("Error fetching tasks:", error);
       } finally {
-        setLoading(false); // Set loading to false after tasks are fetched
+        setLoading(false); 
       }
     };
     fetchTasks();
@@ -58,15 +57,7 @@ const ActiveTask = () => {
       setTimeout(() => setMessage(null), 3000);
     }
   };
-  const [time, setTime] = useState("10:00"); // Default time
 
-  const handleTimeChange = (selectedTime: string) => {
-    setTime(selectedTime); // Update time picker value
-    setNewTask((prev) => ({
-      ...prev,
-      dueDate: selectedTime, // Store just the time as a string
-    }));
-  };
   const handleMarkAsDone = async (taskId: number) => {
     try {
       await axios.patch(url, { taskId, completed: true });
@@ -95,7 +86,6 @@ const ActiveTask = () => {
           </h3>
           <hr className="border-t-2 border-neutral-700 mb-6 w-full" />
 
-          {/* Show message */}
           {message && (
             <div
               className={`${
@@ -108,7 +98,6 @@ const ActiveTask = () => {
 
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
             {loading ? (
-              // Show skeleton loaders while loading
               Array(3)
                 .fill(null)
                 .map((_, index) => (

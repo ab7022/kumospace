@@ -2,7 +2,7 @@ import prisma from "@/lib/prisma";
 import { NextRequest, NextResponse } from "next/server";
 import getUserFromSession from "@/lib/userSession";
 
-export async function POST(req: NextRequest, res: NextResponse) {
+export async function POST(req: NextRequest,  NextResponse:any) {
   const body = await req.json();
   const { success, user, error, status } = await getUserFromSession();
   if (!success) {
@@ -53,7 +53,7 @@ export async function POST(req: NextRequest, res: NextResponse) {
   }
 }
 
-export async function GET(req: NextRequest, res: NextResponse) {
+export async function GET( NextResponse:any) {
   const { success, user, error, status } = await getUserFromSession();
   if (!success || !user) {
     return NextResponse.json({ error }, { status });

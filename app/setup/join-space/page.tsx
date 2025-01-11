@@ -1,11 +1,7 @@
 "use client";
-
 import React, { useState } from "react";
 import axios from "axios";
-import { useRouter } from "next/navigation";
-
 export default function JoinSpaceForm() {
-  const router = useRouter();
   const [spaceCode, setSpaceCode] = useState("");
   const [email, setEmail] = useState("");
   const [isLoading, setIsLoading] = useState(false);

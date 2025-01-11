@@ -326,7 +326,7 @@ const Canvas = ({ open, session }: any) => {
     }
   }, [myStream, screenStream]);
   const handleCallAccepted = useCallback(
-    ({ from, ans }: any) => {
+    ({ ans }: any) => {
       peer.setLocalDescription(ans);
       console.log("Call Accepted!");
       sendStreams();

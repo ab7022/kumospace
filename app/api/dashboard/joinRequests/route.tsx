@@ -69,7 +69,7 @@ import prisma from "@/lib/prisma";
 //     );
 //   }
 // }
-export async function GET(req: NextRequest, res: NextResponse) {
+export async function GET( NextResponse:any) {
   try {
     const { success, user, error, status } = await getUserFromSession();
     if (!success || !user) {

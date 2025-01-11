@@ -1,4 +1,4 @@
-import { Eye, Link, Mail, MessageCircle, UserCircle } from "lucide-react";
+import { Eye, Mail, MessageCircle, UserCircle } from "lucide-react";
 import Image from "next/image";
 import React from "react";
 

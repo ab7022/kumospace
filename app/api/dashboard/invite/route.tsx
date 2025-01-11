@@ -1,7 +1,7 @@
 import getUserFromSession from "@/lib/userSession";
 import { NextRequest, NextResponse } from "next/server";
 import prisma from "@/lib/prisma";
-export async function POST(req: NextRequest, res: NextResponse) {
+export async function POST(req: NextRequest, NextResponse:any) {
   try {
     const { success, user, error, status } = await getUserFromSession();
     if (!success || !user) {
@@ -70,7 +70,7 @@ export async function POST(req: NextRequest, res: NextResponse) {
     );
   }
 }
-export async function GET(req: NextRequest, res: NextResponse) {
+export async function GET(NextResponse:any) {
   try {
     const { success, user, error, status } = await getUserFromSession();
     if (!success || !user) {
@@ -119,7 +119,7 @@ export async function GET(req: NextRequest, res: NextResponse) {
   }
 }
 
-export async function DELETE(req: NextRequest, res: NextResponse) {
+export async function DELETE(req: NextRequest, NextResponse:any) {
   try {
     const { searchParams } = new URL(req.url);
     const inviteId = searchParams.get("inviteId");

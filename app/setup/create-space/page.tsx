@@ -21,7 +21,7 @@ export default function SetupForm() {
   }>({});
 
   const validateForm = () => {
-    let formErrors: {
+    const formErrors: {
       spaceName?: string;
       url?: string;
       teamSize?: string;

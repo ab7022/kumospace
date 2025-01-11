@@ -1,6 +1,6 @@
 import Header from "@/components/LandingPage/Header";
 import { getUser } from "@/components/Sessions";
-
+import Link from "next/link";
 export default async function NotFound() {
   const session = await getUser();
   return (
@@ -15,12 +15,12 @@ export default async function NotFound() {
           Sorry, the page you are looking for does not exist. It might have been
           removed or renamed.
         </p>
-        <a
+        <Link
           href="/"
           className="px-6 py-2 bg-primary-500 text-gray-900  rounded-md hover:bg-primary-600-700 transition duration-300"
         >
           Go back home
-        </a>
+        </Link>
       </div>
     </div>
   );

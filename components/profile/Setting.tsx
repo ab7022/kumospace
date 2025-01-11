@@ -69,8 +69,6 @@ const Setting = () => {
     .format("hh:mm:ss A");
 
   const url = "/api/dashboard/profile/setting";
-
-  // Function to handle the save action
   const handleSaveChanges = async () => {
     const data = {
   
@@ -82,7 +80,6 @@ const Setting = () => {
     try {
       const response = await axios.post(url, data);
       if (response.status === 200) {
-        const updatedUser = response.data;
         setMessage("Settings updated successfully!");
         setMessageType("success");
       } else {

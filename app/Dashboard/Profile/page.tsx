@@ -1,9 +1,4 @@
 import React from "react";
-import {
-  ArrowRightIcon,
-  ClockIcon,
-  UserIcon,
-} from "@heroicons/react/24/outline";
 import BasicDetails from "@/components/profile/BasicDetails";
 import DailyStatus from "@/components/profile/DailyStatus";
 import ActiveTask from "@/components/profile/ActiveTask";

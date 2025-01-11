@@ -5,7 +5,7 @@ import getUserFromSession from "@/lib/userSession";
 export async function POST(req: NextRequest) {
   try {
     const body = await req.json();
-    const { success, user, error, status } = await getUserFromSession();
+    const { success, user, status } = await getUserFromSession();
 
     if (!success || !user) {
       return NextResponse.json({ error: "Authentication failed." }, { status });
