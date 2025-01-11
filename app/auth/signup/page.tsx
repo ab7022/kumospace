@@ -5,7 +5,7 @@ import Link from "next/link";
 import validator from "validator"; // Add this import
 
 const SignUpComponent = () => {
-  const [error, setError] = useState(null);
+  const [error, setError] = useState<string | null>(null);
   const [isSubmitting, setIsSubmitting] = useState(false);
   const name = useRef("");
   const email = useRef("");
@@ -66,7 +66,11 @@ const SignUpComponent = () => {
         callbackUrl: "/",
       });
     } catch (error) {
-      setError(error.message);
+      if (error instanceof Error) {
+        setError(error.message);
+      } else {
+        setError("An unknown error occurred");
+      }
     } finally {
       setIsSubmitting(false);
     }

@@ -40,7 +40,8 @@ export const Avatar: React.FC<AvatarProps> = ({
             muted
             height="full"
             width="150px"
-            url={screenStream || myStream || remoteStream}
+            // @ts-ignore
+            url={screenStream? screenStream : myStream ? myStream :  remoteStream}
           />
         ) : (
           <Image
