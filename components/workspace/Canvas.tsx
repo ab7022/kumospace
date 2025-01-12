@@ -54,6 +54,7 @@ const Canvas = ({ open, session }: any) => {
       } else {
         router.push("/setup");
       }
+      //test
     } catch (error: any) {
       console.error("Error:", error.message);
       router.push("/setup");
