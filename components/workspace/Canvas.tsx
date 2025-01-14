@@ -11,6 +11,7 @@ import Dock from "./Dock";
 import Modal from "./Modal";
 import "react-responsive-modal/styles.css";
 import { Avatar } from "./Avatar";
+import { Position, User, UserDetails } from "../types";
 
 const STEP_SIZE = 20;
 const AVATAR_SIZE = 68;
@@ -135,7 +136,7 @@ const Canvas = ({ open, session }: any) => {
   // Movement handler
   const moveAvatar = useCallback(
     (direction: string) => {
-      setAvatarPosition((prev) => {
+      setAvatarPosition((prev:any) => {
         const newPosition = { ...prev };
 
         switch (direction) {
