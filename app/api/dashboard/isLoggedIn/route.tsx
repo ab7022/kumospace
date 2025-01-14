@@ -1,11 +1,13 @@
 import getUserFromSession from "@/lib/userSession";
-import { NextResponse,NextRequest } from "next/server";
+import { NextResponse, NextRequest } from "next/server";
 import prisma from "@/lib/prisma";
-export async function GET( _req:NextRequest,_res:NextResponse) {
+
+export async function GET(_req: NextRequest) {
   const { success, user, error, status } = await getUserFromSession();
   if (!success || !user) {
-    return NextResponse.json({ error }, { status });
+    return NextResponse.json({ error }, { status: status || 401 });
   }
+
   const userId = user.id;
   try {
     const existingSpace = await prisma.spaceMember.findFirst({
@@ -21,9 +23,10 @@ export async function GET( _req:NextRequest,_res:NextResponse) {
         },
       },
     });
+
     if (existingSpace == null) {
       return NextResponse.json(
-        { message: "You are not associated with any of space" },
+        { message: "You are not associated with any space" },
         { status: 409 }
       );
     } else {
@@ -33,7 +36,7 @@ export async function GET( _req:NextRequest,_res:NextResponse) {
   } catch (error) {
     console.error(error);
     return NextResponse.json(
-      { error: "Error Creating Space" },
+      { error: "Error fetching space details" },
       { status: 500 }
     );
   }

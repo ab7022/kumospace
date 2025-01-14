@@ -1,22 +1,24 @@
 import getUserFromSession from "@/lib/userSession";
 import { NextRequest, NextResponse } from "next/server";
 import prisma from "@/lib/prisma";
-export async function POST(req:NextRequest,_res:NextResponse) {
+
+export async function POST(req: NextRequest) {
   try {
     const { success, user, error, status } = await getUserFromSession();
     if (!success || !user) {
-      return NextResponse.json({ error }, { status });
+      return NextResponse.json({ error }, { status: status || 401 });
     }
 
     const body = await req.json();
     const { email, role } = body;
 
-    if (!email) {
+    if (!email || !role) {
       return NextResponse.json(
         { message: "Email and role are required." },
         { status: 400 }
       );
     }
+
     const existingMember = await prisma.spaceMember.findFirst({
       where: {
         email,
@@ -29,6 +31,7 @@ export async function POST(req:NextRequest,_res:NextResponse) {
         { status: 409 }
       );
     }
+
     const space = await prisma.spaceMember.findFirst({
       where: {
         userId: user.id,
@@ -51,7 +54,6 @@ export async function POST(req:NextRequest,_res:NextResponse) {
         email,
         spaceId: space.spaceId,
         role: role.toUpperCase() || "MEMBER",
-        
       },
     });
 
@@ -70,39 +72,42 @@ export async function POST(req:NextRequest,_res:NextResponse) {
     );
   }
 }
-export async function GET(NextResponse:any) {
+
+export async function GET(_req: NextRequest) {
   try {
     const { success, user, error, status } = await getUserFromSession();
     if (!success || !user) {
-      return NextResponse.json({ error }, { status });
+      return NextResponse.json({ error }, { status: status || 401 });
     }
+
     const space = await prisma.space.findFirst({
       where: {
-       userId:user.id
+        userId: user.id,
       },
       select: {
         id: true,
       },
     });
+
     if (!space) {
       return NextResponse.json(
         { message: "You are not associated with any space." },
         { status: 400 }
       );
     }
+
     const existingInvites = await prisma.invitation.findMany({
       where: {
         spaceId: space.id,
       },
-      select:{
-        id:true,
-        email:true,
-        invitedAt:true
-      }
+      select: {
+        id: true,
+        email: true,
+        invitedAt: true,
+      },
     });
 
-    if (existingInvites) {
-      
+    if (existingInvites.length > 0) {
       return NextResponse.json({ existingInvites }, { status: 200 });
     } else {
       return NextResponse.json(
@@ -111,15 +116,15 @@ export async function GET(NextResponse:any) {
       );
     }
   } catch (error) {
-    console.error("Error inviting user:", error);
+    console.error("Error fetching invitations:", error);
     return NextResponse.json(
-      { message: "An error occurred while processing the invitation." },
+      { message: "An error occurred while fetching invitations." },
       { status: 500 }
     );
   }
 }
 
-export async function DELETE(req: NextRequest, NextResponse:any) {
+export async function DELETE(req: NextRequest) {
   try {
     const { searchParams } = new URL(req.url);
     const inviteId = searchParams.get("inviteId");
@@ -133,12 +138,12 @@ export async function DELETE(req: NextRequest, NextResponse:any) {
 
     const { success, user, error, status } = await getUserFromSession();
     if (!success || !user) {
-      return NextResponse.json({ error }, { status });
+      return NextResponse.json({ error }, { status: status || 401 });
     }
 
     const deletionRequest = await prisma.invitation.delete({
       where: {
-        id: Number(inviteId), 
+        id: Number(inviteId),
       },
     });
 

@@ -17,7 +17,7 @@ const PendingInvites = () => {
   const [joinRequest, setJoinRequest] = useState<Request[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
-  let open = false
+  const open = false
   const fetchInvites = async () => {
     try {
       const response = await axios.get("/api/dashboard/invite");

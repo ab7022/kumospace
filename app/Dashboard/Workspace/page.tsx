@@ -3,7 +3,8 @@ import { getUser } from "@/components/Sessions";
 import Canvas from "@/components/workspace/Canvas";
 
 
-const Workspace = ({ open }: { open: boolean }) => {
+const Workspace = () => {
+  const open = false;
   const session = getUser();
 
   return <Canvas open={open} session={session} />;

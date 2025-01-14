@@ -2,7 +2,7 @@ import getUserFromSession from "@/lib/userSession";
 import { NextRequest, NextResponse } from "next/server";
 import prisma from "@/lib/prisma";
 
-export async function POST(req:NextRequest,_res:NextResponse) {
+export async function POST(req: NextRequest) {
   try {
     const { success, user, error, status } = await getUserFromSession();
     if (!success || !user) {
@@ -78,7 +78,8 @@ export async function POST(req:NextRequest,_res:NextResponse) {
     );
   }
 }
-export async function PUT(req: NextRequest, _res: NextResponse) {
+
+export async function PUT(req: NextRequest) {
   try {
     const { success, user, error, status } = await getUserFromSession();
     if (!success || !user) {

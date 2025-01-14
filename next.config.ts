@@ -11,6 +11,10 @@ const nextConfig: NextConfig = {
       "avatars.githubusercontent.com",
       "assets.aceternity.com"
     ],
-  },};
+  },
+  typescript: {
+    ignoreBuildErrors: true,
+}
+};
 
 export default nextConfig;

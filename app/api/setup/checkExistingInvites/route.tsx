@@ -1,58 +1,46 @@
 import getUserFromSession from "@/lib/userSession";
 import { NextRequest, NextResponse } from "next/server";
 import prisma from "@/lib/prisma";
-export async function GET( _req:NextRequest,_res:NextResponse) {
+export async function GET(_req: NextRequest) {
   try {
     const { success, user, error, status } = await getUserFromSession();
-    if (!success || !user) {
-      return NextResponse.json({ error }, { status });
-    }
 
-    const invitations = await prisma.invitation.findFirst({
-      where: {
-        email: user.email,
-      },
-      select: {
-        id: true,
-        role: true,
-        spaceId: true,
-      },
-    });
-    if (!invitations) {
+    if (!success || !user) {
       return NextResponse.json(
-        { message: "you have not received any invitation yet." },
-        { status: 400 }
+        { error: error || "User not authenticated" },
+        { status: status || 401 }
       );
     }
-    const space = await prisma.space.findFirst({
-      where: {
-        id: invitations.spaceId,
-      },
-      select: {
-        id: true,
-        name: true,
-      },
+
+    const invites = await prisma.invitation.findMany({
+      where: { email: user.email },
+      select: { id: true, spaceId: true, role: true },
     });
-    if (!space) {
-      return NextResponse.json({ message: "Space not found" }, { status: 404 });
+
+    if (!invites.length) {
+      return NextResponse.json(
+        { message: "No invitations found." },
+        { status: 404 }
+      );
     }
-    return NextResponse.json({ invitations, space }, { status: 200 });
+
+    return NextResponse.json({ invites }, { status: 200 });
   } catch (error) {
-    console.error("Error Fetching Invitation:", error);
+    console.error("Error fetching invitations:", error);
     return NextResponse.json(
-      { message: "An error occurred while processing the invitation." },
+      { message: "An internal server error occurred." },
       { status: 500 }
     );
   }
 }
 
-export async function POST(req:NextRequest,_res:NextResponse) {
+
+export async function POST(req: NextRequest) {
   try {
     const { success, user, error, status } = await getUserFromSession();
     if (!success || !user) {
       return NextResponse.json({ error }, { status });
     }
-
     const body = await req.json();
     const { requestId } = body;
 
@@ -60,40 +48,6 @@ export async function POST(req:NextRequest,_res:NextResponse) {
       return NextResponse.json(
         { message: "Request ID is required." },
         { status: 400 }
-      );
-    }
-
-    const joinRequest = await prisma.invitation.findUnique({
-      where: { id: requestId },
-      select: {
-        id: true,
-        spaceId: true,
-        email: true,
-        role: true,
-      },
-    });
-
-    if (!joinRequest) {
-      return NextResponse.json(
-        { message: "Invalid Join Request." },
-        { status: 400 }
-      );
-    }
-
-    const newMember = await prisma.spaceMember.create({
-      data: {
-        joinedAt: new Date(),
-        role: joinRequest.role,
-        email: joinRequest.email,
-        spaceId: joinRequest.spaceId,
-        userId: user.id,
-      },
-    });
-
-    if (!newMember) {
-      return NextResponse.json(
-        { message: "Failed to accept invitation." },
-        { status: 500 }
       );
     }
 
@@ -101,42 +55,29 @@ export async function POST(req:NextRequest,_res:NextResponse) {
       where: { id: requestId },
     });
 
-    if (!deletedRequest) {
-      return NextResponse.json(
-        { message: "Failed to delete the join request." },
-        { status: 500 }
-      );
-    }
-
+    return NextResponse.json(deletedRequest, { status: 200 });
+  } catch (error) {
+    console.error("Error deleting invitation:", error);
     return NextResponse.json(
-      { message: "Invitation accepted." },
-      { status: 200 }
-    );
-  } catch (error: any) {
-
-    return NextResponse.json(
-      {
-        message:
-          "An unexpected error occurred while processing the accept request.",
-        error: error.message || "Internal Server Error",
-      },
+      { message: "An internal server error occurred." },
       { status: 500 }
     );
   }
 }
-export async function PUT(req:NextRequest,_res:NextResponse) {
+export async function PUT(req: NextRequest, _res: NextResponse) {
   try {
     const { success, user, error, status } = await getUserFromSession();
     if (!success || !user) {
-      return NextResponse.json({ error }, { status });
+      return NextResponse.json({ error }, { status: status || 401 });
     }
+
     const body = await req.json();
     const { requestId } = body;
 
     if (!requestId) {
       return NextResponse.json(
         { message: "Request ID is required." },
-        { status: 400 }
+        { status: 400 } // Ensure the second argument is an object with `status` field
       );
     }
 
@@ -153,16 +94,17 @@ export async function PUT(req:NextRequest,_res:NextResponse) {
 
     return NextResponse.json(
       { message: "Joining Request Declined." },
-      { status: 200 }
+      { status: 200 } // Ensure the second argument is an object with `status` field
     );
   } catch (error: any) {
+    console.error("Error processing join request:", error);
     return NextResponse.json(
       {
         message:
           "An unexpected error occurred while processing the join request.",
         error: error.message || "Internal Server Error",
       },
-      { status: 500 }
+      { status: 500 } // Ensure the second argument is an object with `status` field
     );
   }
 }

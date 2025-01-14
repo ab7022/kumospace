@@ -2,14 +2,14 @@ import getUserFromSession from "@/lib/userSession";
 import { NextRequest, NextResponse } from "next/server";
 import prisma from "@/lib/prisma";
 
-export async function GET( _req:NextRequest,_res:NextResponse) {
+export async function GET(_req: NextRequest) {
   try {
     const { success, user, error, status } = await getUserFromSession();
 
     if (!success || !user) {
       return NextResponse.json(
         { error: error || "User not authenticated" },
-        { status }
+        { status: status || 401 }
       );
     }
 
@@ -34,7 +34,7 @@ export async function GET( _req:NextRequest,_res:NextResponse) {
             lastName: true,
             profileUrl: true,
             name: true,
-            status:true,
+            status: true,
             designation: true,
             teamName: true,
           },
@@ -43,11 +43,12 @@ export async function GET( _req:NextRequest,_res:NextResponse) {
     });
 
     if (!mySpaceMembers.length) {
-      return NextResponse.json({ message: "No members found.", status: 404 });
+      return NextResponse.json({ message: "No members found." }, { status: 404 });
     }
 
     return NextResponse.json({ mySpaceMembers }, { status: 200 });
-  } catch  {
+  } catch (error) {
+    console.error("Error fetching space members:", error);
     return NextResponse.json(
       { message: "An internal server error occurred." },
       { status: 500 }

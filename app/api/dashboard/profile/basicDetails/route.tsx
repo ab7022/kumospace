@@ -1,15 +1,17 @@
-import getUserFromSession from "@/lib/userSession";
 import { NextRequest, NextResponse } from "next/server";
+import getUserFromSession from "@/lib/userSession";
 import prisma from "@/lib/prisma";
-export async function POST(req:NextRequest,_res:NextResponse) {
-  const { success, user, error, status } = await getUserFromSession();
-  if (!success || !user) {
-    return NextResponse.json({ error }, { status });
-  }
-  const body = await req.json();
-  const { firstName, lastName, teamName, designation } = body;
 
+export async function POST(req: NextRequest) {
   try {
+    const { success, user, error, status } = await getUserFromSession();
+    if (!success || !user) {
+      return NextResponse.json({ error }, { status: status || 401 });
+    }
+
+    const body = await req.json();
+    const { firstName, lastName, teamName, designation } = body;
+
     await prisma.user.update({
       where: {
         id: user.id,
@@ -24,22 +26,24 @@ export async function POST(req:NextRequest,_res:NextResponse) {
 
     return NextResponse.json(
       { message: "Profile updated successfully" },
-      { status: 200 }
+      { status: 200 } // Correct status for successful update
     );
-  } catch {
+  } catch (error) {
+    console.error("Error updating profile:", error);
     return NextResponse.json(
       { message: "Failed to update profile" },
-      { status: 500 }
+      { status: 500 } // Server error for failed update
     );
   }
 }
 
-export async function GET(_req:NextRequest,_res:NextResponse) {
+export async function GET(_req: NextRequest) {
   try {
     const { success, user, error, status } = await getUserFromSession();
     if (!success || !user) {
-      return NextResponse.json({ error }, { status });
+      return NextResponse.json({ error }, { status: status || 401 });
     }
+
     const user1 = await prisma.user.findUnique({
       where: { id: user.id },
       select: {
@@ -47,11 +51,15 @@ export async function GET(_req:NextRequest,_res:NextResponse) {
         lastName: true,
         teamName: true,
         designation: true,
-        
       },
     });
-    return NextResponse.json(user1, { status: 200 });
+
+    return NextResponse.json(user1, { status: 200 }); // Return user details with 200 status
   } catch (error) {
-    return NextResponse.json({ message: error }, { status: 500 });
+    console.error("Error fetching user details:", error);
+    return NextResponse.json(
+      { message: "Failed to fetch user details" },
+      { status: 500 } // Return server error status
+    );
   }
 }
