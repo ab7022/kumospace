@@ -380,7 +380,7 @@ const Canvas = ({ open, session }: any) => {
   );
 
   const handleScreenShareAccepted = useCallback(
-    ({ from, ans }: any) => {
+    ({ ans }: any) => {
       peer.setLocalDescription(ans);
       console.log("Screen Share Accepted!");
       sendStreams();
