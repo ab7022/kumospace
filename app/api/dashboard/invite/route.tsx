@@ -1,7 +1,7 @@
 import getUserFromSession from "@/lib/userSession";
 import { NextRequest, NextResponse } from "next/server";
 import prisma from "@/lib/prisma";
-export async function POST(req: NextRequest, NextResponse:any) {
+export async function POST(req:NextRequest,_res:NextResponse) {
   try {
     const { success, user, error, status } = await getUserFromSession();
     if (!success || !user) {

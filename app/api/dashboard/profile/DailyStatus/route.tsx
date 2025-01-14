@@ -1,7 +1,7 @@
 import { NextRequest, NextResponse } from "next/server";
 import prisma from "@/lib/prisma";
 import getUserFromSession from "@/lib/userSession";
-export async function POST(req: NextRequest, NextResponse:any) {
+export async function POST(req:NextRequest,_res:NextResponse) {
   try {
     const { success, user, error, status } = await getUserFromSession();
     if (!success || !user) {
@@ -31,9 +31,7 @@ export async function POST(req: NextRequest, NextResponse:any) {
       message: "Status updated successfully!",
       user: updatedUser,
     });
-  } catch (error) {
-    console.error("Error updating user status:", error);
-
+  } catch {
     return NextResponse.json(
       { error: "Internal Server Error" },
       { status: 500 }
@@ -43,7 +41,7 @@ export async function POST(req: NextRequest, NextResponse:any) {
   }
 }
 
-export async function GET(req: NextRequest) {  
+export async function GET(_req:NextRequest,_res:NextResponse) {  
   try {
     const { success, user, error, status } = await getUserFromSession();
     if (!success || !user) {

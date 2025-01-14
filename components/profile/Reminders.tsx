@@ -28,8 +28,7 @@ const Reminders = () => {
         const response = await axios.get(url);
         const data = await response.data;
         if (data) setReminders(data);
-      } catch (error) {
-        console.error("Error fetching reminders:", error);
+      } catch {
       }
     };
     fetchReminders();
@@ -72,8 +71,7 @@ const Reminders = () => {
         setNewReminder({ title: "", description: "", time: "" });
         setShowInputFields(false);
         showNotification("Reminder added successfully!", "success");
-      } catch (error) {
-        console.error("Error adding reminder:", error);
+      } catch  {
         showNotification("Failed to add reminder. Please try again.", "error");
       }
     } else {
@@ -96,8 +94,7 @@ const Reminders = () => {
       await axios.put(`${url}/?id=${id}`);
       setReminders((prev) => prev.filter((reminder) => reminder.id !== id));
       showNotification("Reminder deleted successfully!", "success");
-    } catch (error) {
-      console.error("Error deleting reminder:", error);
+    } catch {
       showNotification("Failed to delete reminder. Please try again.", "error");
     }
   };
@@ -152,7 +149,7 @@ const Reminders = () => {
           <div className="bg-neutral-800 rounded-lg p-4 mb-8">
             <div className="flex justify-between mb-2">
               <h3 className="text-lg font-medium text-neutral-200">
-                Today's Reminders
+                {"Today's Reminders"}
               </h3>
               <button
                 onClick={() => setShowInputFields(true)}

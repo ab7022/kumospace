@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import Image from "next/image";
 import ReactPlayer from "react-player";
 import UserModal from "./UserModal";
+import { AvatarProps } from "../types";
 
 export const Avatar: React.FC<AvatarProps> = ({
   position,

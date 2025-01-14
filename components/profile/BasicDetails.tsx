@@ -30,7 +30,7 @@ const BasicDetails = () => {
         if (response.status === 200) {
           setFormData(response.data);
         }
-      } catch (error) {
+      } catch{
         setMessage({
           type: "error",
           text: "Failed to load profile details. Please try again.",
@@ -84,7 +84,7 @@ const BasicDetails = () => {
             Profile
           </h1>
           <p className="text-neutral-400 text-lg">
-            Welcome back! Here's your profile details
+            {"Welcome back! Here's your profile details"}
           </p>
         </div>
 

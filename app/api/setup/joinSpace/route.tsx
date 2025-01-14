@@ -2,7 +2,7 @@ import prisma from "@/lib/prisma";
 import { NextRequest, NextResponse } from "next/server";
 import getUserFromSession from "@/lib/userSession";
 
-export async function POST(req: NextRequest) {
+export async function POST(req:NextRequest,_res:NextResponse) {
   try {
     const body = await req.json();
     const { success, user, status } = await getUserFromSession();
@@ -65,8 +65,7 @@ export async function POST(req: NextRequest) {
       { message: "Invitation request sent successfully!", invitation },
       { status: 200 }
     );
-  } catch (err) {
-    console.error(err);
+  } catch  {
     return NextResponse.json(
       { error: "An unexpected error occurred. Please try again." },
       { status: 500 }

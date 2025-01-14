@@ -47,7 +47,7 @@ const Steps = () => {
                 </h3>
                 <p className="mt-4 text-lg text-neutral-300">
                   Experience true transparency with our virtual office. See
-                  who's working on what, join conversations naturally, and
+                  who is working on what, join conversations naturally, and
                   maintain team cohesion just like in a physical office.
                 </p>
               </div>

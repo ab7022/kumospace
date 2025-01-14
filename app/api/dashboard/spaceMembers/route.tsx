@@ -2,7 +2,7 @@ import getUserFromSession from "@/lib/userSession";
 import { NextRequest, NextResponse } from "next/server";
 import prisma from "@/lib/prisma";
 
-export async function GET( NextRequest:any): Promise<NextResponse> {
+export async function GET( _req:NextRequest,_res:NextResponse) {
   try {
     const { success, user, error, status } = await getUserFromSession();
 
@@ -47,8 +47,7 @@ export async function GET( NextRequest:any): Promise<NextResponse> {
     }
 
     return NextResponse.json({ mySpaceMembers }, { status: 200 });
-  } catch (error) {
-    console.error("Error fetching invitation:", error);
+  } catch  {
     return NextResponse.json(
       { message: "An internal server error occurred." },
       { status: 500 }

@@ -3,7 +3,7 @@ import { NextRequest, NextResponse } from "next/server";
 
 const client = new PrismaClient();
 
-export async function POST(req: NextRequest) {
+export async function POST(req:NextRequest,_res:NextResponse) {
     try {
       const body = await req.json();
       if (!body) {
@@ -34,8 +34,7 @@ export async function POST(req: NextRequest) {
           }
         );
       }
-    } catch (error) {
-      console.error("Error fetching user details:", error);
+    } catch {
       return new NextResponse(null, {
         status: 500,
         headers: {

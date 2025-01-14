@@ -10,8 +10,7 @@ const Faq = () => {
               Frequently Asked Questions
             </h2>
             <p className="mt-1 text-neutral-300">
-              Discover how our virtual workspace can transform your team's
-              productivity.
+             {" Discover how our virtual workspace can transform your team's productivity"}
             </p>
           </div>
 
@@ -22,11 +21,7 @@ const Faq = () => {
                   Why do leading companies choose virtual offices?
                 </h3>
                 <p className="mt-2 text-neutral-300">
-                  Industry giants like McKinsey, Microsoft, and PwC predict that
-                  70%+ of future work will be remote. Companies using our
-                  virtual office solution report up to 40% increase in team
-                  productivity and 65% better employee satisfaction. Don't let
-                  your competition get ahead!
+                  {"Industry giants like McKinsey, Microsoft, and PwC predict that  70%+ of future work will be remote. Companies using our virtual office solution report up to 40% increase in team productivity and 65% better employee satisfaction. Don't let your competition get ahead!"}
                 </p>
               </div>
 
@@ -50,8 +45,8 @@ const Faq = () => {
                   Our cutting-edge features include HD video conferencing,
                   instant team messaging, intuitive screen sharing, and
                   revolutionary spatial audio that makes remote conversations
-                  feel natural. Teams report feeling "just like being in the
-                  same room."
+                  feel natural. Teams report feeling just like being in the
+                  same room.
                 </p>
               </div>
             </div>

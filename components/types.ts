@@ -43,3 +43,5 @@ interface Position {
     timezone: string;
     status: string;
   };
+
+  export type { Position, User, AvatarProps, UserDetails };

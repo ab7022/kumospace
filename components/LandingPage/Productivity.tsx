@@ -15,7 +15,7 @@ const Productivity = () => {
             className="mb-6 text-4xl text-center font-bold text-white md:text-6xl lg:text-7xl max-w-5xl"
             data-element-type="Heading"
           >
-            Transform Your Remote Team's Productivity Today
+            {"Transform Your Remote Team's Productivity Today"}
           </h1>
           <p
             className="mx-auto mb-10 max-w-2xl text-lg text-neutral-400"

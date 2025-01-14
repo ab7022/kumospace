@@ -12,7 +12,7 @@ interface TeamMember {
   teamName: string;
 }
 
-const TeamMembers = ({ userRole }: { userRole: string }) => {
+const TeamMembers = () => {
   const [teamMembers, setTeamMembers] = useState<TeamMember[]>([]);
   const [isLoading, setIsLoading] = useState(true);
 
@@ -22,9 +22,8 @@ const TeamMembers = ({ userRole }: { userRole: string }) => {
         const response = await axios.get("/api/dashboard/spaceMembers");
         const data = response.data.mySpaceMembers.map((item: any) => item.user);
         setTeamMembers(data);
-      } catch (error) {
-        console.error("Failed to fetch team members", error);
-      } finally {
+      } catch {
+    } finally {
         setIsLoading(false);
       }
     };

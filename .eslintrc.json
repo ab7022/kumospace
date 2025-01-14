@@ -1,3 +1,20 @@
 {
-  "extends": ["next/core-web-vitals", "next/typescript"]
+  "extends": ["next/core-web-vitals", "next/typescript"],
+  "rules": {
+    "@typescript-eslint/no-explicit-any": "warn", // Warn instead of error for 'any'
+    "@typescript-eslint/no-unused-vars": [
+      "error",
+      {
+        "vars": "all",
+        "args": "after-used",
+        "ignoreRestSiblings": true,
+        "argsIgnorePattern": "^_" 
+      }
+    ],
+    "no-unused-vars": "off", // Disable the base rule since we use the TypeScript version
+    "no-console": "warn",
+    "@typescript-eslint/ban-ts-comment": "off"
+
+
+  }
 }

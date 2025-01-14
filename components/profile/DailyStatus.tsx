@@ -22,7 +22,7 @@ const DailyStatus = () => {
           setTask(response.data.task);
           setAvailability(response.data.availability);
         }
-      } catch (error) {
+      } catch{
         setMessage({
           type: "error",
           text: "Failed to load status details. Please try again.",
@@ -39,7 +39,7 @@ const DailyStatus = () => {
       if (response.status === 200) {
         setMessage({ type: "success", text: "Status updated successfully!" });
       }
-    } catch (error) {
+    } catch {
       setMessage({
         type: "error",
         text: "Failed to update status. Please try again.",

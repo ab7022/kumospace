@@ -14,7 +14,7 @@ import { Avatar } from "./Avatar";
 
 const STEP_SIZE = 20;
 const AVATAR_SIZE = 68;
-const SOCKET_URL = "http://localhost:3001";
+const SOCKET_URL = "https://kumospace-be-production.up.railway.app/";
 const MOVEMENT_KEYS = {
   ArrowUp: "up",
   ArrowDown: "down",
@@ -54,7 +54,6 @@ const Canvas = ({ open, session }: any) => {
       } else {
         router.push("/setup");
       }
-      //test
     } catch (error: any) {
       console.error("Error:", error.message);
       router.push("/setup");

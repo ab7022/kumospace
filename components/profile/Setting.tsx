@@ -83,7 +83,6 @@ const Setting = () => {
         setMessage("Settings updated successfully!");
         setMessageType("success");
       } else {
-        console.error("Failed to update:", response.data.error);
         setMessage("Failed to update settings.");
         setMessageType("error");
       }
@@ -92,8 +91,7 @@ const Setting = () => {
         setMessage(null);
         setMessageType(null);
       }, 3000);
-    } catch (error) {
-      console.error("Error:", error);
+    } catch  {
       setMessage("Error occurred while updating settings.");
       setMessageType("error");
       setTimeout(() => {

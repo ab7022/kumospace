@@ -2,7 +2,7 @@ import prisma from "@/lib/prisma";
 import { NextRequest, NextResponse } from "next/server";
 import getUserFromSession from "@/lib/userSession";
 
-export async function POST(req: NextRequest,  NextResponse:any) {
+export async function POST(req:NextRequest,_res:NextResponse) {
   const body = await req.json();
   const { success, user, error, status } = await getUserFromSession();
   if (!success) {
@@ -44,8 +44,7 @@ export async function POST(req: NextRequest,  NextResponse:any) {
     });
 
     return NextResponse.json({ newSpace }, { status: 201 });
-  } catch (error) {
-    console.error(error);
+  } catch  {
     return NextResponse.json(
       { error: "Error Creating Space" },
       { status: 500 }
@@ -53,7 +52,7 @@ export async function POST(req: NextRequest,  NextResponse:any) {
   }
 }
 
-export async function GET( NextResponse:any) {
+export async function GET( _req:NextRequest,_res:NextResponse) {
   const { success, user, error, status } = await getUserFromSession();
   if (!success || !user) {
     return NextResponse.json({ error }, { status });
@@ -73,8 +72,7 @@ export async function GET( NextResponse:any) {
     } else {
       return NextResponse.json({ existingSpace }, { status: 200 });
     }
-  } catch (error) {
-    console.error(error);
+  } catch {
     return NextResponse.json(
       { error: "Error Creating Space" },
       { status: 500 }

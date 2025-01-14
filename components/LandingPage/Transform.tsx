@@ -109,9 +109,7 @@ const Transform = () => {
                   className="text-xl text-neutral-300 leading-relaxed"
                   data-element-type="Text"
                 >
-                  See who's working on what in real-time. Our platform enables
-                  seamless collaboration and transparency, making remote work
-                  feel more natural than ever.
+                  {"See who's working on what in real-time. Our platform enables seamless collaboration and transparency, making remote work feel more natural than ever."}
                 </p>
                 <ul className="space-y-6" data-element-type="ul">
                   <li

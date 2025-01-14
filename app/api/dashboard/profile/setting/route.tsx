@@ -2,7 +2,7 @@ import { NextRequest, NextResponse } from "next/server";
 import getUserFromSession from "@/lib/userSession";
 import prisma from "@/lib/prisma";
 
-export async function POST(req: NextRequest,  NextResponse:any) {
+export async function POST(req:NextRequest,_res:NextResponse) {
   const body = await req.json();
   const { success, user, error, status } = await getUserFromSession();
   if (!success || !user) {
@@ -21,7 +21,7 @@ export async function POST(req: NextRequest,  NextResponse:any) {
     });
 
     return NextResponse.json(updatedUser, { status: 200 });
-  } catch (error) {
+  } catch  {
     return NextResponse.json(
       { error: "Failed to update user setting" },
       { status: 500 }
@@ -29,7 +29,7 @@ export async function POST(req: NextRequest,  NextResponse:any) {
   }
 }
 
-export async function GET( NextResponse:any) {
+export async function GET( _req:NextRequest,_res:NextResponse) {
   const { success, user, error, status } = await getUserFromSession();
   if (!success || !user) {
     return NextResponse.json({ error }, { status });

@@ -6,7 +6,6 @@ import Image from "next/image";
 import {
   IconArrowLeft,
   IconBrandTabler,
-  IconSettings,
   IconUserBolt,
 } from "@tabler/icons-react";
 import { Sidebar, SidebarBody, SidebarLink } from "../components/ui/Sidevar";

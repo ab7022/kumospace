@@ -44,7 +44,7 @@ const JoiningRequest = () => {
 
     fetchJoinRequests();
   }, []);
-  async function acceptInvitation(invitationId: number) {
+  async function acceptInvitation(invitationId: any) {
     const res = await axios.post(url, {
         requestId: invitationId,
     });
@@ -56,7 +56,7 @@ const JoiningRequest = () => {
       router.push(`/Dashboard`);
     }
   }
-  async function declineInvitation(invitationId: number) {
+  async function declineInvitation(invitationId: any) {
     const res = await axios.put(url, {
         requestId: invitationId,
     });

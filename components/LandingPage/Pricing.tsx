@@ -10,8 +10,7 @@ const Pricing = () => {
               Transform Your Workspace Today
             </h2>
             <p className="mx-auto mt-4 max-w-2xl text-lg text-neutral-300">
-              Elevate your team's productivity with our cutting-edge virtual
-              workspace solutions.
+              {"Elevate your team's productivity with our cutting-edge virtual workspace solutions."}
             </p>
           </div>
 
@@ -364,8 +363,7 @@ const Pricing = () => {
                   Enhance Team Visibility
                 </h4>
                 <p className="mt-2 text-neutral-300">
-                  See who's available, what they're working on, and collaborate
-                  spontaneously - just like in a physical office.
+                  {"See who's available, what they're working on, and collaborate spontaneously - just like in a physical office."}
                 </p>
               </div>
               <div className="rounded-lg bg-neutral-800 p-6">

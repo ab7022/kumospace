@@ -1,7 +1,7 @@
 import { NextRequest, NextResponse } from "next/server";
 import getUserFromSession from "@/lib/userSession";
 import prisma from "@/lib/prisma";
-export async function GET(req: NextRequest, res: NextResponse) {
+export async function GET(_req:NextRequest,_res:NextResponse) {
   const { success, user, error, status } = await getUserFromSession();
   if (!success) {
     return NextResponse.json({ error }, { status });
@@ -13,14 +13,13 @@ export async function GET(req: NextRequest, res: NextResponse) {
   return NextResponse.json({ success: true, tasks }, { status: 200 });
 }
 
-export async function POST(req: NextRequest, res: NextResponse) {
+export async function POST(req: NextRequest, _res: NextResponse) {
   const { success, user, error, status } = await getUserFromSession();
   if (!success) {
     return NextResponse.json({ error }, { status });
   }
   const body = await req.json();
   const { name, priority, dueDate } = body;
-  console.log("Creating task", { name, priority, dueDate });
   if (!name) {
     return NextResponse.json(
       { error: "Task name is required" },
@@ -44,7 +43,7 @@ export async function POST(req: NextRequest, res: NextResponse) {
 
   return NextResponse.json({ success: true, task }, { status: 200 });
 }
-export async function PATCH(req: NextRequest,  NextResponse:any) {
+export async function PATCH(req:NextRequest,_res:NextResponse) {
   const { success, user, error, status } = await getUserFromSession();
   if (!success) {
     return NextResponse.json({ error }, { status });

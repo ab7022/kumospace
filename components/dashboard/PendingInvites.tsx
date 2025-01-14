@@ -14,10 +14,8 @@ type Request = {
 
 const PendingInvites = ({
   open,
-  userRole,
 }: {
   open: boolean;
-  userRole: string;
 }) => {
   const [invites, setInvites] = useState<Invite[]>([]);
   const [joinRequest, setJoinRequest] = useState<Request[]>([]);
@@ -28,8 +26,7 @@ const PendingInvites = ({
     try {
       const response = await axios.get("/api/dashboard/invite");
       setInvites(response.data.existingInvites);
-    } catch (err) {
-      console.error("Error fetching invites:", err);
+    } catch  {
       setError("Failed to load invites.");
     } finally {
       setLoading(false);
@@ -39,8 +36,7 @@ const PendingInvites = ({
     try {
       const response = await axios.get("/api/dashboard/joinRequests");
       setJoinRequest(response.data.existingInvites);
-    } catch (err) {
-      console.error("Error fetching invites:", err);
+    } catch  {
       setError("Failed to load invites.");
     } finally {
       setLoading(false);
@@ -62,8 +58,7 @@ const PendingInvites = ({
       } else {
         alert("Error deleting invite");
       }
-    } catch (error) {
-      console.error("Error deleting invite:", error);
+    } catch {
       alert("Error deleting invite");
     }
   }
@@ -98,8 +93,7 @@ const PendingInvites = ({
       } else {
         alert("Error approving request");
       }
-    } catch (error) {
-      console.error("Error approving request:", error);
+    } catch  {
       alert("Error approving request");
     }
   }

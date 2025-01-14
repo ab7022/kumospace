@@ -44,7 +44,7 @@ const DashboardHeader = ({ userRole }: { userRole: string }) => {
               Dashboard
             </h1>
             <p className="text-neutral-400 text-lg">
-              Welcome back! Here's your team's latest updates
+              {"              Welcome back! Here's your team's latest updates"}{" "}
             </p>
           </div>
           {(userRole === "ADMIN" || userRole === "MODERATOR") && (

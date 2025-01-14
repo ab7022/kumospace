@@ -36,8 +36,7 @@ const Trial = () => {
                 Real-time Team Visibility
               </h3>
               <p className="mt-4 text-neutral-400">
-                See who's working on what in real-time, fostering transparency
-                and collaboration.
+                {"See who's working on what in real-time, fostering transparency and collaboration"}.
               </p>
               <ul className="mt-6 space-y-3 text-sm text-neutral-400">
                 <li className="flex items-center">
@@ -247,8 +246,7 @@ const Trial = () => {
                 Ready to Transform Your Remote Workspace?
               </h3>
               <p className="mx-auto mt-4 max-w-2xl text-lg text-neutral-400">
-                Join thousands of successful remote companies who've boosted
-                their team's productivity with our platform.
+             {"   Join thousands of successful remote companies who've boosted their team's productivity with our platform."}
               </p>
               <div className="mt-8 flex flex-col items-center justify-center gap-4 sm:flex-row">
                 <a

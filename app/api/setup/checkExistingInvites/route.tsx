@@ -1,7 +1,7 @@
 import getUserFromSession from "@/lib/userSession";
 import { NextRequest, NextResponse } from "next/server";
 import prisma from "@/lib/prisma";
-export async function GET( NextResponse:any) {
+export async function GET( _req:NextRequest,_res:NextResponse) {
   try {
     const { success, user, error, status } = await getUserFromSession();
     if (!success || !user) {
@@ -46,7 +46,7 @@ export async function GET( NextResponse:any) {
   }
 }
 
-export async function POST(req: NextRequest,  NextResponse:any) {
+export async function POST(req:NextRequest,_res:NextResponse) {
   try {
     const { success, user, error, status } = await getUserFromSession();
     if (!success || !user) {
@@ -113,7 +113,6 @@ export async function POST(req: NextRequest,  NextResponse:any) {
       { status: 200 }
     );
   } catch (error: any) {
-    console.error("Error processing join request:", error);
 
     return NextResponse.json(
       {
@@ -125,7 +124,7 @@ export async function POST(req: NextRequest,  NextResponse:any) {
     );
   }
 }
-export async function PUT(req: NextRequest,  NextResponse:any) {
+export async function PUT(req:NextRequest,_res:NextResponse) {
   try {
     const { success, user, error, status } = await getUserFromSession();
     if (!success || !user) {
@@ -157,8 +156,6 @@ export async function PUT(req: NextRequest,  NextResponse:any) {
       { status: 200 }
     );
   } catch (error: any) {
-    console.error("Error processing join request:", error);
-
     return NextResponse.json(
       {
         message:

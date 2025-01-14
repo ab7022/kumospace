@@ -7,7 +7,7 @@ const Features = () => {
         <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
           <div className="text-center">
             <h2 className="text-4xl font-bold text-white sm:text-5xl bg-gradient-to-r from-blue-400 to-purple-500 bg-clip-text text-transparent">
-              Transform Your Team's Productivity
+              {"Transform Your Team's Productivity"}
             </h2>
             <p className="mx-auto mt-4 max-w-2xl text-lg text-neutral-300">
               Revolutionize your remote work experience with our immersive
@@ -123,8 +123,7 @@ const Features = () => {
                 Real-time Collaboration
               </h3>
               <p className="mt-2 text-neutral-400">
-                See who's working on what in real-time, just like in a physical
-                office. No more isolation or communication gaps.
+                {"See who's working on what in real-time, just like in a physical office. No more isolation or communication gaps."}
               </p>
             </div>
 
@@ -179,8 +178,7 @@ const Features = () => {
                 Team Presence
               </h3>
               <p className="mt-2 text-neutral-400">
-                Always know who's available and what they're working on with
-                real-time presence indicators.
+                {"Always know who's available and what they're working on with real-time presence indicators."}
               </p>
             </div>
             <div className="mt-20">
