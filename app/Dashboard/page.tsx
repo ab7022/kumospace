@@ -9,7 +9,7 @@ import { useEffect, useState } from "react";
 import axios from "axios";
 import { useRouter } from "next/navigation";
 
-const Dashboard = ({ open }: { open: boolean }) => {
+export default function Dashboard({ open }: { open: boolean })  {
   const router = useRouter();
   const [, setUserDetails] = useState(null);
   const [role, setRole] = useState("");
@@ -67,4 +67,3 @@ const Dashboard = ({ open }: { open: boolean }) => {
   );
 };
 
-export default Dashboard;
