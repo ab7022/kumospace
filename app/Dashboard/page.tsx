@@ -9,7 +9,7 @@ import { useEffect, useState } from "react";
 import axios from "axios";
 import { useRouter } from "next/navigation";
 
-export default function Dashboard({ open }: { open: boolean })  {
+export default function Dashboard()  {
   const router = useRouter();
   const [, setUserDetails] = useState(null);
   const [role, setRole] = useState("");
@@ -56,7 +56,7 @@ export default function Dashboard({ open }: { open: boolean })  {
           <div className="col-span-4 space-y-6">
             {/* <TeamPerformance /> */}
             {(role === "ADMIN" || role === "MODERATOR") && (
-              <PendingInvites open={open} />
+              <PendingInvites  />
             )}
             <QuickActions />
             <UpcomingDeadline />

@@ -12,16 +12,12 @@ type Request = {
   email: string;
 };
 
-const PendingInvites = ({
-  open,
-}: {
-  open: boolean;
-}) => {
+const PendingInvites = () => {
   const [invites, setInvites] = useState<Invite[]>([]);
   const [joinRequest, setJoinRequest] = useState<Request[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
-
+  let open = false
   const fetchInvites = async () => {
     try {
       const response = await axios.get("/api/dashboard/invite");
