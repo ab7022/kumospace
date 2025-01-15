@@ -425,7 +425,12 @@ const Canvas = ({ open, session }: any) => {
   const closeFullScreen = () => {
     setIsFullScreen(false);
   };
-
+  const handleDoubleClick = (event: React.MouseEvent<HTMLDivElement>) => {
+    const rect = event.currentTarget.getBoundingClientRect();
+    const x = event.clientX - rect.left - AVATAR_SIZE / 2;
+    const y = event.clientY - rect.top - AVATAR_SIZE / 2;
+    setAvatarPosition({ x, y });
+  };
   return (
     <>
       <div
@@ -433,6 +438,8 @@ const Canvas = ({ open, session }: any) => {
           open ? "flex-row" : "flex-col"
         } overflow-hidden w-full h-full bg-gradient-to-br from-neutral-900 to-neutral-800`}
       >
+      <div onDoubleClick={handleDoubleClick} className="relative w-full h-full">
+
         <Image
           src="/images/updated.jpg"
           alt="Virtual Workspace"
@@ -441,6 +448,7 @@ const Canvas = ({ open, session }: any) => {
           height={1080}
           priority
         />
+        </div>
         {/* Current user's avatar */}
         <Avatar
           myStream={myStream}

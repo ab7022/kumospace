@@ -37,7 +37,7 @@ export const Avatar: React.FC<AvatarProps> = ({
               objectFit: "contain",
             }}
             playing
-            muted
+            // muted
             height="full"
             width="150px"
             // @ts-ignore

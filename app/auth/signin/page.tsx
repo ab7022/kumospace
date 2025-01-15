@@ -31,16 +31,17 @@ const SignInComponent = () => {
       <div className="relative hidden h-screen select-none flex-col justify-center bg-blue-600 text-center md:flex md:w-1/2">
         <div className="mx-auto py-16 px-8 text-white xl:w-[40rem]">
           <span className="rounded-full bg-white px-3 py-1 font-medium text-blue-600">
-            Welcome to EazyFolio!
+            Welcome to Kumospace!
           </span>
           <p className="my-6 text-3xl font-semibold leading-10">
-            Build your dream portfolio
-            <span className="mx-auto block w-56 whitespace-nowrap rounded-lg bg-orange-400 py-2 text-white">
-              Effortlessly!
+          Transform Your Remote Team's 
+
+            <span className="mx-auto block w-72 whitespace-nowrap rounded-lg bg-orange-400 py-2 text-white">
+            Productivity Today
             </span>
           </p>
           <p className="mb-4">
-            Dive in and create a standout profile in minutes.
+            Dive in and create a your space today.
           </p>
           <Link
             href="/"
@@ -53,7 +54,7 @@ const SignInComponent = () => {
 
       <div className="flex-1 flex items-center justify-center h-screen">
         <div className="w-full max-w-md space-y-8 px-4 bg-white text-gray-600 sm:px-0">
-          <h3 className="text-5xl font-bold text-center text-gray-800">Eazy <span className="text-blue-800">Folio</span></h3>
+          <h3 className="text-5xl font-bold text-center text-gray-800">Kumo <span className="text-blue-800">Space</span></h3>
           {/* <img
             className=" flex justify-center mx-auto items-center md:h-40 md:w-64 scale-125 h-40 w-52"
             src="/logo.png"

@@ -1,5 +1,16 @@
-import { Maximize, Phone, Play, Share, StopCircle, X } from "lucide-react";
-import React from "react";
+import {
+  Maximize,
+  Mic,
+  MicOff,
+  Phone,
+  Play,
+  Share,
+  StopCircle,
+  Video,
+  VideoOff,
+  X,
+} from "lucide-react";
+import React, { useState } from "react";
 
 export default function Dock({
   sendStreams,
@@ -14,6 +25,26 @@ export default function Dock({
   myStream,
   handleFullScreen,
 }: any) {
+  const [isCameraMuted, setIsCameraMuted] = useState(false);
+  const [isMicMuted, setIsMicMuted] = useState(false);
+
+  const handleToggleCamera = () => {
+    setIsCameraMuted(!isCameraMuted);
+    if (myStream) {
+      myStream.getVideoTracks().forEach((track: any) => {
+        track.enabled = !track.enabled;
+      });
+    }
+  };
+
+  const handleToggleMic = () => {
+    setIsMicMuted(!isMicMuted);
+    if (myStream) {
+      myStream.getAudioTracks().forEach((track: any) => {
+        track.enabled = !track.enabled;
+      });
+    }
+  };
   return (
     <div className="fixed bottom-6 left-1/2 transform -translate-x-1/2 bg-black/80 backdrop-blur-lg text-white px-8 py-4 rounded-2xl shadow-2xl border border-white/10">
       <div className="flex items-center space-x-6">
@@ -59,7 +90,44 @@ export default function Dock({
             </span>
           </button>
         )}
-
+         {myStream && ( 
+          <>
+          {/* Mute Camera Button */}
+          
+          <button
+            onClick={handleToggleCamera}
+            className="group flex flex-col items-center transition-all duration-300"
+          >
+            <div className="p-4 rounded-xl bg-gradient-to-br from-red-500 to-red-700 group-hover:from-red-400 group-hover:to-red-600 shadow-lg group-hover:shadow-red-400/25 transition-all duration-300">
+              {isCameraMuted ? (
+                <VideoOff className="w-6 h-6 text-white group-hover:scale-110 transition-transform" />
+              ) : (
+                <Video className="w-6 h-6 text-white group-hover:scale-110 transition-transform" />
+              )}
+            </div>
+            <span className="mt-2 text-xs font-medium opacity-80 group-hover:opacity-100">
+              {isCameraMuted ? "Show Camera" : "Mute Camera"}
+            </span>
+          </button>
+        
+        {/* Mute Mic Button */}
+        <button
+          onClick={handleToggleMic}
+          className="group flex flex-col items-center transition-all duration-300"
+        >
+          <div className="p-4 rounded-xl bg-gradient-to-br from-red-500 to-red-700 group-hover:from-red-400 group-hover:to-red-600 shadow-lg group-hover:shadow-red-400/25 transition-all duration-300">
+            {isMicMuted ? (
+              <MicOff className="w-6 h-6 text-white group-hover:scale-110 transition-transform" />
+            ) : (
+              <Mic className="w-6 h-6 text-white group-hover:scale-110 transition-transform" />
+            )}
+          </div>
+          <span className="mt-2 text-xs font-medium opacity-80 group-hover:opacity-100">
+            {isMicMuted ? "Unmute Mic" : "Mute Mic"}
+          </span>
+        </button>
+        </>
+        )} 
         {/* Screen Share Toggle Button */}
         <button
           onClick={() => {
