@@ -84,6 +84,7 @@ export const NEXT_AUTH_CONFIG: NextAuthOptions = {
       return token;
     },
     async session({ session, token }) {
+      
       return { ...session, user: { ...session.user, id: token.uid as string} };
     },
   },
