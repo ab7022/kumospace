@@ -3,7 +3,7 @@ import { NextRequest, NextResponse } from "next/server";
 import { getToken } from "next-auth/jwt";
 
 export async function middleware(request: NextRequest) {
-  const token = await getToken({ req: request,secret:process.env.NEXTAUTH_SECRET, cookieName: "__Secure-authjs.session-token" })
+  const token = await getToken({ req: request,secret:process.env.NEXTAUTH_SECRET, cookieName: "__Secure-next-auth.session-token" })
   console.log('token', token);
 
   // Redirect to home if not authenticated and accessing a protected route
