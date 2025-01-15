@@ -34,7 +34,7 @@ const SignInComponent = () => {
             Welcome to Kumospace!
           </span>
           <p className="my-6 text-3xl font-semibold leading-10">
-          Transform Your Remote Team's 
+          {"Transform Your Remote Team's"} 
 
             <span className="mx-auto block w-72 whitespace-nowrap rounded-lg bg-orange-400 py-2 text-white">
             Productivity Today
