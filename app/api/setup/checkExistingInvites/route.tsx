@@ -39,7 +39,7 @@ export async function GET(_req: NextRequest) {
 }
 
 
-export async function POST(req: NextRequest, res: NextResponse) {
+export async function POST(req: NextRequest, _res: NextResponse) {
   try {
     const { success, user, error, status } = await getUserFromSession();
     if (!success || !user) {

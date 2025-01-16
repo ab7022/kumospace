@@ -1,5 +1,4 @@
-import React, { useState } from "react";
-import axios from "axios";
+import React from "react";
 import Header from "@/components/LandingPage/Header";
 import { getUser } from "@/components/Sessions";
 import JoinSpace from "@/components/setup/JoinSpace";
