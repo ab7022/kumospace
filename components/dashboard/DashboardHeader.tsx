@@ -1,12 +1,15 @@
 import axios from "axios";
-import React, { useState } from "react";
+import React, { use, useEffect, useState } from "react";
 
 const DashboardHeader = ({ userRole }: { userRole: string }) => {
   const [isDialogOpen, setIsDialogOpen] = useState(false);
   const [email, setEmail] = useState("");
   const [role, setRole] = useState("");
   const [loading, setLoading] = useState(false);
-
+  const [activeStatus, setActiveStatus] = useState("0");
+  const [awayStatus, setAwayStatus] = useState("0");
+  const [dndStatus, setDndStatus] = useState("0");
+  const [totalMembers, setTotalMembers] = useState("0");
   const handleInvite = async () => {
     if (!email) {
       alert("Please fill out both fields.");
@@ -34,7 +37,29 @@ const DashboardHeader = ({ userRole }: { userRole: string }) => {
       setLoading(false);
     }
   };
-
+  async function getAllStatus()  {
+    setLoading(true);
+    try {
+      const response = await axios.get("/api/dashboard/getStatus");
+      if (response.status === 200) {
+        console.log(response);
+        setTotalMembers(response.data.statusCount.total);
+        setActiveStatus(response.data.statusCount.active);
+        setAwayStatus(response.data.statusCount.away);
+        setDndStatus(response.data.statusCount.dnd);
+      } else {
+        const errorData = await response.data;
+        alert(`Error: ${errorData.message || "Something went wrong."}`);
+      }
+    } catch (error) {
+      console.error("Error with post request:", error);
+    } finally {
+      setLoading(false);
+    }
+  }
+  useEffect(() => {
+    getAllStatus();
+  }, []);
   return (
     <>
       <div className="mb-12">
@@ -49,22 +74,7 @@ const DashboardHeader = ({ userRole }: { userRole: string }) => {
           </div>
           {(userRole === "ADMIN" || userRole === "MODERATOR") && (
             <div className="flex gap-4">
-              <button className="group relative bg-neutral-800 text-white px-6 py-3 rounded-xl hover:bg-neutral-700 transition-all duration-200 flex items-center gap-2">
-                <svg
-                  className="w-5 h-5"
-                  fill="none"
-                  stroke="currentColor"
-                  viewBox="0 0 24 24"
-                >
-                  <path
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                    strokeWidth="2"
-                    d="M12 6v6m0 0v6m0-6h6m-6 0H6"
-                  />
-                </svg>
-                New Project
-              </button>
+             
               <button
                 className="bg-primary-400 text-neutral-900 px-6 py-3 rounded-xl hover:shadow-lg hover:shadow-yellow-500/20 transition-all duration-200 font-semibold flex items-center gap-2"
                 onClick={() => setIsDialogOpen(true)}
@@ -157,38 +167,30 @@ const DashboardHeader = ({ userRole }: { userRole: string }) => {
             <div className="bg-neutral-800/50 backdrop-blur-xl rounded-2xl p-6 border border-neutral-700/50">
               <div className="flex justify-between items-start mb-4">
                 <span className="text-neutral-400">Total Members</span>
-                <span className="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-blue-400/10 text-blue-400">
-                  +12% ↑
-                </span>
+               
               </div>
-              <p className="text-3xl font-bold text-white">48</p>
+              <p className="text-3xl font-bold text-white">{totalMembers}</p>
             </div>
             <div className="bg-neutral-800/50 backdrop-blur-xl rounded-2xl p-6 border border-neutral-700/50">
               <div className="flex justify-between items-start mb-4">
-                <span className="text-neutral-400">Active Now</span>
-                <span className="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-green-400/10 text-green-400">
-                  +5% ↑
-                </span>
+                <span className="text-neutral-400">Available</span>
+              
               </div>
-              <p className="text-3xl font-bold text-white">32</p>
+              <p className="text-3xl font-bold text-white">{activeStatus}</p>
             </div>
             <div className="bg-neutral-800/50 backdrop-blur-xl rounded-2xl p-6 border border-neutral-700/50">
               <div className="flex justify-between items-start mb-4">
-                <span className="text-neutral-400">In Meetings</span>
-                <span className="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-yellow-400/10 text-yellow-400">
-                  Active
-                </span>
+                <span className="text-neutral-400">DND</span>
+                
               </div>
-              <p className="text-3xl font-bold text-white">8</p>
+              <p className="text-3xl font-bold text-white">{dndStatus}</p>
             </div>
             <div className="bg-neutral-800/50 backdrop-blur-xl rounded-2xl p-6 border border-neutral-700/50">
               <div className="flex justify-between items-start mb-4">
                 <span className="text-neutral-400">Away</span>
-                <span className="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-purple-400/10 text-red-400">
-                  15 New
-                </span>
+            
               </div>
-              <p className="text-3xl font-bold text-white">8</p>
+              <p className="text-3xl font-bold text-white">{awayStatus}</p>
             </div>
           </div>
         )}

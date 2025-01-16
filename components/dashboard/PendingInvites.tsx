@@ -23,7 +23,7 @@ const PendingInvites = () => {
       const response = await axios.get("/api/dashboard/invite");
       setInvites(response.data.existingInvites);
     } catch  {
-      setError("Failed to load invites.");
+      setError("");
     } finally {
       setLoading(false);
     }
@@ -33,7 +33,7 @@ const PendingInvites = () => {
       const response = await axios.get("/api/dashboard/joinRequests");
       setJoinRequest(response.data.existingInvites);
     } catch  {
-      setError("Failed to load invites.");
+      setError("");
     } finally {
       setLoading(false);
     }

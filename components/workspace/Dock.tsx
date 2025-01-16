@@ -46,7 +46,7 @@ export default function Dock({
     }
   };
   return (
-    <div className="fixed bottom-6 left-1/2 transform -translate-x-1/2 bg-black/80 backdrop-blur-lg text-white px-8 py-4 rounded-2xl shadow-2xl border border-white/10">
+    <div className="fixed bottom-6 left-1/2 transform -translate-x-1/2 bg-black/80 backdrop-blur-lg text-white px-4 pt-4 pb-2 rounded-2xl shadow-2xl border border-white/10">
       <div className="flex items-center space-x-6">
         {/* Send Stream Button */}
         <button

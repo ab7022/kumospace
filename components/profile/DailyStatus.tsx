@@ -112,7 +112,7 @@ const DailyStatus = () => {
                         className="w-32 h-10 bg-neutral-700/50 rounded-lg animate-pulse"
                       ></div>
                     ))
-                : ["AVAILABLE", "AWAY", "DND", "OFFLINE", "BUSY"].map(
+                : ["AVAILABLE", "AWAY", "DND"].map(
                     (status) => (
                       <div
                         key={status}

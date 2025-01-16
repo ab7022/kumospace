@@ -101,7 +101,7 @@ export const DesktopSidebar = ({
           setOpen(true);
         }}
         onMouseLeave={() => {
-          if (path == "/Dashboard/Profile") {
+          if (path == "/Dashboard/Profile" || path == "/Dashboard") {
             setOpen(true);
           } else {
             setOpen(false);

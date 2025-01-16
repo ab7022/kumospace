@@ -8,6 +8,7 @@ export default async function Setup() {
   const session = await getUser();
 
   return (
+    
     <div className="bg-[#121212] min-h-screen flex flex-col items-center">
       <Header session={session} />
       <div className="w-full max-w-7xl mx-auto mt-20 p-8 rounded-lg shadow-lg bg-[#1E1E1E]">

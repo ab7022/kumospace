@@ -6,6 +6,7 @@ import Image from "next/image";
 import {
   IconArrowLeft,
   IconBrandTabler,
+  IconMessage,
   IconUserBolt,
 } from "@tabler/icons-react";
 import { Sidebar, SidebarBody, SidebarLink } from "../components/ui/Sidevar";
@@ -33,6 +34,13 @@ const SidebarParent = ({ session }: any) => {
       href: "/Dashboard/Profile",
       icon: (
         <IconUserBolt className="text-neutral-200 h-5 w-5 flex-shrink-0" />
+      ),
+    },
+    {
+      label: "Messages",
+      href: "/Dashboard/Messages",
+      icon: (
+        <IconMessage className="text-neutral-200 h-5 w-5 flex-shrink-0" />
       ),
     },
    

@@ -9,29 +9,22 @@ const JoiningRequest = () => {
     role: string;
     spaceName: string;
   }
+
   const [joinRequests, setJoinRequests] = useState<JoinRequest[]>([]);
-  const router = useRouter();
   const [loading, setLoading] = useState(true);
+  const [spaceName, setSpaceName] = useState("");
+  const router = useRouter();
   const url = "/api/setup/checkExistingInvites";
+
   useEffect(() => {
     const fetchJoinRequests = async () => {
       try {
         const response = await axios.get(url);
 
         if (response.status === 200) {
-          const { invitations, space } = response.data;
-
-          if (invitations && space) {
-            const formattedRequests = [
-              {
-                id: invitations.id,
-                role: invitations.role,
-                spaceName: space.name,
-              },
-            ];
-
-            setJoinRequests(formattedRequests);
-          }
+          const { invites, name } = response.data;
+          setSpaceName(name);
+          setJoinRequests(invites);
         } else {
           console.error("Failed to fetch join requests.");
         }
@@ -43,39 +36,43 @@ const JoiningRequest = () => {
     };
 
     fetchJoinRequests();
-  }, []);
-  async function acceptInvitation(invitationId: any) {
-    const res = await axios.post(url, {
-        requestId: invitationId,
-    });
-    if (res.status == 200) {
-      const newRequests = joinRequests.filter(
-        (request) => request.id !== invitationId.toString()
-      );
-      setJoinRequests(newRequests);
-      router.push(`/Dashboard`);
+  }, []); // Run only once on mount
+
+  async function acceptInvitation(invitationId: string) {
+    try {
+      const res = await axios.post(url, { requestId: invitationId });
+      if (res.status === 200) {
+        setJoinRequests((prevRequests) =>
+          prevRequests.filter((request) => request.id !== invitationId)
+        );
+        router.push(`/Dashboard`);
+      }
+    } catch (error) {
+      console.error("Error accepting invitation:", error);
     }
   }
-  async function declineInvitation(invitationId: any) {
-    const res = await axios.put(url, {
-        requestId: invitationId,
-    });
-    if (res.status == 200) {
-      const newRequests = joinRequests.filter(
-        (request) => request.id !== invitationId.toString()
-      );
-      setJoinRequests(newRequests);
+
+  async function declineInvitation(invitationId: string) {
+    try {
+      const res = await axios.put(url, { requestId: invitationId });
+      if (res.status === 200) {
+        setJoinRequests((prevRequests) =>
+          prevRequests.filter((request) => request.id !== invitationId)
+        );
+      }
+    } catch (error) {
+      console.error("Error declining invitation:", error);
     }
   }
+
   return (
     <div>
-      {" "}
       <div className="mb-8">
         {loading ? (
           <p className="text-center text-[#E0E0E0]">
             Loading your join requests...
           </p>
-        ) : joinRequests?.length > 0 ? (
+        ) : joinRequests.length > 0 ? (
           <div className="p-4 border rounded-lg bg-[#2A2A2A]">
             <h2 className="text-xl text-[#FFEA00] font-semibold mb-4">
               Pending Join Requests
@@ -84,29 +81,24 @@ const JoiningRequest = () => {
               {joinRequests.map((request) => (
                 <li
                   key={request.id}
-                  className="p-4 bg-[#1E1E1E] rounded-lg shadow"
+                  className="p-4 bg-[#1E1E1E] rounded-lg shadow list-none"
                 >
                   <p className="text-[#E0E0E0]">
-                    <strong>Name:</strong> {request.spaceName}
+                    <strong>Space Name:</strong> {spaceName}
                   </p>
                   <p className="text-[#E0E0E0]">
                     <strong>Role:</strong> {request.role}
                   </p>
                   <div className="flex flex-row gap-x-5">
                     <button
-                      className="mt-4 w-full py-2 px-4 bg-neutral-700 text-neutral-200 font-semibold rounded-md hover:text-neutral-100 transition-colors "
-                      onClick={() => {
-                        declineInvitation(request.id);
-                      }}
-                    
+                      className="mt-4 w-full py-2 px-4 bg-neutral-700 hover:bg-neutral-800 text-neutral-200 font-semibold rounded-md hover:text-neutral-100 transition-colors"
+                      onClick={() => declineInvitation(request.id)}
                     >
                       Decline
-                    </button>{" "}
+                    </button>
                     <button
                       className="mt-4 w-full py-2 px-4 bg-[#FFEA00] text-black font-semibold rounded-md hover:bg-yellow-400 transition-colors"
-                      onClick={() => {
-                        acceptInvitation(request.id);
-                      }}
+                      onClick={() => acceptInvitation(request.id)}
                     >
                       Accept
                     </button>

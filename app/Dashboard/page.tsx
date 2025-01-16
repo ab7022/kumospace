@@ -49,12 +49,9 @@ export default function Dashboard()  {
           <div className="col-span-8 space-y-6">
             
             <TeamMembers />
-            {/* <TeamActivities /> */}
-            {/* <SharedResources /> */}
             <UpcomingEvents />
           </div>
           <div className="col-span-4 space-y-6">
-            {/* <TeamPerformance /> */}
             {(role === "ADMIN" || role === "MODERATOR") && (
               <PendingInvites  />
             )}
