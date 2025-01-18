@@ -42,12 +42,23 @@ export async function GET(_req: NextRequest) {
         },
       },
     });
+    const spaceDetails = await prisma.space.findFirst({
+      where: { id: mySpace.spaceId },
+      select: {
+        name: true,
+        code: true,
+        id: true,
+      },
+    });
 
     if (!mySpaceMembers.length) {
-      return NextResponse.json({ message: "No members found." }, { status: 404 });
+      return NextResponse.json(
+        { message: "No members found." },
+        { status: 404 }
+      );
     }
 
-    return NextResponse.json({ mySpaceMembers }, { status: 200 });
+    return NextResponse.json({ mySpaceMembers,spaceDetails }, { status: 200 });
   } catch (error) {
     console.error("Error fetching space members:", error);
     return NextResponse.json(
