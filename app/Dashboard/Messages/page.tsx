@@ -1,4 +1,3 @@
-import Header from '@/components/LandingPage/Header';
 import Messages from '@/components/Messages/Messages';
 import { getUser } from '@/components/Sessions';
 import React from 'react';
