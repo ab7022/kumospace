@@ -31,6 +31,7 @@ export async function GET(_req: NextRequest) {
         user: {
           select: {
             firstName: true,
+            email: true,
             lastName: true,
             profileUrl: true,
             name: true,

@@ -9,7 +9,8 @@ const nextConfig: NextConfig = {
       "raw.githubusercontent.com",
       "lh3.googleusercontent.com",
       "avatars.githubusercontent.com",
-      "assets.aceternity.com"
+      "assets.aceternity.com",
+      "ui-avatars.com",
     ],
   },
   typescript: {
