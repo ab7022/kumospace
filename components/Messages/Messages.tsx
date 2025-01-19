@@ -66,9 +66,11 @@ const Messages = ({ session }: any) => {
     setCode(spaceDetails?.code);
   }, [teamMembers, spaceDetails]);
 
-  const socketUrl = process.env.SOCKET_URL
+  const socketUrl = "https://kumospace-be-production.up.railway.app/"
   useEffect(() => {
-    const socketInstance = io(socketUrl);
+    const socketInstance = io(socketUrl,{
+      transports: ["websocket"],
+    });
     setSocket(socketInstance);
     setTimeout(() => {
       socketInstance.emit("registerForMessage", {

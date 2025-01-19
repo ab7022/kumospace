@@ -15,7 +15,7 @@ import { Position, User, UserDetails } from "../types";
 
 const STEP_SIZE = 20;
 const AVATAR_SIZE = 68;
-const SOCKET_URL =process.env.SOCKET_URL
+const SOCKET_URL ="https://kumospace-be-production.up.railway.app/"
 const MOVEMENT_KEYS = {
   ArrowUp: "up",
   ArrowDown: "down",
@@ -65,7 +65,9 @@ const Canvas = ({ open, session }: any) => {
   }, []);
 
   useEffect(() => {
-    const newSocket = io(SOCKET_URL);
+    const newSocket = io(SOCKET_URL,{
+      transports: ["websocket"],
+    });
     setSocket(newSocket);
 
     newSocket.on("connect", () => {
