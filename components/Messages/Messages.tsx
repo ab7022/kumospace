@@ -5,6 +5,7 @@ import Image from "next/image";
 import axios from "axios";
 import { PaperAirplaneIcon } from "@heroicons/react/24/outline";
 import { MessageSquare, Workflow } from "lucide-react";
+import Link from "next/link";
 
 interface Message {
   senderEmail: string;
@@ -79,13 +80,18 @@ const Messages = ({ session }: any) => {
 
     socketInstance.on("previousMessages", (data) => {
       setAllMessages(data);
+      console.log("Previous Messages:", data);
+    });
+    socketInstance.on("previousMessagesForGroup", (data) => {
+      setGroupMessages(data);
+      console.log("Previous Messages:", data);
     });
 
     socketInstance.on("receiveMessage", (incomingMessage) => {
       console.log("Incoming Message:", incomingMessage);
       setAllMessages((prevMessages) => [...prevMessages, incomingMessage]);
     });
- 
+
     // Listen for group messages
     socketInstance.on("receive-group-message", (message) => {
       console.log("Group Message:", message);
@@ -104,7 +110,6 @@ const Messages = ({ session }: any) => {
   const checkSendMessage = () => {
     if (chatMember?.email) {
       sendMessage();
-      
     } else {
       sendGroupMessage();
     }
@@ -116,7 +121,7 @@ const Messages = ({ session }: any) => {
         (msg) =>
           (msg.senderEmail === email &&
             msg.recipientEmail === chatMember.email) ||
-          (msg.senderEmail === chatMember.email && msg.recipientEmail === email) 
+          (msg.senderEmail === chatMember.email && msg.recipientEmail === email)
       );
       setFilteredMessages(filtered);
       scrollToBottom();
@@ -126,17 +131,17 @@ const Messages = ({ session }: any) => {
     console.log("Group Message");
     if (socket && message) {
       const messageObject = {
-         senderEmail:email,
-         text:message,
-         code:spaceDetails?.code,
-         image:profileUrl,
-         name:name,
+        senderEmail: email,
+        text: message,
+        code: spaceDetails?.code,
+        image: profileUrl,
+        name: name,
       };
       console.log("Group Message Object:", messageObject);
       socket.emit("group-message", messageObject);
       setMessage("");
+    }
   };
-}
   const sendMessage = () => {
     console.log("Message");
     if (socket && message) {
@@ -323,15 +328,13 @@ const Messages = ({ session }: any) => {
                 </div>
               </div>
               <div className="flex flex-row items-center justify-center">
-                <button
+                <Link
+                  href="/Dashboard/Workspace"
                   className="p-2 text-gray-100 flex flex-row items-center justify-center bg-indigo-500 hover:bg-indigo-600 rounded-full transition-colors"
-                  onClick={() =>
-                    (window.location.href = "/Dashboard/Workspace")
-                  }
                 >
                   <Workflow className="w-5 h-5" />
                   Go to Workspace
-                </button>
+                </Link>
               </div>
             </div>
           </div>
@@ -340,83 +343,85 @@ const Messages = ({ session }: any) => {
         {/* Messages */}
         <div className="flex-1 p-4 overflow-y-auto bg-gradient-to-b from-gray-50 to-white">
           <div className="space-y-4">
-            {!chatMember?.code ? (
-              filteredMessages.map((msg: any, index: any) => (
-                <div
-                  key={`${msg.senderEmail}-${index}`}
-                  className={`flex ${
-                    msg.senderEmail === email ? "justify-end" : "justify-start"
-                  }`}
-                >
+            {!chatMember?.code
+              ? filteredMessages.map((msg: any, index: any) => (
                   <div
-                    className={`flex items-end gap-2 max-w-[70%] ${
-                      msg.senderEmail === email ? "flex-row-reverse" : ""
+                    key={`${msg.senderEmail}-${index}`}
+                    className={`flex ${
+                      msg.senderEmail === email
+                        ? "justify-end"
+                        : "justify-start"
                     }`}
                   >
-                    <Image
-                      src={
-                        msg.image ||
-                        `https://ui-avatars.com/api/?name=${msg.name}`
-                      }
-                      alt={msg.senderEmail}
-                      width={32}
-                      height={32}
-                      className="rounded-full"
-                    />
                     <div
-                      className={`relative px-4 py-2 rounded-lg text-sm shadow-sm ${
-                        msg.senderEmail === email
-                          ? "bg-indigo-600 text-white"
-                          : "bg-white text-gray-900 border border-gray-200"
+                      className={`flex items-end gap-2 max-w-[70%] ${
+                        msg.senderEmail === email ? "flex-row-reverse" : ""
                       }`}
                     >
-                      <p>{msg.text}</p>
-                      <span className="block text-xs mt-1 opacity-70">
-                        {formatRelativeTime(msg.timestamp)}
-                      </span>
+                      <Image
+                        src={
+                          msg.image ||
+                          `https://ui-avatars.com/api/?name=${msg.name}`
+                        }
+                        alt={msg.senderEmail}
+                        width={32}
+                        height={32}
+                        className="rounded-full"
+                      />
+                      <div
+                        className={`relative px-4 py-2 rounded-lg text-sm shadow-sm ${
+                          msg.senderEmail === email
+                            ? "bg-indigo-600 text-white"
+                            : "bg-white text-gray-900 border border-gray-200"
+                        }`}
+                      >
+                        <p>{msg.text}</p>
+                        <span className="block text-xs mt-1 opacity-70">
+                          {formatRelativeTime(msg.timestamp)}
+                        </span>
+                      </div>
                     </div>
                   </div>
-                </div>
-              ))
-            ) : (
-              groupMessages.map((msg: any, index: any) => (
-                <div
-                  key={`${msg.senderEmail}-${index}`}
-                  className={`flex ${
-                    msg.senderEmail === email ? "justify-end" : "justify-start"
-                  }`}
-                >
+                ))
+              : groupMessages.map((msg: any, index: any) => (
                   <div
-                    className={`flex items-end gap-2 max-w-[70%] ${
-                      msg.senderEmail === email ? "flex-row-reverse" : ""
+                    key={`${msg.senderEmail}-${index}`}
+                    className={`flex ${
+                      msg.senderEmail === email
+                        ? "justify-end"
+                        : "justify-start"
                     }`}
                   >
-                    <Image
-                      src={
-                        msg.image ||
-                        `https://ui-avatars.com/api/?name=${msg.name}`
-                      }
-                      alt={msg.senderEmail}
-                      width={32}
-                      height={32}
-                      className="rounded-full"
-                    />
                     <div
-                      className={`relative px-4 py-2 rounded-lg text-sm shadow-sm ${
-                        msg.senderEmail === email
-                          ? "bg-indigo-600 text-white"
-                          : "bg-white text-gray-900 border border-gray-200"
+                      className={`flex items-end gap-2 max-w-[70%] ${
+                        msg.senderEmail === email ? "flex-row-reverse" : ""
                       }`}
                     >
-                      <p>{msg.text}</p>
-                      <span className="block text-xs mt-1 opacity-70">
-                        {formatRelativeTime(msg.timestamp)}
-                      </span>
+                      <Image
+                        src={
+                          msg.image ||
+                          `https://ui-avatars.com/api/?name=${msg.name}`
+                        }
+                        alt={msg.senderEmail}
+                        width={32}
+                        height={32}
+                        className="rounded-full"
+                      />
+                      <div
+                        className={`relative px-4 py-2 rounded-lg text-sm shadow-sm ${
+                          msg.senderEmail === email
+                            ? "bg-indigo-600 text-white"
+                            : "bg-white text-gray-900 border border-gray-200"
+                        }`}
+                      >
+                        <p>{msg.text}</p>
+                        <span className="block text-xs mt-1 opacity-70">
+                          {formatRelativeTime(msg.timestamp)}
+                        </span>
+                      </div>
                     </div>
                   </div>
-                </div>
-              ))
-            )}
+                ))}
             <div ref={messagesEndRef} />
           </div>
         </div>

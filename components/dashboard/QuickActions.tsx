@@ -1,83 +1,81 @@
-import React from "react";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import {
-  faCalendarAlt,
-  faVideo,
-  faProjectDiagram,
-  faEdit,
+import React from 'react';
+import { Video,PenLine, ChevronRight, MessageSquare, Users } from 'lucide-react';
+import { Card, CardHeader, CardTitle, CardContent } from '@/components/ui/card';
+import Link from 'next/link';
 
-} from "@fortawesome/free-solid-svg-icons";
+const QuickActionButton = ({ icon: Icon, title, color, bgColor, hoverBgColor,href }:any) => (
+  <Link className="w-full group flex items-center justify-between bg-neutral-700/20 text-left px-4 py-3 rounded-xl transition-all duration-300 hover:scale-102 hover:bg-neutral-800"href={href}>
+    <div className="flex items-center gap-4" >
+      <div className={`w-10 h-10 rounded-xl ${bgColor} flex items-center justify-center transition-all duration-300 group-hover:scale-110 ${hoverBgColor}`}>
+        <Icon className={`w-5 h-5 ${color}`} />
+      </div>
+      <span className="font-medium text-neutral-300 group-hover:text-white transition-colors">
+        {title}
+      </span>
+    </div>
+    <ChevronRight className="w-5 h-5 text-neutral-500 group-hover:text-white transition-all duration-300 group-hover:translate-x-1" />
+  </Link>
+);
 
 const QuickActions = () => {
+  const actions = [
+    {
+      icon: MessageSquare,
+      title: "Quick Chat",
+      color: "text-blue-400",
+      bgColor: "bg-blue-400/10",
+      hoverBgColor: "group-hover:bg-blue-400/20",
+      href:"/Dashboard/Messages"
+    },
+    {
+      icon: Video,
+      title: "Start Video Call",
+      color: "text-emerald-400",
+      bgColor: "bg-emerald-400/10",
+      hoverBgColor: "group-hover:bg-emerald-400/20",
+      href:"/Dashboard"
+    },
+    {
+      icon: Users,
+      title: "Assign Task",
+      color: "text-purple-400",
+      bgColor: "bg-purple-400/10",
+      hoverBgColor: "group-hover:bg-purple-400/20",
+      href:"/Dashboard"
+    },
+    {
+      icon: PenLine,
+      title: "Write Update",
+      color: "text-rose-400",
+      bgColor: "bg-rose-400/10",
+      hoverBgColor: "group-hover:bg-rose-400/20",
+      href:"/Dashboard"
+    }
+  ];
+
   return (
-    <div className="bg-neutral-800/50 backdrop-blur-xl rounded-2xl p-8 border border-neutral-700/50">
-      <h2 className="text-2xl font-semibold text-white mb-6">Quick Actions</h2>
-      <div className="space-y-3">
-        <button className="w-full group flex items-center justify-between text-left text-neutral-400 hover:text-white px-4 py-3 rounded-xl hover:bg-neutral-700/50 transition-all duration-200">
-          <div className="flex items-center gap-3">
-            <div className="w-8 h-8 rounded-lg bg-blue-400/10 flex items-center justify-center group-hover:bg-blue-400/20 transition-colors">
-              <FontAwesomeIcon
-                icon={faCalendarAlt}
-                className="text-blue-400"
-              />
-            </div>
-            Schedule Meeting
-          </div>
-          <FontAwesomeIcon
-            icon="chevron-right"
-            className="w-5 h-5 text-neutral-500 group-hover:text-white transition-colors"
-          />
-        </button>
-
-        <button className="w-full group flex items-center justify-between text-left text-neutral-400 hover:text-white px-4 py-3 rounded-xl hover:bg-neutral-700/50 transition-all duration-200">
-          <div className="flex items-center gap-3">
-            <div className="w-8 h-8 rounded-lg bg-primary-700 flex items-center justify-center group-hover:bg-blue-400/20 transition-colors">
-              <FontAwesomeIcon
-                icon={faVideo}
-                className="text-blue-400"
-              />
-            </div>
-            Start Video Call
-          </div>
-          <FontAwesomeIcon
-            icon="chevron-right"
-            className="w-5 h-5 text-neutral-500 group-hover:text-white transition-colors"
-          />
-        </button>
-
-        <button className="w-full group flex items-center justify-between text-left text-neutral-400 hover:text-white px-4 py-3 rounded-xl hover:bg-neutral-700/50 transition-all duration-200">
-          <div className="flex items-center gap-3">
-            <div className="w-8 h-8 rounded-lg bg-purple-400/10 flex items-center justify-center group-hover:bg-purple-400/20 transition-colors">
-              <FontAwesomeIcon
-                icon={faProjectDiagram}
-                className="text-purple-400"
-              />
-            </div>
-            Create Project
-          </div>
-          <FontAwesomeIcon
-            icon="chevron-right"
-            className="w-5 h-5 text-neutral-500 group-hover:text-white transition-colors"
-          />
-        </button>
-
-        <button className="w-full group flex items-center justify-between text-left text-neutral-400 hover:text-white px-4 py-3 rounded-xl hover:bg-neutral-700/50 transition-all duration-200">
-          <div className="flex items-center gap-3">
-            <div className="w-8 h-8 rounded-lg bg-pink-400/10 flex items-center justify-center group-hover:bg-pink-400/20 transition-colors">
-              <FontAwesomeIcon
-                icon={faEdit}
-                className="text-pink-400"
-              />
-            </div>
-            Write Update
-          </div>
-          <FontAwesomeIcon
-            icon="chevron-right"
-            className="w-5 h-5 text-neutral-500 group-hover:text-white transition-colors"
-          />
-        </button>
-      </div>
-    </div>
+    <Card className="bg-neutral-800/50 backdrop-blur-xl shadow-xl border-neutral-700/50  ">
+      <CardHeader className="pb-3">
+        <CardTitle className="text-2xl font-semibold text-white tracking-tight">
+          Quick Actions
+        </CardTitle>
+      </CardHeader>
+      <CardContent>
+        <div className="space-y-2">
+          {actions.map((action, index) => (
+            <QuickActionButton
+              key={index}
+              icon={action.icon}
+              title={action.title}
+              color={action.color}
+              bgColor={action.bgColor}
+              hoverBgColor={action.hoverBgColor}
+              href={action.href}
+            />
+          ))}
+        </div>
+      </CardContent>
+    </Card>
   );
 };
 

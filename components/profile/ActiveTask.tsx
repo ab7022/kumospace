@@ -2,17 +2,18 @@
 import React, { useState, useEffect } from "react";
 import axios from "axios";
 import Skeleton from "react-loading-skeleton";
+import Button from "../Button";
 
 const ActiveTask = () => {
-  const [tasks, setTasks] = useState<
-    {
-      id: number;
-      name: string;
-      priority: string;
-      completed: boolean;
-      dueDate?: string;
-    }[]
-  >([]);
+  interface Task {
+    id: number;
+    name: string;
+    priority: string;
+    dueDate: string;
+    completed: boolean;
+  }
+
+  const [tasks, setTasks] = useState<Task[]>([]);
   const [isCreating, setIsCreating] = useState(false);
   const [newTask, setNewTask] = useState({
     name: "",
@@ -22,7 +23,7 @@ const ActiveTask = () => {
   const [message, setMessage] = useState<{ text: string; type: string } | null>(
     null
   );
-  const [loading, setLoading] = useState(true); 
+  const [loading, setLoading] = useState(true);
   const url = "/api/dashboard/profile/activeTask";
 
   useEffect(() => {
@@ -33,7 +34,7 @@ const ActiveTask = () => {
       } catch (error) {
         console.error("Error fetching tasks:", error);
       } finally {
-        setLoading(false); 
+        setLoading(false);
       }
     };
     fetchTasks();
@@ -75,116 +76,49 @@ const ActiveTask = () => {
     tasks.length >= 0 ? tasks.filter((task) => !task.completed) : null;
 
   return (
-    <div>
-      <section
-        id="tasks_projects"
-        className="bg-neutral-800/50 backdrop-blur-xl p-6 border border-neutral-700 rounded-2xl shadow-md m-6 space-y-8"
-      >
-        <div>
-          <h3 className="text-2xl font-semibold text-white mb-4">
-            🚀 Active Tasks
-          </h3>
-          <hr className="border-t-2 border-neutral-700 mb-6 w-full" />
+    <div className=" bg-neutral-950 p-6 flex items-center justify-center ">
+      <div className="max-w-6xl w-full bg-neutral-900/60 backdrop-blur-xl p-6  rounded-xl shadow-2xl border border-neutral-800 ">
+        <div className="flex flex-col md:flex-row justify-between align-middle items-center mb-8 border-b border-neutral-800 shadow-2xl">
+          <h1 className="text-3xl font-bold text-white bg-gradient-to-r from-neutral-500 to-purple-500 bg-clip-text text-transparent">
+            Active Tasks
+          </h1>
+          <div className="mb-2 flex justify-center items-center">
+            <Button onClickFunction={() => setIsCreating(true)}>
+              + Create New Task
+            </Button>
+          </div>
+          
+        </div>
 
-          {message && (
-            <div
-              className={`${
-                message.type === "success" ? "bg-green-500" : "bg-red-500"
-              } text-white p-3 rounded-md mb-4`}
-            >
-              {message.text}
-            </div>
-          )}
+        {message && (
+          <div
+            className={`${
+              message.type === "success"
+                ? "bg-green-600/20 border-green-500 text-green-400"
+                : "bg-red-600/20 border-red-500 text-red-400"
+            } border rounded-lg p-4 mb-6`}
+          >
+            {message.text}
+          </div>
+        )}
 
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-            {loading ? (
-              Array(3)
-                .fill(null)
-                .map((_, index) => (
-                  <div
-                    key={index}
-                    className="bg-neutral-800 p-4 rounded-lg shadow-sm border border-neutral-700"
-                  >
-                    <Skeleton
-                      height={30}
-                      width="80%"
-                      className="mb-2"
-                      enableAnimation
-                    />
-                    <Skeleton
-                      height={20}
-                      width="60%"
-                      className="mb-4"
-                      enableAnimation
-                    />
-                    <Skeleton height={20} width="40%" enableAnimation />
-                  </div>
-                ))
-            ) : activeTasks && activeTasks.length > 0 ? (
-              activeTasks?.map((task) => (
-                <div
-                  key={task.id}
-                  className="bg-neutral-800 p-4 rounded-lg shadow-sm border border-neutral-700 hover:scale-105 transition-transform duration-300"
-                >
-                  <div className="flex flex-row justify-between">
-                    <h4 className="text-lg font-bold text-white mb-2 w-full">
-                      {task.name}
-                    </h4>
-                    <span className="text-sm font-bold text-white mb-2">
-                      {task?.dueDate}
-                    </span>
-                  </div>
-                  <div className="mb-2 flex flex-row justify-between">
-                    <span
-                      className={`inline-block px-3 py-1 text-sm font-medium rounded-full ${
-                        task.priority === "HIGH"
-                          ? "bg-red-500/30 text-red-400"
-                          : task.priority === "MEDIUM"
-                          ? "bg-yellow-500/30 text-yellow-400"
-                          : "bg-green-500/30 text-green-400"
-                      }`}
-                    >
-                      {task.priority}
-                    </span>
-                   
-                    <button
-                      onClick={() => handleMarkAsDone(task.id)}
-                      className="text-white bg-neutral-700 rounded-md px-2 py-1 text-sm hover:underline"
-                    >
-                      Mark as Done
-                    </button>
-                  </div>
-                </div>
-              ))
-            ) : (
-              <></>
-            )}
-
-            {isCreating ? (
-              <div className="bg-neutral-800 p-4 rounded-lg shadow-sm border border-neutral-700 hover:scale-105 transition-transform duration-300">
-                <h4 className="text-lg font-bold text-white mb-2">
-                  Create New Task
-                </h4>
-                <div className="mb-4">
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+          {isCreating && (
+            <>
+              <div className="bg-neutral-800/70 p-6 rounded-2xl shadow-md flex flex-col justify-between">
+                <h3 className="text-lg font-bold text-white mb-4">New Task</h3>
+                <div className="space-y-4">
                   <input
                     type="text"
-                    required
                     placeholder="Task Title"
                     value={newTask.name}
                     onChange={(e) =>
-                      setNewTask((prev) => ({
-                        ...prev,
-                        name: e.target.value,
-                      }))
+                      setNewTask((prev) => ({ ...prev, name: e.target.value }))
                     }
-                    className="w-full px-4 py-2 bg-neutral-700/30 text-white rounded-md border border-neutral-600 focus:ring-2 focus:ring-primary focus:outline-none"
+                    className="w-full px-4 py-2 bg-neutral-700 rounded-lg border border-neutral-600 focus:ring-2 focus:ring-indigo-500 text-white"
                   />
-                </div>
-                <div className="mb-4">
                   <input
-                    type="text"
-                    required
-                    placeholder="Task Deadline"
+                    type="date"
                     value={newTask.dueDate}
                     onChange={(e) =>
                       setNewTask((prev) => ({
@@ -192,57 +126,96 @@ const ActiveTask = () => {
                         dueDate: e.target.value,
                       }))
                     }
-                    className="w-full px-4 py-2 bg-neutral-700/30 text-white rounded-md border border-neutral-600 focus:ring-2 focus:ring-primary focus:outline-none"
+                    className="w-full px-4 py-2 bg-neutral-700 rounded-lg border border-neutral-600 focus:ring-2 focus:ring-indigo-500 text-white"
                   />
-                </div>
-                <div className="mb-4">
                   <select
-                    onChange={(e) => {
-                      const selectedPriority =
-                        e.target.options[e.target.selectedIndex].value;
+                    value={newTask.priority}
+                    onChange={(e) =>
                       setNewTask((prev) => ({
                         ...prev,
-                        priority: selectedPriority,
-                      }));
-                    }}
-                    className="w-full px-4 py-2 bg-neutral-700/30 text-white rounded-md border border-neutral-600 focus:ring-2 focus:ring-primary focus:outline-none"
+                        priority: e.target.value,
+                      }))
+                    }
+                    className="w-full px-4 py-2 bg-neutral-700 rounded-lg border border-neutral-600 focus:ring-2 focus:ring-indigo-500 text-white"
                   >
                     <option>HIGH</option>
                     <option>MEDIUM</option>
                     <option>LOW</option>
                   </select>
-                </div>
-                <div className="flex ">
-                  <button
-                    onClick={handleCreateTask}
-                    className="px-4 py-2 bg-primary text-white rounded-md hover:bg-primary-dark"
-                  >
-                    Add Task
-                  </button>
-                  <button
-                    onClick={() => setIsCreating(false)}
-                    className="px-4 py-2 bg-neutral-600 text-white rounded-md ml-2"
-                  >
-                    Cancel
-                  </button>
+                  <div className="flex gap-4">
+                    <button
+                      onClick={handleCreateTask}
+                      className="w-full px-4 py-2 bg-indigo-500 text-white rounded-lg font-medium hover:bg-indigo-600 transition"
+                    >
+                      Add Task
+                    </button>
+                    <button
+                      onClick={() => setIsCreating(false)}
+                      className="w-full px-4 py-2 bg-gray-700 text-white rounded-lg font-medium hover:bg-gray-600 transition"
+                    >
+                      Cancel
+                    </button>
+                  </div>
                 </div>
               </div>
-            ) : (
+            </>
+          )}
+
+          {loading ? (
+            Array(3)
+              .fill(null)
+              .map((_, idx) => (
+                <div
+                  key={idx}
+                  className="bg-neutral-800/70 p-6 rounded-2xl shadow-md"
+                >
+                  <Skeleton height={24} className="mb-4" />
+                  <Skeleton height={16} width="80%" />
+                  <Skeleton height={16} width="60%" />
+                </div>
+              ))
+          ) : activeTasks?.length === 0 ? (
+            <div className="col-span-1 md:col-span-3 text-center text-gray-400">
+              You don't have any pending tasks.
+            </div>
+          ) : (
+            activeTasks?.map((task) => (
               <div
-                onClick={() => setIsCreating(true)}
-                className="bg-neutral-800 p-4 rounded-lg shadow-sm border border-neutral-700 hover:scale-105 transition-transform duration-300 flex items-center justify-center cursor-pointer"
+                key={task.id}
+                className="bg-neutral-800/70 p-6 rounded-2xl shadow-md flex flex-col justify-between"
               >
-                <div className="text-center">
-                  <div className="text-3xl text-neutral-500 mb-2">+</div>
-                  <h4 className="text-lg font-bold text-white">
-                    Create New Task
+                <div>
+                  <h4 className="text-lg font-semibold text-white">
+                    {task.name}
                   </h4>
+                  <p className="text-sm text-gray-400">
+                    Due: {task.dueDate || "N/A"}
+                  </p>
+                </div>
+                <div className="flex justify-between items-center mt-4">
+                  <span
+                    className={`px-3 py-1 rounded-full text-sm font-medium ${
+                      task.priority === "HIGH"
+                        ? "bg-red-500/20 text-red-400"
+                        : task.priority === "MEDIUM"
+                        ? "bg-yellow-500/20 text-yellow-400"
+                        : "bg-green-500/20 text-green-400"
+                    }`}
+                  >
+                    {task.priority}
+                  </span>
+                  <button
+                    onClick={() => handleMarkAsDone(task.id)}
+                    className="px-4 py-2 bg-gray-700 text-white rounded-lg hover:bg-gray-600 transition"
+                  >
+                    Complete
+                  </button>
                 </div>
               </div>
-            )}
-          </div>
+            ))
+          )}
         </div>
-      </section>
+      </div>
     </div>
   );
 };

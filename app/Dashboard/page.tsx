@@ -42,21 +42,20 @@ export default function Dashboard()  {
     getData();
   }, [getData]);
   return (
-    <div className="flex flex-1  overflow-x-scroll bg-gradient-to-br from-neutral-900 to-neutral-800 p-8">
-      <div className="max-w-8xl  mx-auto">
+    <div className="flex flex-1 overflow-x-scroll  bg-gradient-to-br from-neutral-900 to-neutral-800 p-4 md:p-8">
+      <div className="max-w-8xl mx-auto">
         <DashboardHeader userRole={role} />
-        <div className="grid grid-cols-12 gap-8">
-          <div className="col-span-8 space-y-6">
-            
+        <div className="grid grid-cols-1 md:grid-cols-12 gap-4 md:gap-8">
+          {/* Left Column */}
+          <div className="col-span-12 md:col-span-8 space-y-4 md:space-y-6">
             <TeamMembers />
-            <UpcomingEvents />
+            {/* <UpcomingEvents /> */}
           </div>
-          <div className="col-span-4 space-y-6">
-            {(role === "ADMIN" || role === "MODERATOR") && (
-              <PendingInvites  />
-            )}
+          {/* Right Column */}
+          <div className="col-span-12 md:col-span-4 space-y-4 md:space-y-6">
+            {(role === "ADMIN" || role === "MODERATOR") && <PendingInvites />}
             <QuickActions />
-            <UpcomingDeadline />
+            {/* <UpcomingDeadline /> */}
           </div>
         </div>
       </div>

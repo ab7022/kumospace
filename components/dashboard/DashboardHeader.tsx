@@ -1,34 +1,35 @@
-import axios from "axios";
-import React, {  useEffect, useState } from "react";
+import React, { useEffect, useState } from 'react';
+import { Users, UserPlus, Activity, Clock, Moon } from 'lucide-react';
+import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/ui/dialog";
+import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
+import axios from 'axios';
 
 const DashboardHeader = ({ userRole }: { userRole: string }) => {
   const [isDialogOpen, setIsDialogOpen] = useState(false);
   const [email, setEmail] = useState("");
   const [role, setRole] = useState("");
   const [loading, setLoading] = useState(false);
-  const [activeStatus, setActiveStatus] = useState("0");
-  const [awayStatus, setAwayStatus] = useState("0");
-  const [dndStatus, setDndStatus] = useState("0");
-  const [totalMembers, setTotalMembers] = useState("0");
+  const [stats, setStats] = useState({
+    total: "0",
+    active: "0",
+    away: "0",
+    dnd: "0"
+  });
+
   const handleInvite = async () => {
-    if (!email) {
-      alert("Please fill out both fields.");
+    if (!email || !role) {
+      alert("Please fill out all fields.");
       return;
     }
     setLoading(true);
     try {
-      const response = await axios.post("/api/dashboard/invite", {
-        email,
-        role,
-      });
-
+      const response = await axios.post("/api/dashboard/invite", { email, role });
       if (response.status === 200) {
         setIsDialogOpen(false);
         setEmail("");
         setRole("");
-      } else {
-        const errorData = await response.data;
-        alert(`Error: ${errorData.message || "Something went wrong."}`);
       }
     } catch (error) {
       console.error("Error sending invite:", error);
@@ -37,165 +38,158 @@ const DashboardHeader = ({ userRole }: { userRole: string }) => {
       setLoading(false);
     }
   };
-  async function getAllStatus()  {
-    setLoading(true);
+
+  const getAllStatus = async () => {
     try {
       const response = await axios.get("/api/dashboard/getStatus");
       if (response.status === 200) {
-        console.log(response);
-        setTotalMembers(response.data.statusCount.total);
-        setActiveStatus(response.data.statusCount.active);
-        setAwayStatus(response.data.statusCount.away);
-        setDndStatus(response.data.statusCount.dnd);
-      } else {
-        const errorData = await response.data;
-        alert(`Error: ${errorData.message || "Something went wrong."}`);
+        const { statusCount } = response.data;
+        setStats({
+          total: statusCount.total,
+          active: statusCount.active,
+          away: statusCount.away,
+          dnd: statusCount.dnd
+        });
       }
     } catch (error) {
-      console.error("Error with post request:", error);
-    } finally {
-      setLoading(false);
+      console.error("Error fetching status:", error);
     }
-  }
+  };
+
   useEffect(() => {
     getAllStatus();
   }, []);
-  return (
-    <>
-      <div className="mb-12">
-        <div className="flex justify-between items-center mb-8">
-          <div>
-            <h1 className="text-4xl font-bold text-white mb-3 tracking-tight">
-              Dashboard
-            </h1>
-            <p className="text-neutral-400 text-lg">
-              {"              Welcome back! Here's your team's latest updates"}{" "}
-            </p>
-          </div>
-          {(userRole === "ADMIN" || userRole === "MODERATOR") && (
-            <div className="flex gap-4">
-             
-              <button
-                className="bg-primary-400 text-neutral-900 px-6 py-3 rounded-xl hover:shadow-lg hover:shadow-yellow-500/20 transition-all duration-200 font-semibold flex items-center gap-2"
-                onClick={() => setIsDialogOpen(true)}
-              >
-                <svg
-                  className="w-5 h-5"
-                  fill="none"
-                  stroke="currentColor"
-                  viewBox="0 0 24 24"
-                >
-                  <path
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                    strokeWidth="2"
-                    d="M18 9v3m0 0v3m0-3h3m-3 0h-3m-2-5a4 4 0 11-8 0 4 4 0 018 0zM3 20a6 6 0 0112 0v1H3v-1z"
-                  />
-                </svg>
-                Invite Member
-              </button>
-            </div>
-          )}
-        </div>
 
-        {/* Dialog Box */}
-        {isDialogOpen && (
-          <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50 z-50">
-            <div className="bg-neutral-800 rounded-lg shadow-xl p-6 w-1/3">
-              <h2 className="text-xl font-semibold text-white mb-4">
-                Invite Member
-              </h2>
-              <form>
-                <div className="mb-4">
-                  <label
-                    className="block text-neutral-400 mb-2"
-                    htmlFor="email"
-                  >
-                    Email
-                  </label>
-                  <input
-                    id="email"
-                    type="email"
-                    value={email}
-                    onChange={(e) => setEmail(e.target.value)}
-                    className="w-full px-4 py-2 bg-neutral-900 text-white rounded-lg border border-neutral-700 focus:outline-none focus:ring-2 focus:ring-blue-500"
-                    placeholder="Enter email address"
-                    required
-                  />
-                </div>
-                <div className="mb-4">
-                  <label className="block text-neutral-400 mb-2" htmlFor="role">
-                    Role
-                  </label>
-                  <select
-                    id="role"
-                    value={role}
-                    onChange={(e) => setRole(e.target.value)}
-                    className="w-full px-4 py-2 bg-neutral-900 text-white rounded-lg border border-neutral-700 focus:outline-none focus:ring-2 focus:ring-blue-500"
-                  >
-                    <option value="" disabled>
-                      Select role
-                    </option>
-                    <option value="ADMIN">ADMIN</option>
-                    <option value="MODERATOR">MODERATOR</option>
-                    <option value="MEMBER">MEMBER</option>
-                  </select>
-                </div>
-                <div className="flex justify-end gap-4">
-                  <button
-                    type="button"
-                    className="px-4 py-2 bg-neutral-700 text-white rounded-lg hover:bg-neutral-600"
-                    onClick={() => setIsDialogOpen(false)}
-                  >
-                    Cancel
-                  </button>
-                  <button
-                    type="button"
-                    className="px-4 py-2 bg-primary-500 text-neutral-800 rounded-lg hover:bg-primary-600"
-                    disabled={loading}
-                    onClick={handleInvite}
-                  >
-                    Invite
-                  </button>
-                </div>
-              </form>
-            </div>
-          </div>
-        )}
+  const statsCards = [
+    {
+      title: "Total Members",
+      value: stats.total,
+      icon: <Users className="w-6 h-6 text-blue-400" />,
+      bgColor: "bg-blue-400/10",
+      borderColor: "border-blue-400/20"
+    },
+    {
+      title: "Available",
+      value: stats.active,
+      icon: <Activity className="w-6 h-6 text-green-400" />,
+      bgColor: "bg-green-400/10",
+      borderColor: "border-green-400/20"
+    },
+    {
+      title: "Do Not Disturb",
+      value: stats.dnd,
+      icon: <Moon className="w-6 h-6 text-red-400" />,
+      bgColor: "bg-red-400/10",
+      borderColor: "border-red-400/20"
+    },
+    {
+      title: "Away",
+      value: stats.away,
+      icon: <Clock className="w-6 h-6 text-yellow-400" />,
+      bgColor: "bg-yellow-400/10",
+      borderColor: "border-yellow-400/20"
+    }
+  ];
+
+  return (
+    <div className="space-y-8 mb-4">
+      <div className="flex justify-between items-center">
+        <div className="space-y-2">
+          <h1 className="text-4xl font-bold text-white tracking-tight">
+            Dashboard
+          </h1>
+          <p className="text-neutral-400 text-sm w-48 md:w-full md:text-lg">
+            Welcome back! Here's your team's latest updates
+          </p>
+        </div>
+        
         {(userRole === "ADMIN" || userRole === "MODERATOR") && (
-          <div className="grid grid-cols-4 gap-6 mb-8">
-            <div className="bg-neutral-800/50 backdrop-blur-xl rounded-2xl p-6 border border-neutral-700/50">
-              <div className="flex justify-between items-start mb-4">
-                <span className="text-neutral-400">Total Members</span>
-               
-              </div>
-              <p className="text-3xl font-bold text-white">{totalMembers}</p>
-            </div>
-            <div className="bg-neutral-800/50 backdrop-blur-xl rounded-2xl p-6 border border-neutral-700/50">
-              <div className="flex justify-between items-start mb-4">
-                <span className="text-neutral-400">Available</span>
-              
-              </div>
-              <p className="text-3xl font-bold text-white">{activeStatus}</p>
-            </div>
-            <div className="bg-neutral-800/50 backdrop-blur-xl rounded-2xl p-6 border border-neutral-700/50">
-              <div className="flex justify-between items-start mb-4">
-                <span className="text-neutral-400">DND</span>
-                
-              </div>
-              <p className="text-3xl font-bold text-white">{dndStatus}</p>
-            </div>
-            <div className="bg-neutral-800/50 backdrop-blur-xl rounded-2xl p-6 border border-neutral-700/50">
-              <div className="flex justify-between items-start mb-4">
-                <span className="text-neutral-400">Away</span>
-            
-              </div>
-              <p className="text-3xl font-bold text-white">{awayStatus}</p>
-            </div>
-          </div>
+          <Button
+            onClick={() => setIsDialogOpen(true)}
+            className="bg-blue-500 hover:bg-blue-600 text-white px-6 py-6 rounded-xl transition-all duration-200"
+          >
+            <UserPlus className="w-5 h-5 mr-2" />
+            Invite Member
+          </Button>
         )}
       </div>
-    </>
+
+      {(userRole === "ADMIN" || userRole === "MODERATOR") && (
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-4 ">
+          {statsCards.map((card, index) => (
+            <div
+              key={index}
+              className={`p-6 rounded-xl border ${card.borderColor} ${card.bgColor} backdrop-blur-xl transition-all duration-200 hover:scale-105`}
+            >
+              <div className="flex justify-between items-start mb-4">
+                <span className="text-neutral-300 font-medium">
+                  {card.title}
+                </span>
+                {card.icon}
+              </div>
+              <p className="text-3xl font-bold text-white">
+                {card.value}
+              </p>
+            </div>
+          ))}
+        </div>
+      )}
+
+      <Dialog open={isDialogOpen} onOpenChange={setIsDialogOpen}>
+        <DialogContent className="bg-neutral-800 border-neutral-700">
+          <DialogHeader>
+            <DialogTitle className="text-xl font-semibold text-white">
+              Invite Member
+            </DialogTitle>
+          </DialogHeader>
+          <div className="space-y-6 py-4">
+            <div className="space-y-2">
+              <label className="text-sm text-neutral-400">
+                Email
+              </label>
+              <Input
+                type="email"
+                value={email}
+                onChange={(e) => setEmail(e.target.value)}
+                placeholder="Enter email address"
+                className="bg-neutral-900 border-neutral-700 text-white"
+              />
+            </div>
+            <div className="space-y-2">
+              <label className="text-sm text-neutral-400">
+                Role
+              </label>
+              <Select value={role} onValueChange={setRole}>
+                <SelectTrigger className="bg-neutral-900 border-neutral-700 text-white">
+                  <SelectValue placeholder="Select role" />
+                </SelectTrigger>
+                <SelectContent className="bg-neutral-800 border-neutral-700">
+                  <SelectItem value="ADMIN">Admin</SelectItem>
+                  <SelectItem value="MODERATOR">Moderator</SelectItem>
+                  <SelectItem value="MEMBER">Member</SelectItem>
+                </SelectContent>
+              </Select>
+            </div>
+            <div className="flex justify-end gap-4">
+              <Button
+                variant="outline"
+                onClick={() => setIsDialogOpen(false)}
+                className="bg-neutral-700 hover:bg-neutral-600 text-white border-neutral-600"
+              >
+                Cancel
+              </Button>
+              <Button
+                onClick={handleInvite}
+                disabled={loading}
+                className="bg-blue-500 hover:bg-blue-600 text-white"
+              >
+                {loading ? "Sending..." : "Send Invite"}
+              </Button>
+            </div>
+          </div>
+        </DialogContent>
+      </Dialog>
+    </div>
   );
 };
 

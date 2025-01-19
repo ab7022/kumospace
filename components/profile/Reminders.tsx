@@ -2,6 +2,7 @@
 import { ClockIcon } from "@heroicons/react/24/outline";
 import axios from "axios";
 import React, { useState, useEffect } from "react";
+import Button from "../Button";
 
 const Reminders = () => {
   const [reminders, setReminders] = useState<
@@ -28,12 +29,11 @@ const Reminders = () => {
         const response = await axios.get(url);
         const data = await response.data;
         if (data) setReminders(data);
-      } catch {
-      }
+      } catch {}
     };
     fetchReminders();
   }, []);
-  // Remove expired reminders
+
   useEffect(() => {
     const checkExpiredReminders = () => {
       const now = new Date();
@@ -53,6 +53,7 @@ const Reminders = () => {
     const interval = setInterval(checkExpiredReminders, 60000);
     return () => clearInterval(interval);
   });
+
   const handleInputChange = (e: any) => {
     const { name, value } = e.target;
     setNewReminder((prev) => ({ ...prev, [name]: value }));
@@ -71,7 +72,7 @@ const Reminders = () => {
         setNewReminder({ title: "", description: "", time: "" });
         setShowInputFields(false);
         showNotification("Reminder added successfully!", "success");
-      } catch  {
+      } catch {
         showNotification("Failed to add reminder. Please try again.", "error");
       }
     } else {
@@ -98,6 +99,7 @@ const Reminders = () => {
       showNotification("Failed to delete reminder. Please try again.", "error");
     }
   };
+
   function calculateTimeRemaining(targetDateString: string) {
     const now = new Date();
     const targetDate = new Date(targetDateString);
@@ -116,29 +118,37 @@ const Reminders = () => {
   }
 
   return (
-    <div>
-      <section
-        id="reminders_deadlines"
-        className="bg-neutral-800 bg-neutral-800/50 backdrop-blur-xl p-6 border border-neutral-700/50 rounded-2xl shadow-sm m-6"
-      >
-        <div className="space-y-8">
-          {/* Header */}
-          <div className="flex justify-between items-center border-b border-neutral-700 pb-4 mb-6">
-            <div className="flex items-center gap-2">
-              <ClockIcon className="w-6 h-6 text-white" />
-              <h2 className="text-2xl font-semibold text-neutral-100">
-                Reminders &amp; Deadlines
+    <div className=" bg-neutral-950 p-4 ">
+      <section className="max-w-6xl mx-auto bg-neutral-900/50 backdrop-blur-lg rounded-xl border border-neutral-800 shadow-2xl">
+        {/* Header */}
+        <div className="px-6  border-b border-neutral-600 rounded-t-2xl md:-mt-12">
+          <div className="flex justify-between items-center">
+            <div className="flex items-center gap-3">
+              <div className="bg-primary/30  rounded-lg shadow-md">
+                <ClockIcon className="w-8 h-8 bg-black text-primary-400" />
+              </div>
+              <h2 className="text-3xl font-extrabold text-transparent bg-gradient-to-r from-white to-gray-300 bg-clip-text">
+                Deadlines
               </h2>
             </div>
+            <div className="mb-2">
+            <Button
+              onClickFunction={() => setShowInputFields(true)}
+            >
+              Add Reminder
+            </Button>
+            </div>
           </div>
+        </div>
 
+        <div className="p-6 space-y-6">
           {/* Notifications */}
           {notification.message && (
             <div
-              className={`p-4 mb-4 text-sm rounded-lg ${
+              className={`p-4 rounded-xl border shadow-md transition-all duration-300 ${
                 notification.type === "success"
-                  ? "bg-green-500 text-white"
-                  : "bg-red-500 text-white"
+                  ? "bg-green-600/20 border-green-500 text-green-300"
+                  : "bg-red-600/20 border-red-500 text-red-300"
               }`}
             >
               {notification.message}
@@ -146,93 +156,65 @@ const Reminders = () => {
           )}
 
           {/* Reminder List */}
-          <div className="bg-neutral-800 rounded-lg p-4 mb-8">
-            <div className="flex justify-between mb-2">
-              <h3 className="text-lg font-medium text-neutral-200">
-                {"Today's Reminders"}
-              </h3>
-              <button
-                onClick={() => setShowInputFields(true)}
-                className="flex items-center gap-2 px-3 py-2 bg-primary-500 text-neutral-800 text-sm font-medium rounded-md hover:bg-primary-400 focus:outline-none focus:ring-2 focus:ring-primary transition"
-              >
-                <svg
-                  className="w-5 h-5"
-                  fill="none"
-                  stroke="currentColor"
-                  viewBox="0 0 24 24"
+          <div className="">
+            {reminders.length === 0 ? (
+              <div className="text-center pt-8">
+                <div className="text-gray-400">No Deadlines available.</div>
+              </div>
+            ) : (
+              reminders.map((reminder, index) => (
+                <div
+                  key={index}
+                  className="group flex items-center gap-4 p-5 bg-neutral-800/60 hover:bg-neutral-800/80 rounded-xl border border-neutral-600 shadow-lg transition-all duration-200"
                 >
-                  <path
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                    strokeWidth={2}
-                    d="M12 6v6m0 0v6m0-6h6m-6 0H6"
-                  />
-                </svg>
-                Add Reminder
-              </button>
-            </div>
-
-            <div className="space-y-4">
-              {reminders.length === 0 ? (
-                <div className="text-neutral-400 text-center">
-                  No reminders available.
-                </div>
-              ) : (
-                reminders.map((reminder, index) => (
-                  <div
-                    key={index}
-                    className="flex items-center gap-4 p-4 bg-neutral-700/30 hover:bg-neutral-700/50 rounded-lg border border-neutral-800"
-                  >
-                    <div className="w-12 h-12 bg-primary/20 rounded-full flex items-center justify-center">
-                      <svg
-                        className="w-6 h-6 text-primary"
-                        fill="none"
-                        stroke="currentColor"
-                        viewBox="0 0 24 24"
-                      >
-                        <path
-                          strokeLinecap="round"
-                          strokeLinejoin="round"
-                          strokeWidth={2}
-                          d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"
-                        />
-                      </svg>
-                    </div>
-                    <div className="flex-grow">
-                      <h4 className="text-sm font-semibold text-neutral-200">
-                        {reminder.title || "No Title"}
-                      </h4>
-                      <p className="text-sm text-neutral-400">
-                        {reminder.description || "No Description"}
-                      </p>
-                    </div>
-                    <span className="text-xs font-medium px-3 py-1 rounded-full bg-yellow-100 text-yellow-800">
-                      {calculateTimeRemaining(reminder.time) ||
-                        "No Time"}
-                    </span>
-                    <button
-                      onClick={() => handleDeleteReminder(reminder.id)}
-                      className="text-white text-md bg-neutral-800 hover:cursor-pointer hover:bg-neutral-900 px-3 py-2 rounded-md text-sm focus:outline-none"
+                  <div className="w-14 h-14 bg-primary/30 rounded-xl flex items-center justify-center shadow-md">
+                    <svg
+                      className="w-7 h-7 text-primary"
+                      fill="none"
+                      stroke="currentColor"
+                      viewBox="0 0 24 24"
                     >
-                      Mark as done
-                    </button>
+                      <path
+                        strokeLinecap="round"
+                        strokeLinejoin="round"
+                        strokeWidth={2}
+                        d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"
+                      />
+                    </svg>
                   </div>
-                ))
-              )}
-            </div>
+                  <div className="flex-grow">
+                    <h4 className="text-xl font-bold text-white">
+                      {reminder.title || "No Title"}
+                    </h4>
+                    <p className="text-gray-400">
+                      {reminder.description || "No Description"}
+                    </p>
+                  </div>
+                  <span className="px-5 py-2 rounded-lg bg-yellow-600/20 text-yellow-300 font-medium shadow-md">
+                    {calculateTimeRemaining(reminder.time) || "No Time"}
+                  </span>
+                  <button
+                    onClick={() => handleDeleteReminder(reminder.id)}
+                    className="opacity-0 group-hover:opacity-100 transition-all duration-200 px-4 py-2 bg-neutral-700 hover:bg-neutral-600 text-white rounded-lg shadow-md"
+                  >
+                    Mark as done
+                  </button>
+                </div>
+              ))
+            )}
           </div>
 
           {/* Input Fields */}
           {showInputFields && (
-            <div className="bg-neutral-700/30 p-4 rounded-md">
-              <h4 className="text-neutral-100 mb-4">Create New Reminder</h4>
+            <div className="bg-neutral-800/70 p-6 rounded-xl border border-neutral-700 shadow-lg space-y-4">
+              <h4 className="text-xl font-bold text-white mb-4">Create New Reminder</h4>
               <input
                 type="text"
                 name="title"
                 value={newReminder.title}
                 placeholder="Reminder Title"
                 onChange={handleInputChange}
-                className="w-full p-2 mb-2 bg-neutral-700 text-white rounded"
+                className="w-full p-4 bg-neutral-700/60 text-white rounded-lg border border-neutral-600 focus:border-primary outline-none transition duration-200"
               />
               <input
                 type="text"
@@ -240,27 +222,26 @@ const Reminders = () => {
                 value={newReminder.description}
                 placeholder="Reminder Description"
                 onChange={handleInputChange}
-                className="w-full p-2 mb-2 bg-neutral-700 text-white rounded"
+                className="w-full p-4 bg-neutral-700/60 text-white rounded-lg border border-neutral-600 focus:border-primary outline-none transition duration-200"
               />
               <input
                 type="time"
                 name="time"
                 value={newReminder.time}
-                placeholder="Reminder Time"
                 onChange={handleInputChange}
-                className="w-full p-2 bg-neutral-700 text-white rounded"
+                className="w-full p-4 bg-neutral-700/60 text-white rounded-lg border border-neutral-600 focus:border-primary outline-none transition duration-200"
               />
 
-              <div className="flex justify-start mt-4 space-x-2">
+              <div className="flex gap-4 pt-4">
                 <button
                   onClick={handleCancel}
-                  className="px-3 py-2 bg-gray-500 text-white text-sm rounded-md hover:bg-gray-400 focus:outline-none"
+                  className="px-5 py-3 bg-neutral-700 hover:bg-neutral-600 text-white rounded-lg transition duration-200 shadow-md"
                 >
                   Cancel
                 </button>
                 <button
                   onClick={handleAddReminder}
-                  className="px-3 py-2 bg-primary-500 text-neutral-800 text-sm rounded-md hover:bg-primary-400 focus:outline-none"
+                  className="px-5 py-3 bg-primary hover:bg-primary/90 text-white rounded-lg transition duration-200 shadow-md"
                 >
                   Add Reminder
                 </button>
