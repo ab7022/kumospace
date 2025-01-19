@@ -66,7 +66,7 @@ const Messages = ({ session }: any) => {
     setCode(spaceDetails?.code);
   }, [teamMembers, spaceDetails]);
 
-  const socketUrl = "http://localhost:3001";
+  const socketUrl = process.env.SOCKET_URL
   useEffect(() => {
     const socketInstance = io(socketUrl);
     setSocket(socketInstance);
