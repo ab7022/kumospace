@@ -60,7 +60,6 @@ export async function GET(_req: NextRequest) {
       },
       { total: 0, active: 0, dnd: 0, away: 0 }
     );
-    console.log("Status count:", statusCount);
 
     return NextResponse.json({ userDetails, statusCount }, { status: 200 });
   } catch (error) {

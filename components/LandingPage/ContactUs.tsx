@@ -3,8 +3,33 @@ import React from "react";
 const ContactUs = () => {
   return (
     <div id="root">
-      <div className=" bg-neutral-950">
+      <div className=" bg-neutral-900">
+      
         <div className="mx-auto max-w-5xl px-4 py-10 lg:py-20 xl:px-0">
+          {/* <div className="">
+            <div className="rounded-2xl border border-neutral-800 bg-neutral-900 p-8 text-center">
+              <h3 className="text-2xl font-bold text-white">
+                Ready to Transform Your Remote Workspace?
+              </h3>
+              <p className="mx-auto mt-4 max-w-2xl text-lg text-neutral-400">
+             {"   Join thousands of successful remote companies who've boosted their team's productivity with our platform."}
+              </p>
+              <div className="mt-8 flex flex-col items-center justify-center gap-4 sm:flex-row">
+                <a
+                  href="#"
+                  className="inline-flex items-center justify-center rounded-full bg-primary-500 px-6 py-3 text-base font-medium text-black transition hover:bg-primary-400"
+                >
+                  Start Free Trial
+                </a>
+                <a
+                  href="#"
+                  className="inline-flex items-center justify-center rounded-full border border-neutral-700 px-6 py-3 text-base font-medium text-white transition hover:bg-neutral-800"
+                >
+                  Schedule Demo
+                </a>
+              </div>
+            </div>
+          </div> */}
           <div className="mb-10 lg:mb-14 text-center">
             <h2 className="text-3xl font-semibold text-white text-center md:text-4xl md:leading-tight">
               Contact Us
@@ -118,9 +143,9 @@ const ContactUs = () => {
                 </svg>
                 <div>
                   <h3 className="font-semibold text-white">24/7 Support</h3>
-                  <p className="mt-1 text-sm text-neutral-300">
-                    +1 (555) 000-0000
-                  </p>
+                    <a className="mt-1 text-sm text-neutral-300" href="tel:+918217003676">
+                    +91 82170 03676
+                    </a>
                 </div>
               </div>
 
@@ -142,9 +167,9 @@ const ContactUs = () => {
                 </svg>
                 <div>
                   <h3 className="font-semibold text-white">Email Us</h3>
-                  <p className="mt-1 text-sm text-neutral-300">
-                    security@virtualoffice.com
-                  </p>
+                    <a className="mt-1 text-sm text-neutral-300" href="mailto:bayees1@gmail.com">
+                    bayees1@gmail.com
+                    </a>
                 </div>
               </div>
 
@@ -167,7 +192,7 @@ const ContactUs = () => {
                 <div>
                   <h3 className="font-semibold text-white">VirtualSync</h3>
                   <p className="mt-1 text-sm text-neutral-300">
-                    Bengaluru 560032
+                    RT Nagar, Bengaluru, 560032
                     <br />
                     India
                   </p>
@@ -180,7 +205,7 @@ const ContactUs = () => {
                 </h3>
                 <div className="flex space-x-4">
                   <a
-                    href="#"
+                    href="https://x.com/abdul__bayees" target="_blank"
                     className="text-neutral-400 hover:text-yellow-400 transition-colors duration-200"
                   >
                     <span className="sr-only">Twitter</span>
@@ -200,7 +225,7 @@ const ContactUs = () => {
                     </svg>
                   </a>
                   <a
-                    href="#"
+                    href="https://linkedin.com/in/abdulbayees" target="_blank"
                     className="text-neutral-400 hover:text-yellow-400 transition-colors duration-200"
                   >
                     <span className="sr-only">LinkedIn</span>
@@ -222,7 +247,7 @@ const ContactUs = () => {
                     </svg>
                   </a>
                   <a
-                    href="#"
+                    href="https://github.com/ab7022" target="_blank"
                     className="text-neutral-400 hover:text-yellow-400 transition-colors duration-200"
                   >
                     <span className="sr-only">GitHub</span>

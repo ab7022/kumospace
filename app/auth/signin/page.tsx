@@ -31,7 +31,7 @@ const SignInComponent = () => {
       <div className="relative hidden h-screen select-none flex-col justify-center bg-blue-600 text-center md:flex md:w-1/2">
         <div className="mx-auto py-16 px-8 text-white xl:w-[40rem]">
           <span className="rounded-full bg-white px-3 py-1 font-medium text-blue-600">
-            Welcome to Kumospace!
+            Welcome to VirtualSync!
           </span>
           <p className="my-6 text-3xl font-semibold leading-10">
           {"Transform Your Remote Team's"} 

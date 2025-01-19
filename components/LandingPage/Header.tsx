@@ -91,30 +91,7 @@ export default function Header({ session }: { session: any }) {
 
         {/* Navigation Links - Desktop */}
         <div className="hidden md:flex md:items-center md:justify-end md:gap-8 md:ps-5">
-          <Link
-            className="text-base text-white hover:text-primary-300 transition-colors"
-            href="#solutions"
-          >
-            Solutions
-          </Link>
-          <Link
-            className="text-base text-white hover:text-primary-300 transition-colors"
-            href="#features"
-          >
-            Features
-          </Link>
-          <Link
-            className="text-base text-white hover:text-primary-300 transition-colors"
-            href="#pricing"
-          >
-            Pricing
-          </Link>
-          <Link
-            className="text-base text-white hover:text-primary-300 transition-colors"
-            href="#contact"
-          >
-            Contact
-          </Link>
+         
 
           {/* Profile Section - Desktop */}
           <div className="relative flex gap-3">
@@ -147,7 +124,7 @@ export default function Header({ session }: { session: any }) {
                         />
                         <div>
                           <p className="text-sm font-semibold text-white">
-                            {session.user.name || "John Doe"}
+                            {session?.user?.name}
                           </p>
                           <p className="text-xs text-gray-400">{username}</p>
                         </div>
@@ -201,111 +178,7 @@ export default function Header({ session }: { session: any }) {
           <div className="fixed inset-2 top-[100px] z-50 bg-neutral-800/30 backdrop-blur-md md:hidden">
             <div className="flex h-full flex-col px-4 pb-6">
               {/* Navigation Links */}
-              <div className="flex flex-col gap-3 py-8">
-                <Link
-                  className="group relative overflow-hidden rounded-xl bg-neutral-700/20 p-4 backdrop-blur-sm transition-all hover:bg-neutral-700/30 active:scale-98"
-                  href="#solutions"
-                  onClick={() => setMenuVisible(false)}
-                >
-                  <span className="flex items-center justify-between">
-                    <span className="text-xl font-medium text-white transition-transform group-hover:translate-x-2">
-                      Solutions
-                    </span>
-                    <svg
-                      xmlns="http://www.w3.org/2000/svg"
-                      className="h-5 w-5 text-gray-400 transition-transform group-hover:translate-x-2"
-                      fill="none"
-                      viewBox="0 0 24 24"
-                      stroke="currentColor"
-                    >
-                      <path
-                        strokeLinecap="round"
-                        strokeLinejoin="round"
-                        strokeWidth={2}
-                        d="M9 5l7 7-7 7"
-                      />
-                    </svg>
-                  </span>
-                </Link>
-
-                <Link
-                  className="group relative overflow-hidden rounded-xl bg-neutral-700/20 p-4 backdrop-blur-sm transition-all hover:bg-neutral-700/30 active:scale-98"
-                  href="#features"
-                  onClick={() => setMenuVisible(false)}
-                >
-                  <span className="flex items-center justify-between">
-                    <span className="text-xl font-medium text-white transition-transform group-hover:translate-x-2">
-                      Features
-                    </span>
-                    <svg
-                      xmlns="http://www.w3.org/2000/svg"
-                      className="h-5 w-5 text-gray-400 transition-transform group-hover:translate-x-2"
-                      fill="none"
-                      viewBox="0 0 24 24"
-                      stroke="currentColor"
-                    >
-                      <path
-                        strokeLinecap="round"
-                        strokeLinejoin="round"
-                        strokeWidth={2}
-                        d="M9 5l7 7-7 7"
-                      />
-                    </svg>
-                  </span>
-                </Link>
-
-                <Link
-                  className="group relative overflow-hidden rounded-xl bg-neutral-700/20 p-4 backdrop-blur-sm transition-all hover:bg-neutral-700/30 active:scale-98"
-                  href="#pricing"
-                  onClick={() => setMenuVisible(false)}
-                >
-                  <span className="flex items-center justify-between">
-                    <span className="text-xl font-medium text-white transition-transform group-hover:translate-x-2">
-                      Pricing
-                    </span>
-                    <svg
-                      xmlns="http://www.w3.org/2000/svg"
-                      className="h-5 w-5 text-gray-400 transition-transform group-hover:translate-x-2"
-                      fill="none"
-                      viewBox="0 0 24 24"
-                      stroke="currentColor"
-                    >
-                      <path
-                        strokeLinecap="round"
-                        strokeLinejoin="round"
-                        strokeWidth={2}
-                        d="M9 5l7 7-7 7"
-                      />
-                    </svg>
-                  </span>
-                </Link>
-
-                <Link
-                  className="group relative overflow-hidden rounded-xl bg-neutral-700/20 p-4 backdrop-blur-sm transition-all hover:bg-neutral-700/30 active:scale-98"
-                  href="#contact"
-                  onClick={() => setMenuVisible(false)}
-                >
-                  <span className="flex items-center justify-between">
-                    <span className="text-xl font-medium text-white transition-transform group-hover:translate-x-2">
-                      Contact
-                    </span>
-                    <svg
-                      xmlns="http://www.w3.org/2000/svg"
-                      className="h-5 w-5 text-gray-400 transition-transform group-hover:translate-x-2"
-                      fill="none"
-                      viewBox="0 0 24 24"
-                      stroke="currentColor"
-                    >
-                      <path
-                        strokeLinecap="round"
-                        strokeLinejoin="round"
-                        strokeWidth={2}
-                        d="M9 5l7 7-7 7"
-                      />
-                    </svg>
-                  </span>
-                </Link>
-              </div>
+              
 
               {/* Action Buttons */}
               <div className="mt-auto flex flex-col gap-4">

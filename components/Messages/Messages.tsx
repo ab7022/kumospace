@@ -80,21 +80,17 @@ const Messages = ({ session }: any) => {
 
     socketInstance.on("previousMessages", (data) => {
       setAllMessages(data);
-      console.log("Previous Messages:", data);
     });
     socketInstance.on("previousMessagesForGroup", (data) => {
       setGroupMessages(data);
-      console.log("Previous Messages:", data);
     });
 
     socketInstance.on("receiveMessage", (incomingMessage) => {
-      console.log("Incoming Message:", incomingMessage);
       setAllMessages((prevMessages) => [...prevMessages, incomingMessage]);
     });
 
     // Listen for group messages
     socketInstance.on("receive-group-message", (message) => {
-      console.log("Group Message:", message);
       setGroupMessages((prevMessages) => [...prevMessages, message]);
     });
 
@@ -128,7 +124,6 @@ const Messages = ({ session }: any) => {
     }
   }, [chatMember, allMessages, email, code]);
   const sendGroupMessage = () => {
-    console.log("Group Message");
     if (socket && message) {
       const messageObject = {
         senderEmail: email,
@@ -137,13 +132,11 @@ const Messages = ({ session }: any) => {
         image: profileUrl,
         name: name,
       };
-      console.log("Group Message Object:", messageObject);
       socket.emit("group-message", messageObject);
       setMessage("");
     }
   };
   const sendMessage = () => {
-    console.log("Message");
     if (socket && message) {
       const messageObject = {
         email: chatMember?.email,

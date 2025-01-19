@@ -55,6 +55,7 @@ model User {
   onCurrentlyWorking  String?
   teamName            String?
   tasks               Task[]
+  assignedTasks       AssignedTasks[]      
   spaces              Space[]
   spaceMembers        SpaceMember[]
   reminders           Reminder[]
@@ -69,6 +70,17 @@ model User {
   @@index([email], name: "email_idx")
 } 
 
+model AssignedTasks {
+  id        Int      @id @default(autoincrement())
+  taskTitle    String?
+  taskDescription String?
+  userId    Int
+  status    String?
+  spaceId   Int
+  assignedAt DateTime @default(now())
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  space     Space    @relation(fields: [spaceId], references: [id], onDelete: Cascade)
+  }
 model Reminder {
   id          Int      @id @default(autoincrement())
   title       String
@@ -106,6 +118,7 @@ model Space {
   messages     Message[]
   user         User          @relation(fields: [userId], references: [id], onDelete: Cascade)
   createdAt    DateTime      @default(now())
+  assignedTasks AssignedTasks[]
 
   @@unique([code, userId])
 }

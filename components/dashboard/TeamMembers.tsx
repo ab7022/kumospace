@@ -3,46 +3,27 @@ import axios from "axios";
 import Image from "next/image";
 import {  SlidersHorizontal, MessageCircle, MoreVertical, Users } from "lucide-react";
 import Link from "next/link";
+import { TeamMember } from "../types";
 
-interface TeamMember {
-  id: number;
-  name: string;
-  status: string;
-  profileUrl: string;
-  designation: string;
-  lastName: string;
-  firstName: string;
-  teamName: string;
-}
 
-const TeamMembers = () => {
-  const [teamMembers, setTeamMembers] = useState<TeamMember[]>([]);
-  const [isLoading, setIsLoading] = useState(true);
+const TeamMembers = ({teamMembers,isLoading,setTeamMembers}
+  :{teamMembers:TeamMember[],
+    isLoading:boolean,
+    setTeamMembers:any
+  }
+
+) => {
   const [activeTeam, setActiveTeam] = useState("All Teams");
   const [isSorted, setIsSorted] = useState(false); // State for sorting
 
   const teams = [
-    { name: "All Teams", count: teamMembers.length },
+    { name: "All Teams", count: teamMembers?.length },
     { name: "Design", count: 12 },
     { name: "Development", count: 8 },
     { name: "Marketing", count: 5 },
     { name: "Management", count: 3 },
   ];
 
-  useEffect(() => {
-    const fetchTeamMembers = async () => {
-      try {
-        const response = await axios.get("/api/dashboard/spaceMembers");
-        const data = response.data.mySpaceMembers.map((item: any) => item.user);
-        setTeamMembers(data);
-      } catch {
-      } finally {
-        setIsLoading(false);
-      }
-    };
-
-    fetchTeamMembers();
-  }, []);
 
   const getStatusColor = (status: string) => {
     switch (status) {
@@ -58,7 +39,7 @@ const TeamMembers = () => {
 
   const handleSort = () => {
     setIsSorted(!isSorted); // Toggle sort state
-    setTeamMembers((prevMembers) =>
+    setTeamMembers((prevMembers:any) =>
       [...prevMembers].sort((a, b) => {
         if (!isSorted) {
           return a.name.localeCompare(b.name); // Sort alphabetically
@@ -132,10 +113,10 @@ const TeamMembers = () => {
           </div>
         ) : (
           <div className="space-y-3">
-            {teamMembers.length > 0 &&
-              teamMembers.map((member) => (
+            {teamMembers?.length > 0 &&
+              teamMembers?.map((member) => (
                 <div
-                  key={member.id}
+                  key={member.email}
                   className="group flex items-center justify-between p-4 bg-neutral-700/20 hover:bg-neutral-700/30 rounded-xl transition-all duration-200"
                 >
                   <div className="flex items-center gap-4">

@@ -3,16 +3,16 @@ import React from "react";
 const Productivity = () => {
   return (
     <div
-      className="relative -mt-[92px] bg-neutral-900 pt-[92px]"
+      className="relative -mt-[92px] bg-neutral-900 pt-[92px] w-full"
       data-element-type="Container"
     >
       <div
-        className="mx-auto max-w-6xl px-4 pb-24 pt-24 md:px-6 lg:px-8 element-highlight"
+        className="mx-auto max-w-7xl px-4 pb-24 pt-24 md:px-6 lg:px-8 element-highlight"
         data-element-type="Container"
       >
         <div className="text-center" data-element-type="Container">
           <h1
-            className="mb-6 text-4xl text-center font-bold text-white md:text-6xl lg:text-7xl max-w-5xl"
+            className="mb-6 text-4xl text-center font-bold text-white md:text-6xl lg:text-7xl max-w-6xl"
             data-element-type="Heading"
           >
             {"Transform Your Remote Team's Productivity Today"}
@@ -31,11 +31,11 @@ const Productivity = () => {
             data-element-type="Container"
           >
             <a
-              href="/signup"
-              className="inline-flex items-center justify-center rounded-full bg-primary-500 px-8 py-3 text-base font-medium text-black transition hover:bg-primary-400"
+              href="/setup"
+              className="inline-flex items-center justify-center rounded-full bg-primary-500 px-8 py-3 text-base font-bold text-black transition hover:bg-primary-400"
               data-element-type="Text"
             >
-              Start 14-Day Free Trial
+              Create My Workspace
             </a>
             <a
               href="#demo"
@@ -156,10 +156,9 @@ const Productivity = () => {
               >
                 Secure &amp; Private
               </h3>
-              <p className="text-neutral-400" data-element-type="Text">
-                Enterprise-grade security with end-to-end encryption for all
-                communications.
-              </p>
+                <p className="text-neutral-400" data-element-type="Text">
+                We do not store your chats and meetings in our database.
+                </p>
             </div>
           </div>
         </div>

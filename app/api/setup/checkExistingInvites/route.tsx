@@ -16,7 +16,7 @@ export async function GET(_req: NextRequest) {
       where: { email: user.email },
       select: { id: true, spaceId: true, role: true },
     });
-
+    
     if (!invites.length) {
       return NextResponse.json(
       { message: "No invitations found." },

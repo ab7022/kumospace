@@ -3,7 +3,7 @@ import React from "react";
 const Steps = () => {
   return (
     <div id="root">
-      <section className="bg-neutral-900 py-24">
+      <section className="bg-neutral-950 py-24 w-full">
         <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
           <div className="text-center">
             <h2 className="text-3xl font-bold text-white sm:text-4xl">
@@ -120,40 +120,13 @@ const Steps = () => {
                   Boost Team Performance
                 </h3>
                 <p className="mt-4 text-lg text-neutral-300">
-                  Built-in project management tools, virtual whiteboards, and
+                  Built-in project management tools, assignment of tasks, and
                   screen sharing capabilities ensure your team stays productive
                   and aligned on goals.
                 </p>
               </div>
             </div>
 
-            <div className="mt-16 grid gap-8 lg:grid-cols-3">
-              <div className="rounded-xl border border-neutral-700 bg-neutral-800 p-6">
-                <h4 className="text-xl font-bold text-white">
-                  Virtual Meeting Rooms
-                </h4>
-                <p className="mt-2 text-neutral-300">
-                  Dedicated spaces for team meetings, client presentations, and
-                  casual conversations.
-                </p>
-              </div>
-              <div className="rounded-xl border border-neutral-700 bg-neutral-800 p-6">
-                <h4 className="text-xl font-bold text-white">
-                  Document Collaboration
-                </h4>
-                <p className="mt-2 text-neutral-300">
-                  Real-time document editing and version control for seamless
-                  teamwork.
-                </p>
-              </div>
-              <div className="rounded-xl border border-neutral-700 bg-neutral-800 p-6">
-                <h4 className="text-xl font-bold text-white">Team Analytics</h4>
-                <p className="mt-2 text-neutral-300">
-                  Insights into team engagement and productivity to optimize
-                  workflow.
-                </p>
-              </div>
-            </div>
             <div className="mt-20">
               <div className="rounded-xl border border-neutral-700 bg-neutral-800 p-8">
                 <div className="mb-8">
@@ -200,9 +173,9 @@ const Steps = () => {
                 >
                   Transform Your Remote Work Today
                 </a>
-                <p className="mt-4 text-sm text-neutral-400">
+                {/* <p className="mt-4 text-sm text-neutral-400">
                   Start with a 14-day free trial
-                </p>
+                </p> */}
               </div>
             </div>
           </div>

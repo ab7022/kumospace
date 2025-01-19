@@ -121,49 +121,87 @@ export const MobileSidebar = ({
   ...props
 }: React.ComponentProps<"div">) => {
   const { open, setOpen } = useSidebar();
+  const path = usePathname();
+
   return (
     <>
       <div
         className={cn(
-          "h-10 px-4 py-4 flex flex-row md:hidden  items-center justify-between bg-neutral-900 w-full"
+          "h-16 px-4 flex flex-row md:hidden  items-center",
+          "bg-gradient-to-b from-gray-900 to-gray-800",
+          "border-b border-gray-700/30",
+          "sticky top-0 z-40 w-full"
         )}
         {...props}
       >
-        <div className="flex justify-end z-20 w-full">
-          <IconMenu2
-            className="text-neutral-200"
-            onClick={() => setOpen(!open)}
-          />
-        </div>
+        <button
+          onClick={() => setOpen(!open)}
+          className="p-2 rounded-lg hover:bg-gray-800/50 transition-colors"
+          aria-label="Toggle menu"
+        >
+          <IconMenu2 className="h-6 w-6 text-gray-200" />
+        </button>
+        
         <AnimatePresence>
           {open && (
-            <motion.div
-              initial={{ x: "-100%", opacity: 0 }}
-              animate={{ x: 0, opacity: 1 }}
-              exit={{ x: "-100%", opacity: 0 }}
-              transition={{
-                duration: 0.3,
-                ease: "easeInOut",
-              }}
-              className={cn(
-                "fixed h-full w-full inset-0 bg-neutral-900 p-10 z-[100] flex flex-col justify-between",
-                className
-              )}
-            >
-              <div
-                className="absolute right-10 top-10 z-50 text-neutral-200"
-                onClick={() => setOpen(!open)}
+            <>
+              {/* Backdrop overlay */}
+              <motion.div
+                initial={{ opacity: 0 }}
+                animate={{ opacity: 0.5 }}
+                exit={{ opacity: 0 }}
+                transition={{ duration: 0.2 }}
+                className="fixed inset-0 bg-black/80 backdrop-blur-sm z-40"
+                onClick={() => setOpen(false)}
+              />
+
+              {/* Sidebar panel */}
+              <motion.div
+                initial={{ x: "-100%" }}
+                animate={{ x: 0 }}
+                exit={{ x: "-100%" }}
+                transition={{
+                  type: "spring",
+                  bounce: 0,
+                  duration: 0.3
+                }}
+                className={cn(
+                  "fixed inset-y-0 left-0 w-[280px] max-w-[80vw]",
+                  "bg-gradient-to-b from-gray-900 via-gray-800 to-gray-900",
+                  "border-r border-gray-700/30",
+                  "shadow-2xl",
+                  "flex flex-col",
+                  "z-50",
+                  className
+                )}
               >
-                <IconX />
-              </div>
-              {children}
-            </motion.div>
+                {/* Header */}
+                <div className="flex items-center justify-between p-4 border-b border-gray-700/30">
+                  <div className="text-lg font-semibold text-white">Menu</div>
+                  <button
+                    onClick={() => setOpen(false)}
+                    className="p-2 rounded-lg hover:bg-gray-800/50 transition-colors"
+                    aria-label="Close menu"
+                  >
+                    <IconX className="h-5 w-5 text-gray-300" />
+                  </button>
+                </div>
+
+                {/* Content */}
+                <div className="flex-1 overflow-y-auto py-4">
+                  <div className="px-4">
+                    {children}
+                  </div>
+                </div>
+              </motion.div>
+            </>
           )}
         </AnimatePresence>
       </div>
     </>
   );
 };
+
 
 export const SidebarLink = ({
   link,

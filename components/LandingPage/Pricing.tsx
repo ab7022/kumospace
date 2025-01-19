@@ -5,57 +5,14 @@ const Pricing = () => {
     <div id="root">
       <section className="bg-neutral-900  py-24">
         <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
-          <div className="text-center">
+            <div className="text-center">
             <h2 className="text-3xl font-bold text-white sm:text-4xl bg-gradient-to-r from-primary-400 to-primary-600 bg-clip-text text-transparent">
-              Transform Your Workspace Today
+              Revolutionize Your Workspace Now
             </h2>
             <p className="mx-auto mt-4 max-w-2xl text-lg text-neutral-300">
-              {"Elevate your team's productivity with our cutting-edge virtual workspace solutions."}
+              {"Unlock unparalleled productivity and collaboration with our state-of-the-art virtual workspace solutions. Join the future of work today!"}
             </p>
-          </div>
-
-          <div className="mt-12 grid gap-8 lg:grid-cols-3">
-            <div className="rounded-lg bg-neutral-800 p-6">
-              <h3 className="text-xl font-semibold text-white">
-                Real-time Collaboration
-              </h3>
-              <p className="mt-2 text-neutral-300">
-                See what everyone is working on in real-time, just like in a
-                physical office. No more isolation or communication gaps.
-              </p>
             </div>
-            <div className="rounded-lg bg-neutral-800 p-6">
-              <h3 className="text-xl font-semibold text-white">
-                Team Transparency
-              </h3>
-              <p className="mt-2 text-neutral-300">
-                Foster trust and accountability with complete visibility of team
-                activities and projects.
-              </p>
-            </div>
-            <div className="rounded-lg bg-neutral-800 p-6">
-              <h3 className="text-xl font-semibold text-white">
-                Seamless Communication
-              </h3>
-              <p className="mt-2 text-neutral-300">
-                Break down communication barriers with instant voice, video, and
-                chat capabilities.
-              </p>
-            </div>
-          </div>
-          <div className="mt-12 text-center">
-            <div className="relative inline-flex rounded-full bg-neutral-800/50 backdrop-blur-sm p-1">
-              <button className="relative rounded-full px-6 py-2 text-sm font-medium text-white">
-                Monthly
-              </button>
-              <button className="relative rounded-full bg-gradient-to-r from-primary-500 to-primary-400 px-6 py-2 text-sm font-medium text-black">
-                Annual
-              </button>
-            </div>
-            <p className="mt-2 text-sm text-primary-400">
-              Save 20% with annual billing
-            </p>
-          </div>
 
           <div className="mt-16 grid gap-8 lg:grid-cols-3">
             <div className="rounded-2xl border border-neutral-700 bg-neutral-900/50 backdrop-blur-sm p-8 transform transition-all duration-300 hover:scale-105 hover:shadow-xl hover:shadow-primary-500/20">

@@ -199,7 +199,6 @@ const Canvas = ({ open, session }: any) => {
       if (isNearbyX && isNearbyY) {
         setIsUserNearby(true);
 
-        console.log(`${user.name} is nearby!`);
         if (!socket) return;
         // Perform the action you want (e.g., show a call button)
       } else {
@@ -226,7 +225,6 @@ const Canvas = ({ open, session }: any) => {
     }
   }, [remoteSocketId, socket]);
   const handleUserJoined = useCallback(({ email, id }: any) => {
-    console.log(`Email ${email} joined room`);
     setRemoteSocketId(id);
   }, []);
   const handleEndCall = useCallback(() => {
@@ -259,8 +257,6 @@ const Canvas = ({ open, session }: any) => {
   useEffect(() => {
     if (!socket) return console.error("Socket not connected");
     const handleCallEnded = () => {
-      console.log("Call ended by remote peer");
-
       if (myStream) {
         myStream.getTracks().forEach((track) => {
           track.stop();
@@ -310,7 +306,6 @@ const Canvas = ({ open, session }: any) => {
         video: true,
       });
       setMyStream(stream);
-      console.log(`Incoming Call`, from, offer);
       const ans = await peer.getAnswer(offer);
       if (!socket) return console.error("Socket not connected");
       socket.emit("call:accepted", { to: from, ans });
@@ -330,7 +325,6 @@ const Canvas = ({ open, session }: any) => {
   const handleCallAccepted = useCallback(
     ({ ans }: any) => {
       peer.setLocalDescription(ans);
-      console.log("Call Accepted!");
       sendStreams();
     },
     [sendStreams]
@@ -365,7 +359,6 @@ const Canvas = ({ open, session }: any) => {
   useEffect(() => {
     peer.peer.addEventListener("track", async (ev) => {
       const remoteStream = ev.streams;
-      console.log("GOT TRACKS!!");
       setRemoteStream(remoteStream[0]);
     });
   }, []);
@@ -383,7 +376,6 @@ const Canvas = ({ open, session }: any) => {
   const handleScreenShareAccepted = useCallback(
     ({ ans }: any) => {
       peer.setLocalDescription(ans);
-      console.log("Screen Share Accepted!");
       sendStreams();
     },
     [sendStreams]

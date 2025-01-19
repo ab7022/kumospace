@@ -4,15 +4,18 @@ import PendingInvites from "@/components/dashboard/PendingInvites";
 import QuickActions from "@/components/dashboard/QuickActions";
 import TeamMembers from "@/components/dashboard/TeamMembers";
 // import UpcomingDeadline from "@/components/dashboard/UpcomingDeadline";
-// import UpcomingEvents from "@/components/dashboard/UpcomingEvents";
+ import TeamTasksDashboard from "@/components/dashboard/TeamTasksDashboard";
 import { useEffect, useState } from "react";
 import axios from "axios";
 import { useRouter } from "next/navigation";
+import { TeamMember } from "@/components/types";
 
 export default function Dashboard()  {
   const router = useRouter();
-  const [, setUserDetails] = useState(null);
+  const [userDetails, setUserDetails] = useState(null);
   const [role, setRole] = useState("");
+  const [teamMembers,setTeamMembers] = useState<TeamMember[]>([])
+  const [isloading,setIsLoading] = useState(false)
   useEffect(() => {
     const fetchUserDetails = async () => {
       try {
@@ -41,6 +44,20 @@ export default function Dashboard()  {
   useEffect(() => {
     getData();
   }, [getData]);
+  useEffect(() => {
+    const fetchTeamMembers = async () => {
+      try {
+        const response = await axios.get("/api/dashboard/spaceMembers");
+        const data = response.data.mySpaceMembers.map((item: any) => item.user);
+        setTeamMembers(data);
+      } catch {
+      } finally {
+        setIsLoading(false);
+      }
+    };
+
+    fetchTeamMembers();
+  }, []);
   return (
     <div className="flex flex-1 overflow-x-scroll  bg-gradient-to-br from-neutral-900 to-neutral-800 p-4 md:p-8">
       <div className="max-w-8xl mx-auto">
@@ -48,13 +65,13 @@ export default function Dashboard()  {
         <div className="grid grid-cols-1 md:grid-cols-12 gap-4 md:gap-8">
           {/* Left Column */}
           <div className="col-span-12 md:col-span-8 space-y-4 md:space-y-6">
-            <TeamMembers />
-            {/* <UpcomingEvents /> */}
+            <TeamMembers isLoading={isloading} teamMembers={teamMembers} setTeamMembers={setTeamMembers}/>
+            <TeamTasksDashboard />
           </div>
           {/* Right Column */}
           <div className="col-span-12 md:col-span-4 space-y-4 md:space-y-6">
             {(role === "ADMIN" || role === "MODERATOR") && <PendingInvites />}
-            <QuickActions />
+            <QuickActions teamMembers={teamMembers}/>
             {/* <UpcomingDeadline /> */}
           </div>
         </div>

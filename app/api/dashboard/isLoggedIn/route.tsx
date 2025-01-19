@@ -30,7 +30,6 @@ export async function GET(_req: NextRequest) {
         { status: 409 }
       );
     } else {
-      console.log(existingSpace);
       return NextResponse.json({ existingSpace }, { status: 200 });
     }
   } catch (error) {

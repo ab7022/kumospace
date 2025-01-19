@@ -44,4 +44,15 @@ interface Position {
     status: string;
   };
 
-  export type { Position, User, AvatarProps, UserDetails };
+interface TeamMember {
+  id: number;
+  name: string;
+  status: string;
+  profileUrl: string;
+  designation: string;
+  lastName: string;
+  email: string;
+  firstName: string;
+  teamName: string;
+}
+  export type { Position, User, AvatarProps, UserDetails,TeamMember };
