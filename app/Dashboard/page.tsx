@@ -12,7 +12,6 @@ import { TeamMember } from "@/components/types";
 
 export default function Dashboard()  {
   const router = useRouter();
-  const [_userDetails, setUserDetails] = useState(null);
   const [role, setRole] = useState("");
   const [teamMembers,setTeamMembers] = useState<TeamMember[]>([])
   const [isloading,setIsLoading] = useState(false)
@@ -20,7 +19,6 @@ export default function Dashboard()  {
     const fetchUserDetails = async () => {
       try {
         const response = await axios.get("/api/dashboard/fetchData");
-        setUserDetails(response.data);
         setRole(response.data.spaceMembers[0].role);
       } catch (error) {
         console.error("Error fetching user details:", error);
