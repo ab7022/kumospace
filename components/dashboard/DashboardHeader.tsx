@@ -99,7 +99,7 @@ const DashboardHeader = ({ userRole }: { userRole: string }) => {
             Dashboard
           </h1>
           <p className="text-neutral-400 text-sm w-48 md:w-full md:text-lg">
-            Welcome back! Here's your team's latest updates
+            {"Welcome back! Here's your team's latest updates"}
           </p>
         </div>
         

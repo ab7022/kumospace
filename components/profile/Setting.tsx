@@ -98,10 +98,10 @@ const Setting = () => {
     <div className=" bg-neutral-950 p-4 md:p-8">
       <section className="max-w-6xl mx-auto bg-neutral-900/50 backdrop-blur-lg rounded-xl border border-neutral-800 shadow-2xl ">
         {/* Header */}
-        <div className="p-6 border-b border-neutral-800/50 md:-mt-16">
+        <div className="p-6 border-b border-neutral-800/50 -mt-8 md:-mt-20">
           <div className="flex justify-between items-center">
             <div className="flex items-center gap-3">
-              <div className="bg-primary-500/10 p-2 rounded-lg">
+              <div className="bg-primary-500/10 p-2 rounded-lg hidden md:block">
                 <UserIcon className="w-6 h-6 text-primary-400" />
               </div>
               <div>
@@ -109,12 +109,14 @@ const Setting = () => {
                 <p className="text-sm text-neutral-400">Manage your preferences</p>
               </div>
             </div>
+            <div className="mb-2">
             <Button
               onClickFunction={handleSaveChanges}
            
             >
               Save Changes
             </Button>
+            </div>
           </div>
         </div>
 

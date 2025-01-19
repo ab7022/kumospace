@@ -4,7 +4,7 @@ import { Card, CardHeader, CardTitle, CardContent } from '@/components/ui/card';
 import Link from 'next/link';
 
 const QuickActionButton = ({ icon: Icon, title, color, bgColor, hoverBgColor,href }:any) => (
-  <Link className="w-full group flex items-center justify-between bg-neutral-700/20 text-left px-4 py-3 rounded-xl transition-all duration-300 hover:scale-102 hover:bg-neutral-800"href={href}>
+  <Link className="w-full group flex items-center justify-between bg-neutral-700/20 text-left px-4 py-3 rounded-xl transition-all duration-300 hover:scale-102  hover:bg-neutral-800" href={href}>
     <div className="flex items-center gap-4" >
       <div className={`w-10 h-10 rounded-xl ${bgColor} flex items-center justify-center transition-all duration-300 group-hover:scale-110 ${hoverBgColor}`}>
         <Icon className={`w-5 h-5 ${color}`} />
@@ -54,13 +54,13 @@ const QuickActions = () => {
   ];
 
   return (
-    <Card className="bg-neutral-800/50 backdrop-blur-xl shadow-xl border-neutral-700/50  ">
+  <Card className="bg-neutral-800/50 backdrop-blur-xl shadow-xl border-neutral-700/50 mb-12 ">
       <CardHeader className="pb-3">
         <CardTitle className="text-2xl font-semibold text-white tracking-tight">
           Quick Actions
         </CardTitle>
       </CardHeader>
-      <CardContent>
+      <CardContent className=''>
         <div className="space-y-2">
           {actions.map((action, index) => (
             <QuickActionButton

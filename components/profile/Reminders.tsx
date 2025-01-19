@@ -121,27 +121,27 @@ const Reminders = () => {
     <div className=" bg-neutral-950 p-4 ">
       <section className="max-w-6xl mx-auto bg-neutral-900/50 backdrop-blur-lg rounded-xl border border-neutral-800 shadow-2xl">
         {/* Header */}
-        <div className="px-6  border-b border-neutral-600 rounded-t-2xl md:-mt-12">
+        <div className="p-6 border-b border-neutral-800/50 -mt-8 md:-mt-20">
           <div className="flex justify-between items-center">
             <div className="flex items-center gap-3">
-              <div className="bg-primary/30  rounded-lg shadow-md">
-                <ClockIcon className="w-8 h-8 bg-black text-primary-400" />
+              <div className="bg-primary-500/10 p-2 rounded-lg hidden md:block">
+                <ClockIcon className="w-6 h-6 text-primary-400" />
               </div>
-              <h2 className="text-3xl font-extrabold text-transparent bg-gradient-to-r from-white to-gray-300 bg-clip-text">
-                Deadlines
-              </h2>
+              <div>
+                <h2 className="text-xl md:text-2xl font-bold text-white">Deadlines</h2>
+                <p className="text-xs text-neutral-400">Manage your deadlines</p>
+              </div>
             </div>
-            <div className="mb-2">
             <Button
-              onClickFunction={() => setShowInputFields(true)}
+              onClickFunction={()=> setShowInputFields(true)}
             >
-              Add Reminder
+              Add new Deadline
             </Button>
-            </div>
           </div>
         </div>
 
-        <div className="p-6 space-y-6">
+
+        <div className="p-2 md:p-6 space-y-6">
           {/* Notifications */}
           {notification.message && (
             <div
@@ -169,7 +169,7 @@ const Reminders = () => {
                 >
                   <div className="w-14 h-14 bg-primary/30 rounded-xl flex items-center justify-center shadow-md">
                     <svg
-                      className="w-7 h-7 text-primary"
+                      className="w-7 h-7 text-primary-900"
                       fill="none"
                       stroke="currentColor"
                       viewBox="0 0 24 24"
@@ -204,17 +204,18 @@ const Reminders = () => {
             )}
           </div>
 
-          {/* Input Fields */}
+          <div className="grid grid-cols-1 p-2 md-p-4 md:grid-cols-3 gap-6 justify-center items-center">
           {showInputFields && (
-            <div className="bg-neutral-800/70 p-6 rounded-xl border border-neutral-700 shadow-lg space-y-4">
-              <h4 className="text-xl font-bold text-white mb-4">Create New Reminder</h4>
+            <>
+              <div className="bg-neutral-800/70 md:p-6 p-4 rounded-2xl shadow-md flex flex-col justify-center align-middle mt-4 ml-4 items-center space-y-2">
+              <h4 className="text-xl font-bold text-white mb-4">New Reminder</h4>
               <input
                 type="text"
                 name="title"
                 value={newReminder.title}
                 placeholder="Reminder Title"
                 onChange={handleInputChange}
-                className="w-full p-4 bg-neutral-700/60 text-white rounded-lg border border-neutral-600 focus:border-primary outline-none transition duration-200"
+                className="w-full p-2 bg-neutral-700/60 text-white rounded-lg border border-neutral-600 focus:border-primary outline-none transition duration-200"
               />
               <input
                 type="text"
@@ -222,33 +223,35 @@ const Reminders = () => {
                 value={newReminder.description}
                 placeholder="Reminder Description"
                 onChange={handleInputChange}
-                className="w-full p-4 bg-neutral-700/60 text-white rounded-lg border border-neutral-600 focus:border-primary outline-none transition duration-200"
+                className="w-full p-2 bg-neutral-700/60 text-white rounded-lg border border-neutral-600 focus:border-primary outline-none transition duration-200"
               />
               <input
                 type="time"
                 name="time"
                 value={newReminder.time}
                 onChange={handleInputChange}
-                className="w-full p-4 bg-neutral-700/60 text-white rounded-lg border border-neutral-600 focus:border-primary outline-none transition duration-200"
+                className="w-full p-2 bg-neutral-700/60 text-white rounded-lg border border-neutral-600 focus:border-primary outline-none transition duration-200"
               />
 
-              <div className="flex gap-4 pt-4">
-                <button
-                  onClick={handleCancel}
-                  className="px-5 py-3 bg-neutral-700 hover:bg-neutral-600 text-white rounded-lg transition duration-200 shadow-md"
-                >
-                  Cancel
-                </button>
-                <button
-                  onClick={handleAddReminder}
-                  className="px-5 py-3 bg-primary hover:bg-primary/90 text-white rounded-lg transition duration-200 shadow-md"
-                >
-                  Add Reminder
-                </button>
-              </div>
+<div className="flex gap-8 w-full">
+                    <button
+                      onClick={handleAddReminder}
+                      className="w-full px-4 py-2 bg-primary-500 text-gray-800 text-sm font-bold rounded-lg  hover:bg-primary-600 transition"
+                    >
+                      Add Reminder
+                    </button>
+                    <button
+                      onClick={handleCancel}
+                      className="w-full px-4 py-2 bg-gray-700 text-white rounded-lg font-medium hover:bg-gray-600 transition"
+                    >
+                      Cancel
+                    </button>
+                    </div>
             </div>
+            </>
           )}
-        </div>
+          </div>
+          </div>
       </section>
     </div>
   );

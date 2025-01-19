@@ -60,20 +60,32 @@ const DailyStatus = () => {
   };
 
   return (
-    <div className=" bg-neutral-950 p-4 ">
-      <section className="max-w-6xl mx-auto bg-neutral-900/50 backdrop-blur-lg rounded-xl border border-neutral-800 shadow-2xl">
-        {/* Header */}
-        <div className="px-4 border-b border-neutral-800 flex justify-between items-center md:-mt-12">
-          <div className="flex items-center gap-3 ">
-            <div className="bg-primary-500/10 p-2 rounded-lg">
+    <div className=" bg-neutral-950 p-4 md:p-8">
+    <section className="max-w-6xl mx-auto bg-neutral-900/50 backdrop-blur-lg rounded-xl border border-neutral-800 shadow-2xl ">
+      {/* Header */}
+      <div className="p-6 border-b border-neutral-800/50 -mt-8 md:-mt-20">
+        <div className="flex justify-between items-center">
+          <div className="flex items-center gap-3">
+            <div className="bg-primary-500/10 p-2 rounded-lg hidden md:block">
               <ClockIcon className="w-6 h-6 text-primary-400" />
             </div>
-            <h2 className="text-2xl font-bold text-white">Daily Status</h2>
+            <div>
+              <h2 className="text-2xl font-bold text-white">Availability</h2>
+              <p className="text-sm text-neutral-400">{"What's your status"}</p>
+            </div>
           </div>
           <div className="mb-2">
-            <Button onClickFunction={handleUpdate}>Update Status</Button>
+
+         
+          <Button
+            onClickFunction={handleUpdate}
+         
+          >
+            Save Changes
+          </Button>
           </div>
         </div>
+      </div>
 
         {/* Content */}
         <div className="p-6 space-y-6 ">

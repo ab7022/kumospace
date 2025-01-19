@@ -3,6 +3,7 @@ import React, { useState, useEffect } from "react";
 import axios from "axios";
 import Skeleton from "react-loading-skeleton";
 import Button from "../Button";
+import { ClockIcon, LucideWorkflow } from "lucide-react";
 
 const ActiveTask = () => {
   interface Task {
@@ -76,18 +77,26 @@ const ActiveTask = () => {
     tasks.length >= 0 ? tasks.filter((task) => !task.completed) : null;
 
   return (
-    <div className=" bg-neutral-950 p-6 flex items-center justify-center ">
-      <div className="max-w-6xl w-full bg-neutral-900/60 backdrop-blur-xl p-6  rounded-xl shadow-2xl border border-neutral-800 ">
-        <div className="flex flex-col md:flex-row justify-between align-middle items-center mb-8 border-b border-neutral-800 shadow-2xl">
-          <h1 className="text-3xl font-bold text-white bg-gradient-to-r from-neutral-500 to-purple-500 bg-clip-text text-transparent">
-            Active Tasks
-          </h1>
-          <div className="mb-2 flex justify-center items-center">
+    <div className=" bg-neutral-950 p-4 ">
+      <section className="max-w-6xl mx-auto bg-neutral-900/50 backdrop-blur-lg rounded-xl border border-neutral-800 shadow-2xl">
+        {/* Header */}
+        <div className="p-6 border-b border-neutral-800/50 md:-mt-20 -mt-8">
+          <div className="flex justify-between items-center">
+            <div className="flex justify-center items-center gap-3">
+              <div className="bg-primary-500/10 p-2 rounded-lg hidden md:block">
+                <LucideWorkflow className="w-6 h-6 text-primary-400" />
+              </div>
+              <div>
+                <h2 className="text-xl md:text-2xl font-bold text-white">Active Task</h2>
+                <p className="text-sm text-neutral-400">Manage your Work</p>
+              </div>
+            </div>
+            <div className="mb-2">
             <Button onClickFunction={() => setIsCreating(true)}>
-              + Create New Task
+              Create New Task
             </Button>
+            </div>
           </div>
-          
         </div>
 
         {message && (
@@ -102,10 +111,10 @@ const ActiveTask = () => {
           </div>
         )}
 
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+        <div className="grid grid-cols-1 p-4 md:grid-cols-3 gap-6 justify-center items-center">
           {isCreating && (
             <>
-              <div className="bg-neutral-800/70 p-6 rounded-2xl shadow-md flex flex-col justify-between">
+              <div className="bg-neutral-800/70 p-6 rounded-2xl shadow-md flex flex-col justify-center align-middle mt-8 ml-8 items-center">
                 <h3 className="text-lg font-bold text-white mb-4">New Task</h3>
                 <div className="space-y-4">
                   <input
@@ -115,7 +124,7 @@ const ActiveTask = () => {
                     onChange={(e) =>
                       setNewTask((prev) => ({ ...prev, name: e.target.value }))
                     }
-                    className="w-full px-4 py-2 bg-neutral-700 rounded-lg border border-neutral-600 focus:ring-2 focus:ring-indigo-500 text-white"
+                    className="w-full px-4 py-2 bg-neutral-700 rounded-lg border border-neutral-600 focus:ring-2 focus:ring-primary-500 text-white"
                   />
                   <input
                     type="date"
@@ -126,7 +135,7 @@ const ActiveTask = () => {
                         dueDate: e.target.value,
                       }))
                     }
-                    className="w-full px-4 py-2 bg-neutral-700 rounded-lg border border-neutral-600 focus:ring-2 focus:ring-indigo-500 text-white"
+                    className="w-full px-4 py-2 bg-neutral-700 rounded-lg border border-neutral-600 focus:ring-2 focus:ring-primary-500 text-white"
                   />
                   <select
                     value={newTask.priority}
@@ -136,7 +145,7 @@ const ActiveTask = () => {
                         priority: e.target.value,
                       }))
                     }
-                    className="w-full px-4 py-2 bg-neutral-700 rounded-lg border border-neutral-600 focus:ring-2 focus:ring-indigo-500 text-white"
+                    className="w-full px-4 py-2 bg-neutral-700 rounded-lg border border-neutral-600 focus:ring-2 focus:ring-primary-500 text-white"
                   >
                     <option>HIGH</option>
                     <option>MEDIUM</option>
@@ -145,7 +154,7 @@ const ActiveTask = () => {
                   <div className="flex gap-4">
                     <button
                       onClick={handleCreateTask}
-                      className="w-full px-4 py-2 bg-indigo-500 text-white rounded-lg font-medium hover:bg-indigo-600 transition"
+                      className="w-full px-4 py-2 bg-primary-500 text-gray-800 font-bold rounded-lg  hover:bg-primary-600 transition"
                     >
                       Add Task
                     </button>
@@ -175,8 +184,8 @@ const ActiveTask = () => {
                 </div>
               ))
           ) : activeTasks?.length === 0 ? (
-            <div className="col-span-1 md:col-span-3 text-center text-gray-400">
-              You don't have any pending tasks.
+            <div className="col-span-1 pt-12 md:col-span-3 text-center text-gray-400">
+              {"You don't have any pending tasks."}
             </div>
           ) : (
             activeTasks?.map((task) => (
@@ -215,7 +224,7 @@ const ActiveTask = () => {
             ))
           )}
         </div>
-      </div>
+      </section>
     </div>
   );
 };

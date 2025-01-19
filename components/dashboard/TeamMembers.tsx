@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import axios from "axios";
 import Image from "next/image";
-import { Filter, SlidersHorizontal, MessageCircle, MoreVertical, Users, Search } from "lucide-react";
+import {  SlidersHorizontal, MessageCircle, MoreVertical, Users } from "lucide-react";
 import Link from "next/link";
 
 interface TeamMember {
@@ -19,7 +19,6 @@ const TeamMembers = () => {
   const [teamMembers, setTeamMembers] = useState<TeamMember[]>([]);
   const [isLoading, setIsLoading] = useState(true);
   const [activeTeam, setActiveTeam] = useState("All Teams");
-  const [searchQuery, setSearchQuery] = useState("");
   const [isSorted, setIsSorted] = useState(false); // State for sorting
 
   const teams = [
@@ -169,8 +168,8 @@ const TeamMembers = () => {
                         </span>
                         {member.teamName?.length > 0 && (
                           <>
-                            <span className="w-1 h-1 bg-neutral-500 rounded-full" />
-                            <span className="text-neutral-400 text-sm">
+                            <span className="w-1 h-1 bg-neutral-500 rounded-full hidden md:flex" />
+                            <span className="text-neutral-400 text-sm hidden md:flex">
                               {member.teamName}
                             </span>
                           </>
@@ -180,7 +179,7 @@ const TeamMembers = () => {
                   </div>
                   <div className="flex items-center gap-4">
                     <span
-                      className={`px-3 py-1 rounded-full text-xs font-medium ${
+                      className={`px-3 py-1 rounded-full text-xs font-medium hidden md:flex ${
                         getStatusColor(member.status)
                       } bg-opacity-20 text-white`}
                     >
@@ -191,7 +190,7 @@ const TeamMembers = () => {
                     </Link>
                     <button className="p-2 hover:bg-neutral-600/50 rounded-lg transition-all">
                       <MoreVertical className="w-5 h-5 text-neutral-400 hover:text-white transition-colors" />
-                    </button>
+                    </button> 
                   </div>
                 </div>
               ))}
