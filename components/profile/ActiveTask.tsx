@@ -3,7 +3,7 @@ import React, { useState, useEffect } from "react";
 import axios from "axios";
 import Skeleton from "react-loading-skeleton";
 import Button from "../Button";
-import { ClockIcon, LucideWorkflow } from "lucide-react";
+import {  LucideWorkflow } from "lucide-react";
 
 const ActiveTask = () => {
   interface Task {

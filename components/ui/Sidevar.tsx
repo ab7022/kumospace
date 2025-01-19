@@ -121,7 +121,6 @@ export const MobileSidebar = ({
   ...props
 }: React.ComponentProps<"div">) => {
   const { open, setOpen } = useSidebar();
-  const path = usePathname();
 
   return (
     <>

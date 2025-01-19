@@ -12,7 +12,7 @@ import { TeamMember } from "@/components/types";
 
 export default function Dashboard()  {
   const router = useRouter();
-  const [userDetails, setUserDetails] = useState(null);
+  const [_userDetails, setUserDetails] = useState(null);
   const [role, setRole] = useState("");
   const [teamMembers,setTeamMembers] = useState<TeamMember[]>([])
   const [isloading,setIsLoading] = useState(false)

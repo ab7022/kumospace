@@ -224,7 +224,7 @@ const Canvas = ({ open, session }: any) => {
       console.error("Error sharing screen:", error);
     }
   }, [remoteSocketId, socket]);
-  const handleUserJoined = useCallback(({ email, id }: any) => {
+  const handleUserJoined = useCallback(({ id }: any) => {
     setRemoteSocketId(id);
   }, []);
   const handleEndCall = useCallback(() => {

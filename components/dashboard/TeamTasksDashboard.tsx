@@ -195,7 +195,7 @@ const TeamTasksDashboard = () => {
             <CardTitle className="text-3xl font-bold text-white tracking-tight mb-2">
               Team Tasks
             </CardTitle>
-            <p className="text-neutral-400">Manage and track your team's tasks</p>
+            <p className="text-neutral-400">{"Manage and track your team's tasks"}</p>
           </div>
         </div>
         

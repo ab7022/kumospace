@@ -1,5 +1,4 @@
-import React, { useEffect, useState } from "react";
-import axios from "axios";
+import React, { useState } from "react";
 import Image from "next/image";
 import {  SlidersHorizontal, MessageCircle, MoreVertical, Users } from "lucide-react";
 import Link from "next/link";

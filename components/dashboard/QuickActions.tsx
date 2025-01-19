@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Video, PenLine, ChevronRight, MessageSquare, Users, X, Check } from 'lucide-react';
+import { Video, PenLine, ChevronRight, MessageSquare, Users, Check } from 'lucide-react';
 import { Card, CardHeader, CardTitle, CardContent } from '@/components/ui/card';
 import Link from 'next/link';
 import {

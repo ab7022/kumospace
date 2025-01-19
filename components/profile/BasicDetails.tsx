@@ -1,7 +1,6 @@
 "use client";
 import {
   UserIcon,
-  CameraIcon,
   IdentificationIcon,
   BriefcaseIcon,
 } from "@heroicons/react/24/outline";
