@@ -26,13 +26,13 @@ export default function Productivity() {
             <span className="text-sm text-neutral-400">Your Complete Virtual Office Solution</span>
           </div>
           
-          <h1 className="mb-6 bg-gradient-to-r from-white via-primary-200 to-primary-500 bg-clip-text text-5xl font-extrabold tracking-tight text-transparent md:text-7xl lg:text-8xl">
+          <h1 className="mb-6 bg-gradient-to-r from-white via-primary-200 to-primary-500 bg-clip-text text-6xl font-extrabold tracking-wider md:-tracking-tighter text-transparent md:text-7xl lg:text-8xl">
             Everything Your Team Needs,
             <br />
             <span className="text-white">All In One Place</span>
           </h1>
 
-          <p className="mx-auto mb-10 max-w-2xl text-xl text-neutral-400 leading-relaxed">
+          <p className="mx-auto mb-10 max-w-2xl text-xs md:text-xl text-neutral-400 leading-relaxed">
             Video calls, voice chats, screen sharing, messaging, task management – we have got it all. 
             Transform your remote workspace into a powerhouse of collaboration and productivity.
           </p>
