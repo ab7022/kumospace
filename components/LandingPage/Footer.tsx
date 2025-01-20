@@ -7,13 +7,13 @@ const Footer = () => {
         <div className=" mx-20 py-8">
           <div className="flex flex-col items-center justify-between gap-4 sm:flex-row">
             <p className="text-sm text-neutral-400">
-              © 2024 Virtual Office. Transforming remote work for enterprises
+              © 2024 Virtual Sync. Transforming remote work for enterprises
               worldwide.
             </p>
             <div className="flex space-x-6">
               <a
-                href="#"
-                className="text-neutral-400 hover:text-emerald-400 transition-colors"
+     href="https://x.com/abdul__bayees"
+     target="_blank"                className="text-neutral-400 hover:text-emerald-400 transition-colors"
               >
                 <span className="sr-only">Twitter</span>
                 <svg
@@ -26,8 +26,8 @@ const Footer = () => {
                 </svg>
               </a>
               <a
-                href="#"
-                className="text-neutral-400 hover:text-emerald-400 transition-colors"
+  href="https://linkedin.com/in/abdulbayees"
+  target="_blank"                className="text-neutral-400 hover:text-emerald-400 transition-colors"
               >
                 <span className="sr-only">LinkedIn</span>
                 <svg
@@ -44,8 +44,8 @@ const Footer = () => {
                 </svg>
               </a>
               <a
-                href="#"
-                className="text-neutral-400 hover:text-emerald-400 transition-colors"
+   href="https://github.com/ab7022"
+   target="_blank"                className="text-neutral-400 hover:text-emerald-400 transition-colors"
               >
                 <span className="sr-only">GitHub</span>
                 <svg

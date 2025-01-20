@@ -14,7 +14,7 @@ import {
 
 export default function Productivity() {
   return (
-    <div className="relative min-h-screen -mt-20 bg-gradient-to-b from-neutral-900 via-neutral-900 to-neutral-800 pt-[92px]">
+    <div className="relative min-h-screen -mt-32 bg-gradient-to-b from-neutral-900 via-neutral-900 to-neutral-800 pt-[92px]">
       {/* Animated background gradient */}
       <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_center,_var(--tw-gradient-stops))] from-primary-500/20 via-transparent to-transparent blur-3xl" />
       
