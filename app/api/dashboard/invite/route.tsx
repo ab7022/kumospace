@@ -80,12 +80,14 @@ export async function GET(_req: NextRequest) {
       return NextResponse.json({ error }, { status: status || 401 });
     }
 
-    const space = await prisma.space.findFirst({
+    const space = await prisma.spaceMember.findFirst({
       where: {
         userId: user.id,
       },
       select: {
         id: true,
+        spaceId: true,
+
       },
     });
 
