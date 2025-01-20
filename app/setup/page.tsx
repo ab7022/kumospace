@@ -24,8 +24,7 @@ export default async function Setup() {
             Get Started with Your <span className="text-yellow-400">Workspace</span>
           </h1>
           <p className="text-lg text-gray-400 max-w-2xl mx-auto">
-            Create a new collaborative space or join an existing one to enhance your team's productivity
-          </p>
+{"Create a new collaborative space or join an existing one to enhance your team's productivity"}          </p>
         </div>
 
         <JoiningRequest />

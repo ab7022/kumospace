@@ -111,7 +111,7 @@ const JoiningRequest = () => {
                     {spaceName}
                   </h3>
                   <p className="text-sm text-gray-400">
-                    You've been invited to join as a{" "}
+                    You have been invited to join as a{" "}
                     <span className="text-yellow-400 font-medium">
                       {request.role}
                     </span>

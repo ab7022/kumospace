@@ -38,7 +38,7 @@ const SignInComponent = () => {
           </span>
           
           <h2 className="my-6 text-4xl font-bold leading-tight">
-            Elevate Your Remote Team's Experience
+            {"Elevate Your Remote Team's Experience"}
           </h2>
 
           <div className="mt-8 grid grid-cols-2 gap-4">

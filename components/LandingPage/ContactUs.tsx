@@ -27,7 +27,7 @@ const ContactUs = () => {
       <div className="mx-auto max-w-6xl px-4 py-16 lg:py-24">
         <div className="mb-16 text-center">
           <h2 className="text-4xl font-bold text-white md:text-5xl">
-            Let's Connect
+            {"Let's Connect"}
           </h2>
           <p className="mt-4 text-lg text-neutral-400">
             Transform your remote workspace with VirtualSync

@@ -50,7 +50,7 @@ export default function Steps() {
               </div>
               <div>
                 <h3 className="text-3xl font-bold text-white">
-                  Connect Like You're In The Same Room
+                  Connect Like You are In The Same Room
                 </h3>
                 <p className="mt-4 text-xl leading-relaxed text-neutral-400">
                   Experience natural team interactions with HD video calls,

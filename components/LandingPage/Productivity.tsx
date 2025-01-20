@@ -7,7 +7,6 @@ import {
   MessageSquare, 
   Users2, 
   ClipboardList, 
-  Shield,
   Play,
   ChartLine,
   MessagesSquare
@@ -34,7 +33,7 @@ export default function Productivity() {
           </h1>
 
           <p className="mx-auto mb-10 max-w-2xl text-xl text-neutral-400 leading-relaxed">
-            Video calls, voice chats, screen sharing, messaging, task management – we've got it all. 
+            Video calls, voice chats, screen sharing, messaging, task management – we have got it all. 
             Transform your remote workspace into a powerhouse of collaboration and productivity.
           </p>
 
