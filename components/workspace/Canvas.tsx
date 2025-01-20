@@ -15,7 +15,7 @@ import { Position, User, UserDetails } from "../types";
 
 const STEP_SIZE = 20;
 const AVATAR_SIZE = 68;
-const SOCKET_URL ="https://kumospace-be-production.up.railway.app/"
+const SOCKET_URL ="https://kumospace-be-production.up.railway.app"
 const MOVEMENT_KEYS = {
   ArrowUp: "up",
   ArrowDown: "down",

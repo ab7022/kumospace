@@ -188,7 +188,7 @@ const TeamTasksDashboard = () => {
   }
 
   return (
-    <Card className="bg-neutral-900/50 backdrop-blur-xl shadow-2xl border-neutral-700/50">
+    <Card className="bg-neutral-800/50 backdrop-blur-xl shadow-2xl border-neutral-700/50">
       <CardHeader className="p-6">
         <div className="flex items-center justify-between mb-8">
           <div>
@@ -230,7 +230,7 @@ const TeamTasksDashboard = () => {
             <Search className="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-neutral-500" />
             <input
               type="text"
-              placeholder="Search tasks by title, description or assignee..."
+              placeholder="Search tasks by title or description"
               value={searchTerm}
               onChange={(e) => setSearchTerm(e.target.value)}
               className="w-full pl-12 pr-4 py-3 bg-neutral-800 border border-neutral-700 rounded-xl focus:outline-none focus:ring-2 focus:ring-purple-500 text-white placeholder-neutral-500"

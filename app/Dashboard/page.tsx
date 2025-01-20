@@ -9,11 +9,13 @@ import { useEffect, useState } from "react";
 import axios from "axios";
 import { useRouter } from "next/navigation";
 import { TeamMember } from "@/components/types";
+import SpaceCodeCard from "@/components/dashboard/SpaceCodeCard";
 
 export default function Dashboard()  {
   const router = useRouter();
   const [role, setRole] = useState("");
   const [teamMembers,setTeamMembers] = useState<TeamMember[]>([])
+  const [spaceCode, setSpaceCode] = useState("");
   const [isloading,setIsLoading] = useState(false)
   useEffect(() => {
     const fetchUserDetails = async () => {
@@ -31,6 +33,7 @@ export default function Dashboard()  {
     try {
       const response = await axios.get("/api/dashboard/isLoggedIn");
       if (response.status === 200) {
+        setSpaceCode(response.data.existingSpace.space.code);
       } else {
         router.push("/setup");
       }
@@ -70,6 +73,8 @@ export default function Dashboard()  {
           <div className="col-span-12 md:col-span-4 space-y-4 md:space-y-6">
             {(role === "ADMIN" || role === "MODERATOR") && <PendingInvites />}
             <QuickActions teamMembers={teamMembers}/>
+            <SpaceCodeCard spaceCode={spaceCode} />
+
             {/* <UpcomingDeadline /> */}
           </div>
         </div>
