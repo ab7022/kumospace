@@ -89,7 +89,7 @@ export const NEXT_AUTH_CONFIG: NextAuthOptions = {
     },
   },
   pages: {
-    signIn: "/auth/signin",
+    signIn: "/signin",
     signOut: "/auth/signout",
   },
 };

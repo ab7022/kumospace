@@ -1,187 +1,135 @@
 import React from "react";
+import { 
+  ArrowRight, 
+  Video, 
+  Mic, 
+  ScreenShare, 
+  MessageSquare, 
+  Users2, 
+  ClipboardList, 
+  Shield,
+  Play,
+  ChartLine,
+  MessagesSquare
+} from "lucide-react";
 
-const Productivity = () => {
+export default function Productivity() {
   return (
-    <div
-      className="relative -mt-[92px] bg-neutral-900 pt-[92px] w-full"
-      data-element-type="Container"
-    >
-      <div
-        className="mx-auto max-w-7xl px-4 pb-24 pt-24 md:px-6 lg:px-8 element-highlight"
-        data-element-type="Container"
-      >
-        <div className="text-center" data-element-type="Container">
-          <h1
-            className="mb-6 text-4xl text-center font-bold text-white md:text-6xl lg:text-7xl max-w-6xl"
-            data-element-type="Heading"
-          >
-            {"Transform Your Remote Team's Productivity Today"}
+    <div className="relative min-h-screen -mt-20 bg-gradient-to-b from-neutral-900 via-neutral-900 to-neutral-800 pt-[92px]">
+      {/* Animated background gradient */}
+      <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_center,_var(--tw-gradient-stops))] from-primary-500/20 via-transparent to-transparent blur-3xl" />
+      
+      <div className="relative mx-auto max-w-7xl px-4 pb-24 pt-16 md:px-6 lg:px-8">
+        {/* Hero Section */}
+        <div className="text-center">
+          <div className="mb-6 inline-flex items-center rounded-full border border-neutral-800 bg-neutral-900/50 px-4 py-2 backdrop-blur-sm">
+            <span className="mr-2 inline-block h-2 w-2 rounded-full bg-primary-500 animate-pulse"></span>
+            <span className="text-sm text-neutral-400">Your Complete Virtual Office Solution</span>
+          </div>
+          
+          <h1 className="mb-6 bg-gradient-to-r from-white via-primary-200 to-primary-500 bg-clip-text text-5xl font-extrabold tracking-tight text-transparent md:text-7xl lg:text-8xl">
+            Everything Your Team Needs,
+            <br />
+            <span className="text-white">All In One Place</span>
           </h1>
-          <p
-            className="mx-auto mb-10 max-w-2xl text-lg text-neutral-400"
-            data-element-type="Text"
-          >
-            Say goodbye to disconnected remote work. Our virtual workspace
-            brings your team together with real-time collaboration, transparent
-            workflows, and seamless communication - just like being in the same
-            office.
+
+          <p className="mx-auto mb-10 max-w-2xl text-xl text-neutral-400 leading-relaxed">
+            Video calls, voice chats, screen sharing, messaging, task management – we've got it all. 
+            Transform your remote workspace into a powerhouse of collaboration and productivity.
           </p>
-          <div
-            className="flex flex-col items-center justify-center gap-4 sm:flex-row"
-            data-element-type="Container"
-          >
+
+          {/* CTA Buttons */}
+          <div className="flex flex-col items-center justify-center gap-4 sm:flex-row">
             <a
               href="/setup"
-              className="inline-flex items-center justify-center rounded-full bg-primary-500 px-8 py-3 text-base font-bold text-black transition hover:bg-primary-400"
-              data-element-type="Text"
+              className="group inline-flex items-center justify-center gap-2 rounded-full bg-primary-500 px-8 py-4 text-lg font-bold text-black transition-all hover:bg-primary-400 hover:scale-105"
             >
-              Create My Workspace
+              Try For Free
+              <ArrowRight className="h-5 w-5 transition-transform group-hover:translate-x-1" />
             </a>
             <a
               href="#demo"
-              className="inline-flex items-center justify-center gap-2 rounded-full border border-white bg-transparent px-8 py-3 text-base font-medium text-white transition hover:bg-white hover:text-black"
-              data-element-type="Text"
+              className="group inline-flex items-center justify-center gap-2 rounded-full border border-neutral-700 bg-neutral-800/50 px-8 py-4 text-lg font-medium text-white transition-all hover:bg-neutral-700 hover:border-neutral-600 backdrop-blur-sm"
             >
-              See It In Action
-              <svg
-                className="h-5 w-5"
-                fill="none"
-                viewBox="0 0 24 24"
-                stroke="currentColor"
-              >
-                <path
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                  strokeWidth="2"
-                  d="M14.752 11.168l-3.197-2.132A1 1 0 0010 9.87v4.263a1 1 0 001.555.832l3.197-2.132a1 1 0 000-1.664z"
-                ></path>
-                <path
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                  strokeWidth="2"
-                  d="M21 12a9 9 0 11-18 0 9 9 0 0118 0z"
-                ></path>
-              </svg>
+              See Features
+              <Play className="h-5 w-5 transition-transform group-hover:scale-110" />
             </a>
           </div>
 
-          <div
-            className="mt-16 grid grid-cols-1 gap-8 md:grid-cols-3"
-            data-element-type="Container"
-          >
-            <div
-              className="rounded-xl bg-neutral-800/30 p-6 text-left"
-              data-element-type="Container"
-            >
-              <svg
-                className="mb-4 h-12 w-12 text-primary-500"
-                fill="none"
-                viewBox="0 0 24 24"
-                stroke="currentColor"
-              >
-                <path
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                  strokeWidth="2"
-                  d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"
-                ></path>
-                <path
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                  strokeWidth="2"
-                  d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"
-                ></path>
-              </svg>
-              <h3
-                className="mb-2 text-xl font-bold text-white"
-                data-element-type="Heading"
-              >
-                Real-Time Visibility
-              </h3>
-              <p className="text-neutral-400" data-element-type="Text">
-                See what everyone is working on in real-time. No more status
-                meetings needed.
-              </p>
-            </div>
-
-            <div
-              className="rounded-xl bg-neutral-800/30 p-6 text-left"
-              data-element-type="Container"
-            >
-              <svg
-                className="mb-4 h-12 w-12 text-primary-500"
-                fill="none"
-                viewBox="0 0 24 24"
-                stroke="currentColor"
-              >
-                <path
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                  strokeWidth="2"
-                  d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z"
-                ></path>
-              </svg>
-              <h3
-                className="mb-2 text-xl font-bold text-white"
-                data-element-type="Heading"
-              >
-                Seamless Collaboration
-              </h3>
-              <p className="text-neutral-400" data-element-type="Text">
-                Interactive spaces for meetings, brainstorming, and casual
-                conversations.
-              </p>
-            </div>
-
-            <div
-              className="rounded-xl bg-neutral-800/30 p-6 text-left"
-              data-element-type="Container"
-            >
-              <svg
-                className="mb-4 h-12 w-12 text-primary-500"
-                fill="none"
-                viewBox="0 0 24 24"
-                stroke="currentColor"
-              >
-                <path
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                  strokeWidth="2"
-                  d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z"
-                ></path>
-              </svg>
-              <h3
-                className="mb-2 text-xl font-bold text-white"
-                data-element-type="Heading"
-              >
-                Secure &amp; Private
-              </h3>
-                <p className="text-neutral-400" data-element-type="Text">
-                We do not store your chats and meetings in our database.
-                </p>
-            </div>
+          {/* Communication Features Grid */}
+          <div className="mt-24 grid grid-cols-1 gap-6 md:grid-cols-3 lg:grid-cols-4">
+            {[
+              {
+                icon: <Video className="h-6 w-6" />,
+                title: "Crystal Clear Video Calls",
+                description: "HD video conferencing for up to 100 participants"
+              },
+              {
+                icon: <Mic className="h-6 w-6" />,
+                title: "Voice Channels",
+                description: "Drop in and out of voice conversations naturally"
+              },
+              {
+                icon: <ScreenShare className="h-6 w-6" />,
+                title: "Screen Sharing",
+                description: "Share your screen with one click"
+              },
+              {
+                icon: <MessageSquare className="h-6 w-6" />,
+                title: "Direct Messages",
+                description: "Private conversations with end-to-end encryption"
+              },
+              {
+                icon: <MessagesSquare className="h-6 w-6" />,
+                title: "Group Chats",
+                description: "Organized team discussions in channels"
+              },
+              {
+                icon: <ClipboardList className="h-6 w-6" />,
+                title: "Task Management",
+                description: "Assign and track tasks effortlessly"
+              },
+              {
+                icon: <ChartLine className="h-6 w-6" />,
+                title: "Progress Tracking",
+                description: "Real-time updates on team productivity"
+              },
+              {
+                icon: <Users2 className="h-6 w-6" />,
+                title: "Team Spaces",
+                description: "Dedicated rooms for different projects"
+              }
+            ].map((feature) => (
+              <div key={feature.title} className="group relative rounded-xl border border-neutral-800 bg-neutral-900/50 p-6 transition-all hover:border-primary-500/50 hover:bg-neutral-800/50">
+                <div className="mb-4 inline-block rounded-lg bg-primary-500/10 p-2 text-primary-500">
+                  {feature.icon}
+                </div>
+                <h3 className="mb-2 text-lg font-bold text-white">{feature.title}</h3>
+                <p className="text-sm text-neutral-400">{feature.description}</p>
+              </div>
+            ))}
           </div>
-        </div>
 
-        <div
-          className="mt-16 overflow-hidden rounded-xl border border-neutral-800"
-          data-element-type="Container"
-        >
-          <div
-            className="aspect-video w-full bg-neutral-800"
-            data-element-type="Container"
-          >
-            <video className="w-full" autoPlay muted loop>
-              <source
-                src="https://kumospace.mo.cloudinary.net/https://content.kumospace.com/hubfs/landing-pages/videos/chat-dialog-opt.mp4?tx=w_responsive:fallback-max-width_1080;fallback-max-width-mobile_720"
-                type="video/mp4"
-              />{" "}
-            </video>
+       \
+          {/* Demo Video Section */}
+          <div className="mt-24 overflow-hidden rounded-2xl border border-neutral-800 bg-neutral-900/50 shadow-2xl">
+            <div className="aspect-video w-full">
+              <video 
+                className="w-full object-cover" 
+                autoPlay 
+                muted 
+                loop 
+                playsInline
+              >
+                <source
+                  src="https://kumospace.mo.cloudinary.net/https://content.kumospace.com/hubfs/landing-pages/videos/chat-dialog-opt.mp4?tx=w_responsive:fallback-max-width_1080;fallback-max-width-mobile_720"
+                  type="video/mp4"
+                />
+              </video>
+            </div>
           </div>
         </div>
       </div>
     </div>
   );
-};
-
-export default Productivity;
+}

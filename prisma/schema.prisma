@@ -161,7 +161,7 @@ model Deadline {
 
 model SpaceMember {
   id       Int       @id @default(autoincrement())
-  email    String
+  email    String   @unique
   role     UserRole  @default(MEMBER)
   joinedAt DateTime?
   userId   Int

@@ -72,6 +72,21 @@ export async function POST(req: NextRequest, _res: NextResponse) {
         { status: 400 }
       );
     }
+    const checkExistingSpaceMember = await prisma.spaceMember.findFirst({
+      where: { email: user.email },
+    });
+
+    if (checkExistingSpaceMember) {
+      const deleteMemberFromSpace = await prisma.spaceMember.delete({
+        where: { email: user.email },
+      });
+      if (!deleteMemberFromSpace) {
+        return NextResponse.json(
+          { message: "Failed to delete existing member." },
+          { status: 500 }
+        );
+      }
+    }
 
     const newMember = await prisma.spaceMember.create({
       data: {
